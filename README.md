@@ -46,8 +46,8 @@ outcomes and design decisions.
 | Project | Description | Primary Focus | Repository | Status |
 |---------|-------------|---------------|-----------|:------:|
 | 🟦 **BlueKioskTech** | Product validation platform for reusable bottle sanitization. | Functional Analysis · Product Strategy | 🔗 Available | ✅ Active |
-| 🤖 **Executive AI English Coach** | AI-powered executive English learning platform. | AI Product Design | 🔜 Coming Soon | 🚧 In Progress |
 | 📊 **BIXI Operations Dashboard** | Operational Power BI analytics. | Business Intelligence | 🔜 Coming Soon | 🚧 In Progress |
+| 🤖 **Executive AI English Coach** | AI-powered executive English learning platform. | AI Product Design | 🔜 Coming Soon | 🚧 In Progress |
 | ✈️ **TripScore AI** | AI travel planning platform. | Product Discovery | 🔜 Coming Soon | 🚧 In Design |
 
 ## Technical Architecture
