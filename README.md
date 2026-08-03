@@ -3,7 +3,7 @@
 > **Functional Analyst • System Analyst • Product Builder**\
 > Designing digital products from business vision to production.
 
-![Portfolio Hero](public/images/readme/hero-homepage.webp)
+![Portfolio Hero](./public/images/readme/hero-homepage.webp)
 
 > Replace this image with the homepage screenshot.
 
