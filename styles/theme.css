@@ -1,0 +1,40 @@
+/**
+ * MBY Portfolio — Theme tokens
+ *
+ * Ce fichier centralise uniquement les couleurs du panneau d'identité
+ * affiché dans le Hero.
+ *
+ * Objectif :
+ * - permettre de modifier rapidement son apparence ;
+ * - éviter de rechercher plusieurs valeurs dans hero.tsx ;
+ * - préparer une évolution progressive du Design System sans refactor global.
+ */
+
+:root {
+  /* Surface principale du panneau MBY */
+  --mby-panel-background: rgba(255, 255, 255, 0.025);
+
+  /* Bordure extérieure et séparateur interne */
+  --mby-panel-border: rgba(251, 249, 249, 0.057);
+
+  /* Halo décoratif dans le coin supérieur droit */
+  --mby-panel-glow: rgba(124, 156, 255, 0.06);
+
+  /* Texte "MBY PORTFOLIO" */
+  --mby-panel-eyebrow: rgba(255, 255, 255, 0.641);
+
+  /* Texte descriptif */
+  --mby-panel-body: rgba(255, 255, 255, 0.296);
+
+  /* Grand monogramme MBY */
+  --mby-panel-monogram: rgba(0, 7, 10, 0.652);
+
+  /* Signature "MOHAMED BEN YAHMED" */
+  --mby-panel-signature: rgba(171, 184, 181, 0.713);
+
+  /* Couleur du point lumineux */
+  --mby-panel-dot: #114da0da;
+
+  /* Glow du point lumineux */
+  --mby-panel-dot-glow: rgba(189, 199, 214, 0.8);
+}
