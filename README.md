@@ -126,11 +126,11 @@ GitHub → Vercel → Production
 
 Functional Analyst • System Analyst • Product Builder
 
-## Connect
+## Let's Connect
 
-- 🌐 Portfolio
-- 💼 LinkedIn
-- 💻 GitHub
+- 🌐 **Portfolio:** https://mby-studio-portfolio.vercel.app
+- 💼 **LinkedIn:** https://www.linkedin.com/in/ton-profil
+- 💻 **GitHub:** https://github.com/BenYah10
 
 ## License
 
