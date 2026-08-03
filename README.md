@@ -3,9 +3,11 @@
 > **Functional Analyst • System Analyst • Product Builder**\
 > Designing digital products from business vision to production.
 
-![Portfolio Hero](./public/images/readme/hero-homepage.webp)
-
-> Replace this image with the homepage screenshot.
+<p align="center">
+  <img src="/public/images/readme/hero-homepage.webp"
+       alt="MBY Studio Portfolio Hero"
+       width="100%">
+</p>
 
 ## Project Vision
 
