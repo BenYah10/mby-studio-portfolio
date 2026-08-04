@@ -339,6 +339,61 @@ export function Hero({
             </div>
           </div>
         </motion.aside>
+        {/* 
+          * Version mobile et tablette du panneau d’identité MBY.
+          *
+          * Le panneau desktop reste inchangé et visible uniquement à partir de lg.
+          * Cette variante compacte préserve l’identité visuelle du Hero sans
+          * surcharger les petits écrans.
+        */}
+        <motion.aside
+          initial={
+            shouldReduceMotion
+              ? false
+              : {
+                  opacity: 0,
+                  y: 16,
+                }
+         }
+          animate={{
+          opacity: 1,
+          y: 0,
+         }}
+         transition={{
+          duration: shouldReduceMotion ? 0 : 0.6,
+          delay: shouldReduceMotion ? 0 : 0.22,
+          ease: [0.22, 1, 0.36, 1],
+         }}
+         className="relative overflow-hidden rounded-3xl border border-[var(--mby-panel-border)] bg-[var(--mby-panel-background)] p-6 lg:hidden"
+      >
+         <div
+           aria-hidden="true"
+           className="pointer-events-none absolute right-[-5rem] top-[-5rem] h-48 w-48 rounded-full bg-[var(--mby-panel-glow)] blur-[70px]"
+        />
+
+         <div className="relative">
+           <p className="text-xs font-medium uppercase tracking-[0.24em] text-[var(--mby-panel-eyebrow)]">
+              MBY Portfolio
+           </p>
+
+            <p className="mt-4 max-w-sm text-sm leading-6 text-[var(--mby-panel-body)]">
+              Business analysis, system operations and digital product thinking
+              brought together in one professional identity.
+            </p>
+
+           <p className="mt-6 select-none text-[4.75rem] font-semibold leading-none tracking-[-0.08em] text-[var(--mby-panel-monogram)] sm:text-[5.5rem]">
+            MBY
+          </p>
+
+          <div className="-mt-1 flex items-center justify-between border-t border-[var(--mby-panel-border)] pt-4">
+            <span className="text-[0.68rem] uppercase tracking-[0.2em] text-[var(--mby-panel-signature)] sm:text-xs">
+             Mohamed Ben Yahmed
+           </span>
+
+           <span className="h-2 w-2 shrink-0 rounded-full bg-[var(--mby-panel-dot)] shadow-[0_0_24px_var(--mby-panel-dot-glow)]" />
+          </div>
+      </div>
+      </motion.aside>
       </div>
 
       {/*

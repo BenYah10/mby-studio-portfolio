@@ -5,6 +5,7 @@ import type { Project } from "@/content/projects";
 type ProjectMediaProps = {
   project: Project;
   featured?: boolean;
+  featuredMobile?: boolean;
 };
 
 /**
@@ -22,6 +23,7 @@ type ProjectMediaProps = {
 export function ProjectMedia({
   project,
   featured = false,
+  featuredMobile = false,
 }: ProjectMediaProps) {
   /**
    * Certains projets peuvent exister sans visuel associé.
@@ -32,6 +34,47 @@ export function ProjectMedia({
   if (!project.media) {
     return null;
   }
+
+  /**
+ * Variante mobile du projet principal.
+ *
+ * Contrairement à la composition desktop en position absolue,
+ * cette version participe au flux normal de la carte.
+ *
+ * Elle est affichée uniquement sous le breakpoint lg afin de :
+ * - préserver la lisibilité du contenu ;
+ * - empêcher tout débordement horizontal ;
+ * - conserver la machine entièrement visible ;
+ * - ne pas modifier la composition desktop existante.
+ */
+if (featuredMobile) {
+  return (
+    <div
+      aria-hidden="true"
+      className="relative mt-8 h-[20rem] w-full overflow-hidden rounded-[1.5rem] border border-white/[0.07] bg-gradient-to-br from-blue-500/[0.07] via-white/[0.015] to-transparent sm:h-[24rem] lg:hidden"
+    >
+      {/* Panneau décoratif derrière la machine. */}
+      <div className="absolute inset-x-5 top-5 h-[15rem] rounded-[1.4rem] border border-white/[0.055] bg-white/[0.015] sm:inset-x-8 sm:h-[18rem]" />
+
+      {/* Halos lumineux adaptés aux petits écrans. */}
+      <div className="absolute left-1/2 top-8 h-56 w-56 -translate-x-1/2 rounded-full bg-blue-500/[0.13] blur-[85px] sm:h-64 sm:w-64" />
+
+      <div className="absolute left-1/2 top-16 h-40 w-40 -translate-x-1/2 rounded-full bg-cyan-400/[0.08] blur-[70px] sm:h-48 sm:w-48" />
+
+      {/* Ombre de contact sous la machine. */}
+      <div className="absolute bottom-5 left-1/2 h-8 w-44 -translate-x-1/2 rounded-full bg-black/65 blur-xl sm:w-52" />
+
+      <Image
+        src={project.media.image}
+        alt={project.media.alt}
+        fill
+        priority
+        sizes="(max-width: 639px) calc(100vw - 72px), (max-width: 1023px) 520px"
+        className="relative z-10 object-contain object-center scale-[1.28] px-2 py-2 drop-shadow-[0_32px_48px_rgba(0,0,0,0.65)] transition-transform duration-500 ease-out group-hover:-translate-y-1 group-hover:scale-[1.32] sm:scale-[1.22] sm:px-4"
+      />
+    </div>
+  );
+}
 
   /**
    * Variante du projet principal.

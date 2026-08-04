@@ -147,7 +147,7 @@ export function ProjectCard({
         <div
           className={`relative mt-auto ${
             isFeatured
-              ? "pt-16 sm:pt-20 lg:max-w-[50%]"
+               ? "pt-10 sm:pt-14 lg:max-w-[50%] lg:pt-20"
               : project.media
                 ? "pt-8"
                 : "pt-12 sm:pt-16 lg:pt-20"
@@ -183,6 +183,22 @@ export function ProjectCard({
           >
             {project.description}
           </p>
+
+          {/*
+           * Variante mobile du visuel du projet principal.
+           *
+           * Elle est placée après la description afin de conserver une lecture
+           * naturelle : contexte du projet, visuel du produit, puis capacités.
+           *
+           * La variante desktop continue d’être gérée en position absolue
+           * au début de la carte.
+          */}
+              {isFeatured && (
+               <ProjectMedia
+                project={project}
+                featuredMobile
+               />
+      )}
 
           {/*
            * Capacités démontrées par le projet.
