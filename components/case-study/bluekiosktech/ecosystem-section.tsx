@@ -84,7 +84,7 @@ export default function BlueKioskTechEcosystemSection() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex min-h-[24rem] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.04] hover:shadow-[0_24px_80px_rgba(0,0,0,0.22)] sm:p-8"
+                className="group relative flex min-h-[24rem] flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.04] hover:shadow-[0_24px_80px_rgba(0,0,0,0.22)] active:scale-[0.985] active:border-sky-400/30 active:bg-white/[0.055] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#080b11] sm:p-8"
               >
                 <div
                   aria-hidden="true"
@@ -97,8 +97,8 @@ export default function BlueKioskTechEcosystemSection() {
                       <Icon className="h-5 w-5 text-sky-300" />
                     </span>
 
-                    <ArrowUpRight className="h-5 w-5 text-white/35 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white" />
-                  </div>
+                    
+                    <ArrowUpRight className="h-5 w-5 text-white/45 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white group-active:-translate-y-0.5 group-active:translate-x-0.5 group-active:text-sky-300" />                  </div>
 
                   <div className="mt-10">
                     <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/35">
@@ -115,10 +115,8 @@ export default function BlueKioskTechEcosystemSection() {
                   </div>
 
                   <div className="mt-auto border-t border-white/10 pt-6">
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-white/75 transition-colors duration-300 group-hover:text-white">
-                      {item.cta}
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </span>
+                   <span className="inline-flex items-center gap-2 text-sm font-medium text-sky-300 transition-colors duration-300 group-hover:text-white group-active:text-white">                      {item.cta}
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-active:-translate-y-0.5 group-active:translate-x-0.5" />                    </span>
                   </div>
                 </div>
               </a>
