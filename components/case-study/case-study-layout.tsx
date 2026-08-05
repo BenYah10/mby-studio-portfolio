@@ -13,6 +13,7 @@ import CaseStudyFooter from "./case-study-footer";
 
 import BixiHero from "./bixi/hero";
 import BlueKioskTechHero from "./bluekiosktech/hero";
+import BlueKioskTechEcosystemSection from "./bluekiosktech/ecosystem-section";
 import TripScoreHero from "./tripscore/hero";
 import BixiResultsSection from "./bixi/results-section";
 import BlueKioskTechResultsSection from "./bluekiosktech/results-section";
@@ -187,6 +188,11 @@ export default function CaseStudyLayout({
               <ProductRoadmap steps={caseStudy.nextSteps} />
             </CaseStudyReveal>
           )}
+          {caseStudy.projectSlug === "bluekiosk" && (
+            <CaseStudyReveal>
+              <BlueKioskTechEcosystemSection />
+           </CaseStudyReveal>
+         )}
 
           <CaseStudyReveal>
             <CaseStudyFooter />

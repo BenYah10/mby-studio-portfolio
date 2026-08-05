@@ -93,7 +93,7 @@ export function Hero({
        * Elle est purement décorative et placée derrière le contenu.
        * aria-hidden évite qu'elle soit interprétée par les technologies
        * d'assistance.
-       */}
+       */}  
       <div
         aria-hidden="true"
         className="pointer-events-none absolute right-[-10rem] top-20 -z-10 h-[32rem] w-[42rem] rounded-[3rem] bg-accent/[0.045] blur-[120px]"
