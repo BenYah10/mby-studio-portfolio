@@ -14,7 +14,7 @@ export default function CaseStudyReveal({
   children,
   className,
   delay = 0,
-  distance = 48,
+  distance = 28,
 }: CaseStudyRevealProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -41,7 +41,7 @@ export default function CaseStudyReveal({
       }
       viewport={{
         once: true,
-        amount: 0.25,
+        amount: 0.15,
       }}
       transition={{
         duration: 0.85,
