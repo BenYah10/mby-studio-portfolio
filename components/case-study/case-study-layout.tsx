@@ -134,11 +134,18 @@ export default function CaseStudyLayout({
   project,
   caseStudy,
 }: CaseStudyLayoutProps) {
+  /**
+   * Route-safe project identity.
+   *
+   * `project.slug` is resolved from the current route and is the authoritative
+   * key for all project-specific UI. This prevents one case-study payload from
+   * accidentally activating another project's specialized sections.
+   */
+  const activeProjectSlug = project.slug;
+
   /** Resolve project-specific renderers once per layout render. */
-  const ProjectHero = getProjectHero(caseStudy.projectSlug);
-  const ProjectResultsSection = getProjectResultsSection(
-    caseStudy.projectSlug,
-  );
+  const ProjectHero = getProjectHero(activeProjectSlug);
+  const ProjectResultsSection = getProjectResultsSection(activeProjectSlug);
 
   return (
     <main className="mx-auto w-full max-w-7xl px-6 pb-24 sm:px-8 lg:px-10">
@@ -189,8 +196,7 @@ export default function CaseStudyLayout({
 
             Future sections are appended here only after validation.
            ============================================================ */}
-        {caseStudy.projectSlug ===
-          "manufacturing-business-systems-mapping" && (
+        {activeProjectSlug === "manufacturing-business-systems-mapping" && (
           <>
             {/* 01 — Business Challenge */}
             <CaseStudyReveal>
@@ -246,8 +252,6 @@ export default function CaseStudyLayout({
                 imageAlt="Procurement and Procure-to-Pay functional deep dive showing business need, purchase requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment"
               />
             </CaseStudyReveal>
-          </>
-        )}
 
             {/* 08 — Data Governance & Control Framework */}
             <CaseStudyReveal>
@@ -271,6 +275,8 @@ export default function CaseStudyLayout({
                 content={manufacturingContentEn.conclusion}
               />
              </CaseStudyReveal>
+          </>
+        )}
 
         {/* ============================================================
             GENERIC CASE-STUDY SECTIONS
@@ -384,7 +390,7 @@ export default function CaseStudyLayout({
         {/* ============================================================
             BLUEKIOSK-SPECIFIC ECOSYSTEM SECTION
            ============================================================ */}
-        {caseStudy.projectSlug === "bluekiosk" && (
+        {activeProjectSlug === "bluekiosk" && (
           <CaseStudyReveal>
             <BlueKioskTechEcosystemSection />
           </CaseStudyReveal>
