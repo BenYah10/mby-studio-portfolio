@@ -1,3 +1,30 @@
+/**
+ * CaseStudyLayout
+ *
+ * Purpose:
+ * - Provide the shared layout shell used by all portfolio case studies;
+ * - Resolve project-specific Hero and Results components when available;
+ * - Render generic case-study sections for projects using the shared schema;
+ * - Inject specialized Manufacturing Business Systems Mapping sections;
+ * - Preserve common navigation, reveal animations, roadmap and footer behavior.
+ *
+ * Architecture notes:
+ * - Project-specific components are registered by project slug;
+ * - The generic CaseStudyHero and CaseStudySection remain fallback renderers;
+ * - Manufacturing sections are intentionally rendered outside the max-w-4xl
+ *   generic content column because their diagrams and architecture views need
+ *   access to the full max-w-7xl case-study width;
+ * - Manufacturing content currently defaults to English through
+ *   manufacturingContentEn. The structure is ready for the future global
+ *   FR / EN locale switch.
+ *
+ * Maintenance rule:
+ * - Add project-specific UI only when the shared generic renderer is not
+ *   sufficient;
+ * - Keep slug-specific behavior explicit and grouped;
+ * - Avoid turning this layout into a large collection of unrelated conditions.
+ */
+
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import type { ComponentType } from "react";
@@ -5,34 +32,64 @@ import type { ComponentType } from "react";
 import type { Project } from "@/content/projects";
 import type { CaseStudy, CaseStudyMetric } from "@/types/case-study";
 
+/** Shared case-study building blocks. */
 import CaseStudyHero from "./case-study-hero";
 import CaseStudyMetrics from "./case-study-metrics";
 import CaseStudyReveal from "./case-study-reveal";
 import CaseStudySection from "./case-study-section";
 import CaseStudyFooter from "./case-study-footer";
 
+/** Project-specific Hero components. */
 import BixiHero from "./bixi/hero";
 import BlueKioskTechHero from "./bluekiosktech/hero";
-import BlueKioskTechEcosystemSection from "./bluekiosktech/ecosystem-section";
 import TripScoreHero from "./tripscore/hero";
+import ManufacturingHero from "./manufacturing/hero";
+
+/** Project-specific analytical / results components. */
 import BixiResultsSection from "./bixi/results-section";
 import BlueKioskTechResultsSection from "./bluekiosktech/results-section";
+import BlueKioskTechEcosystemSection from "./bluekiosktech/ecosystem-section";
 
+/**
+ * Manufacturing Business Systems Mapping
+ * Specialized full-width analytical sections.
+ */
+import BusinessChallengeSection from "./manufacturing/business-challenge-section";
+import MethodologySection from "./manufacturing/methodology-section";
+import EndToEndProcessSection from "./manufacturing/end-to-end-process-section";
+import SystemsDataSection from "./manufacturing/systems-data-section";
+
+/**
+ * Manufacturing content source.
+ * English remains the current default until the global FR / EN switch is wired.
+ */
+import { manufacturingContentEn } from "@/content/case-studies/manufacturing/en";
+
+/** Reusable generic case-study sections. */
 import ExecutionTimeline from "./sections/execution-timeline";
 import ProductRoadmap from "./sections/product-roadmap";
 import ProductThinkingSection from "./sections/product-thinking-section";
 import SystemDesignSection from "./sections/system-design-section";
+import ProcessInventorySection from "./manufacturing/process-inventory-section";
+import CrmDeepDiveSection from "./manufacturing/crm-deep-dive-section";
+import ProcurementDeepDiveSection from "./manufacturing/procurement-deep-dive-section";
+import DataGovernanceSection from "./manufacturing/data-governance-section";
+import ImprovementFrameworkSection from "./manufacturing/improvement-framework-section";
+import ConclusionSection from "./manufacturing/conclusion-section";
 
+/** Props accepted by the global case-study layout. */
 type CaseStudyLayoutProps = {
   project: Project;
   caseStudy: CaseStudy;
 };
 
+/** Contract required by project-specific Hero components. */
 type ProjectHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
 };
 
+/** Contract required by project-specific Results sections. */
 type ProjectResultsSectionProps = {
   number: string;
   metrics: CaseStudyMetric[];
@@ -41,21 +98,32 @@ type ProjectResultsSectionProps = {
 type ProjectHero = ComponentType<ProjectHeroProps>;
 type ProjectResultsSection = ComponentType<ProjectResultsSectionProps>;
 
+/**
+ * Project Hero registry.
+ * Projects not listed here fall back to CaseStudyHero.
+ */
 const projectHeroes: Record<string, ProjectHero> = {
   bluekiosk: BlueKioskTechHero,
   "bixi-operations-dashboard": BixiHero,
   tripscore: TripScoreHero,
+  "manufacturing-business-systems-mapping": ManufacturingHero,
 };
 
+/**
+ * Project Results registry.
+ * Only projects with a dedicated Results presentation are registered here.
+ */
 const projectResultsSections: Record<string, ProjectResultsSection> = {
   bluekiosk: BlueKioskTechResultsSection,
   "bixi-operations-dashboard": BixiResultsSection,
 };
 
+/** Resolve the Hero component for a project. */
 function getProjectHero(projectSlug: string): ProjectHero {
   return projectHeroes[projectSlug] ?? CaseStudyHero;
 }
 
+/** Resolve the optional project-specific Results component. */
 function getProjectResultsSection(
   projectSlug: string,
 ): ProjectResultsSection | undefined {
@@ -66,6 +134,7 @@ export default function CaseStudyLayout({
   project,
   caseStudy,
 }: CaseStudyLayoutProps) {
+  /** Resolve project-specific renderers once per layout render. */
   const ProjectHero = getProjectHero(caseStudy.projectSlug);
   const ProjectResultsSection = getProjectResultsSection(
     caseStudy.projectSlug,
@@ -73,6 +142,10 @@ export default function CaseStudyLayout({
 
   return (
     <main className="mx-auto w-full max-w-7xl px-6 pb-24 sm:px-8 lg:px-10">
+      {/* ============================================================
+          GLOBAL CASE-STUDY NAVIGATION
+          Returns the visitor to the Selected Work section.
+         ============================================================ */}
       <div className="pt-8 sm:pt-10">
         <Link
           href="/#work"
@@ -83,19 +156,131 @@ export default function CaseStudyLayout({
         </Link>
       </div>
 
+      {/* ============================================================
+          PROJECT HERO
+          Uses a specialized Hero when one is registered for the slug.
+         ============================================================ */}
       <ProjectHero project={project} caseStudy={caseStudy} />
 
+      {/* ============================================================
+          MAIN CASE-STUDY CONTENT
+          Full-width section stack within the global max-w-7xl container.
+         ============================================================ */}
       <div className="space-y-20 pt-16 sm:space-y-24 sm:pt-20 lg:space-y-28 lg:pt-24">
-        {caseStudy.metrics && caseStudy.metrics.length > 0 && (
+        {/* Optional global metrics. */}
+         {caseStudy.metrics && caseStudy.metrics.length > 0 && (
           <CaseStudyReveal>
-            <CaseStudyMetrics metrics={caseStudy.metrics} />
+           <CaseStudyMetrics metrics={caseStudy.metrics} />
           </CaseStudyReveal>
+     )}  
+
+
+        {/* ============================================================
+            MANUFACTURING BUSINESS SYSTEMS MAPPING
+
+            01 — Business Challenge
+            02 — My Approach / Methodology
+            03 — End-to-End Process Architecture
+            04 — Systems & Data Architecture
+            05 — Process Inventory
+            06 — CRM Deep Dive
+            07 — Procurement / P2P Deep Dive
+            08 — Data Governance & Control Framework 
+
+            Future sections are appended here only after validation.
+           ============================================================ */}
+        {caseStudy.projectSlug ===
+          "manufacturing-business-systems-mapping" && (
+          <>
+            {/* 01 — Business Challenge */}
+            <CaseStudyReveal>
+              <BusinessChallengeSection />
+            </CaseStudyReveal>
+
+            {/* 02 — My Approach / Methodology */}
+            <CaseStudyReveal>
+              <MethodologySection
+                content={manufacturingContentEn.methodology}
+              />
+            </CaseStudyReveal>
+
+            {/* 03 — End-to-End Process Architecture */}
+            <CaseStudyReveal>
+              <EndToEndProcessSection
+                content={manufacturingContentEn.endToEnd}
+                imageSrc="/images/projects/manufacturing-business-systems-mapping/enterprise-process-map-fr.png"
+                imageAlt="Enterprise process map showing the end-to-end manufacturing business lifecycle across twelve phases"
+              />
+            </CaseStudyReveal>
+
+            {/* 04 — Systems & Data Architecture */}
+            <CaseStudyReveal>
+              <SystemsDataSection
+                content={manufacturingContentEn.systemsData}
+              />
+            </CaseStudyReveal>
+
+            {/* 05 — Process Inventory */}
+            <CaseStudyReveal>
+              <ProcessInventorySection
+                content={manufacturingContentEn.processInventory}
+                imageSrc="/images/projects/manufacturing-business-systems-mapping/process-inventory-fr.png"
+                imageAlt="Process Inventory showing process ownership, systems, analysis status, maturity, documentation, pain points and priority across twelve business processes"
+              />
+            </CaseStudyReveal>
+
+            {/* 06 — CRM Deep Dive */}
+            <CaseStudyReveal>
+              <CrmDeepDiveSection
+                content={manufacturingContentEn.crmDeepDive}
+                imageSrc="/images/projects/manufacturing-business-systems-mapping/crm-functional-deep-dive-en.png"
+                imageAlt="CRM Functional Deep Dive showing lead qualification, opportunity pipeline, Bid / No-Bid decision, estimation and controlled project handoff across phases P01 to P05"
+              />
+            </CaseStudyReveal>
+
+            {/* 07 — Procurement / P2P Deep Dive */}
+            <CaseStudyReveal>
+              <ProcurementDeepDiveSection
+                content={manufacturingContentEn.procurementDeepDive}
+                imageSrc="/images/projects/manufacturing-business-systems-mapping/procurement-p2p-functional-deep-dive-en.png"
+                imageAlt="Procurement and Procure-to-Pay functional deep dive showing business need, purchase requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment"
+              />
+            </CaseStudyReveal>
+          </>
         )}
 
+            {/* 08 — Data Governance & Control Framework */}
+            <CaseStudyReveal>
+             <DataGovernanceSection
+              content={manufacturingContentEn.dataGovernance}
+              imageSrc="/images/projects/manufacturing-business-systems-mapping/data-governance-control-framework-en.png"
+              imageAlt="Data Governance and Control Framework showing data ownership, data quality, validation rules, security and access, integration monitoring, documentation, change management, critical data domains and cross-system controls"
+             />
+            </CaseStudyReveal>
+
+           {/* 09 — Process Improvement Framework */}
+            <CaseStudyReveal>
+              <ImprovementFrameworkSection
+               content={manufacturingContentEn.improvementFramework}
+              />
+            </CaseStudyReveal> 
+
+            {/* 10 — Conclusion */}
+             <CaseStudyReveal>
+              <ConclusionSection
+                content={manufacturingContentEn.conclusion}
+              />
+             </CaseStudyReveal>
+
+        {/* ============================================================
+            GENERIC CASE-STUDY SECTIONS
+            Narrow editorial column for standard project content.
+           ============================================================ */}
         <div className="mx-auto max-w-4xl space-y-20 sm:space-y-24 lg:space-y-28">
           {caseStudy.sections.map((section, index) => {
             const number = String(index + 1).padStart(2, "0");
 
+            /** Product-thinking section. */
             if (section.id === "thinking") {
               return (
                 <CaseStudyReveal key={section.id}>
@@ -109,6 +294,7 @@ export default function CaseStudyLayout({
               );
             }
 
+            /** Specialized system-design section. */
             if (
               section.id === "system" &&
               caseStudy.layout?.systemDesign
@@ -125,6 +311,7 @@ export default function CaseStudyLayout({
               );
             }
 
+            /** Specialized execution timeline. */
             if (
               section.id === "execution" &&
               caseStudy.layout?.executionTimeline
@@ -139,6 +326,7 @@ export default function CaseStudyLayout({
               );
             }
 
+            /** Results section with optional project-specific renderer. */
             if (
               section.id === "results" &&
               caseStudy.layout?.resultsDashboard
@@ -167,6 +355,7 @@ export default function CaseStudyLayout({
               );
             }
 
+            /** Default generic case-study section. */
             return (
               <CaseStudyReveal key={section.id}>
                 <CaseStudySection
@@ -181,6 +370,9 @@ export default function CaseStudyLayout({
           })}
         </div>
 
+        {/* ============================================================
+            OPTIONAL PRODUCT ROADMAP
+           ============================================================ */}
         {caseStudy.layout?.roadmap &&
           caseStudy.nextSteps &&
           caseStudy.nextSteps.length > 0 && (
@@ -188,15 +380,22 @@ export default function CaseStudyLayout({
               <ProductRoadmap steps={caseStudy.nextSteps} />
             </CaseStudyReveal>
           )}
-          {caseStudy.projectSlug === "bluekiosk" && (
-            <CaseStudyReveal>
-              <BlueKioskTechEcosystemSection />
-           </CaseStudyReveal>
-         )}
 
+        {/* ============================================================
+            BLUEKIOSK-SPECIFIC ECOSYSTEM SECTION
+           ============================================================ */}
+        {caseStudy.projectSlug === "bluekiosk" && (
           <CaseStudyReveal>
-            <CaseStudyFooter />
+            <BlueKioskTechEcosystemSection />
           </CaseStudyReveal>
+        )}
+
+        {/* ============================================================
+            SHARED CASE-STUDY FOOTER
+           ============================================================ */}
+        <CaseStudyReveal>
+          <CaseStudyFooter />
+        </CaseStudyReveal>
       </div>
     </main>
   );

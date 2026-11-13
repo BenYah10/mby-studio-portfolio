@@ -11,7 +11,8 @@ export type ProjectStatus =
   | "Completed"
   | "In development"
   | "Product concept"
-  | "Live";
+  | "Live"
+  | "Conceptual case study";
 
 /**
  * Médias associés à un projet.
@@ -141,7 +142,7 @@ export type Project = {
  * 5. fournir un texte alternatif précis si un média est ajouté.
  */
 export const projects: Project[] = [
-  /**
+/**
    * Projet principal de la Homepage.
    *
    * BlueKioskTech reçoit une présentation spéciale :
@@ -182,7 +183,53 @@ export const projects: Project[] = [
     },
   },
 
-  /**
+/**
+   * Conceptual Business Systems Analysis case study.
+   *
+   * This project maps a project-driven manufacturing ecosystem across:
+   * - end-to-end business processes;
+   * - system responsibilities;
+   * - critical data and ownership;
+   * - business controls and decision gates;
+   * - KPIs and improvement opportunities.
+   *
+   * Governance rule:
+   * - this is a personal conceptual case study;
+   * - it must not be presented as a real client implementation;
+   * - no production deployment, realized savings or measured client outcomes are implied.
+   *
+   * featured remains true so the completed case study appears in Selected Work.
+   */
+
+  {
+  title: "Manufacturing Business Systems Mapping",
+  slug: "manufacturing-business-systems-mapping",
+  category: "Business Systems Analysis",
+  description:
+    "A conceptual case study exploring how end-to-end business processes, systems, critical data, controls and KPIs connect across a project-driven manufacturing environment.",
+  role:
+    "Functional Analysis · Business Systems Analysis · Process Mapping",
+  status: "Conceptual case study",
+  caseStudyAvailable: true,
+  capabilities: [
+    "Business Analysis",
+    "Process Mapping",
+    "ERP / CRM",
+  ],
+  featured: true,
+  media: {
+  image:
+    "/images/projects/manufacturing-business-systems-mapping/manufacturing-business-systems-mapping-cover.png",
+  imageEn:
+    "/images/projects/manufacturing-business-systems-mapping/manufacturing-business-systems-mapping-cover.png",
+  imageFr:
+    "/images/projects/manufacturing-business-systems-mapping/manufacturing-business-systems-mapping-cover.png",
+  alt:
+    "Manufacturing Business Systems Mapping showing CRM, ERP/P2P, Project Management, Field Service and BI connected in an integrated business systems architecture",
+},
+},
+
+/**
    * Projet de Business Intelligence.
    *
    * Le média est affiché dans un cadre 16/9 par ProjectMedia.
@@ -215,7 +262,7 @@ export const projects: Project[] = [
     },
   },
 
-  /**
+/**
    * Produit d'apprentissage professionnel assisté par intelligence artificielle.
    *
    * Le titre officiel affiché dans le portfolio est :
@@ -254,7 +301,7 @@ export const projects: Project[] = [
     },
   },
 
-  /**
+/**
    * Concept de produit dédié à l'intelligence de voyage personnalisée.
    *
    * Le projet combine :

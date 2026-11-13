@@ -154,7 +154,11 @@ export function ProjectCard({
           }`}
         >
           {/* Rôle ou contribution principale sur le projet. */}
-          <p className="text-sm leading-6 text-white/55">
+          <p
+            className={`text-sm leading-6 text-white/55 ${
+              isFeatured ? "" : "min-h-[3rem]"
+            }`}
+          >
             {project.role}
           </p>
 
@@ -168,7 +172,7 @@ export function ProjectCard({
             className={`mt-4 font-semibold tracking-[-0.04em] text-white transition-colors duration-300 ${
               isFeatured
                 ? "max-w-4xl text-4xl sm:text-5xl lg:text-6xl"
-                : "text-[clamp(1.8rem,3vw,2.5rem)]"
+                : "min-h-[6.5rem] text-[clamp(1.8rem,3vw,2.5rem)] leading-[1.08]"
             }`}
           >
             {project.title}
@@ -178,7 +182,7 @@ export function ProjectCard({
             className={`mt-5 leading-7 text-white/55 ${
               isFeatured
                 ? "max-w-3xl text-lg"
-                : "max-w-xl"
+                : "min-h-[7rem] max-w-xl"
             }`}
           >
             {project.description}
