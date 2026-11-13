@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   ArrowDownRight,
@@ -52,10 +52,10 @@ const contentItem = {
     y: 14,
   },
   visible: {
-    opacity: 1,
+    opacity: 0.55,
     y: 0,
     transition: {
-      duration: 0.55,
+      duration: 1.0,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
@@ -89,21 +89,22 @@ const contentItem = {
  * second moving point. The same SVG core becomes the final signature light.
  *
  * Geometry is expressed in a 100 x 100 viewBox so it remains responsive.
- * Two geometry profiles are maintained:
- * - desktop: large identity panel;
+ * Three geometry profiles are maintained:
+ * - desktop: standard laptop / desktop panel;
+ * - large: tall desktop screens (min-height: 900px);
  * - compact: tablet / smartphone panel.
  *
- * Both end with the same visual sequence:
+ * All profiles use the same visual sequence:
  * perimeter -> divider under MBY -> signature-row docking point.
  */
 function MbyLightJourney({
   disabled,
-  duration = 14.4,
-  compact = false,
+  duration = 25,
+  profile = "desktop",
 }: {
   disabled: boolean;
   duration?: number;
-  compact?: boolean;
+  profile?: "desktop" | "large" | "compact";
 }) {
   if (disabled) {
     return null;
@@ -134,6 +135,32 @@ function MbyLightJourney({
     "L 91 72.5",
   ].join(" ");
 
+  const largeJourneyPath = [
+    // Large desktop geometry (tall screens >= 900px).
+    // Calibrated against the actual divider under MBY.
+    "M 0.8 52.8",
+
+    // One complete clockwise perimeter lap.
+    "L 0.8 7",
+    "Q 0.8 0.8 7 0.8",
+    "L 93 0.8",
+    "Q 99.2 0.8 99.2 7",
+    "L 99.2 93",
+    "Q 99.2 99.2 93 99.2",
+    "L 7 99.2",
+    "Q 0.8 99.2 0.8 93",
+    "L 0.8 52.8",
+
+    // Join the actual divider directly under MBY.
+    "L 9.5 52.8",
+
+    // Trace the complete divider from left to right.
+    "L 91 52.8",
+
+    // Only after reaching the divider's end, drop to the signature row.
+    "L 91 58.2",
+  ].join(" ");
+
   const compactJourneyPath = [
     // Mobile/tablet geometry uses the compact MBY panel.
     "M 0.9 66",
@@ -159,9 +186,12 @@ function MbyLightJourney({
     "L 91.5 75.5",
   ].join(" ");
 
-  const journeyPath = compact
-    ? compactJourneyPath
-    : desktopJourneyPath;
+  const journeyPath =
+    profile === "compact"
+      ? compactJourneyPath
+      : profile === "large"
+        ? largeJourneyPath
+        : desktopJourneyPath;
 
   return (
     <svg
@@ -188,7 +218,7 @@ function MbyLightJourney({
 
       {/* Large diffuse halo — follows exactly the same single trajectory. */}
       <circle
-        r="1.65"
+        r={profile === "large" ? "1.8975" : "1.65"}
         fill="rgba(96,165,250,0.28)"
         filter="url(#mby-journey-glow)"
       >
@@ -217,7 +247,7 @@ function MbyLightJourney({
        * remaining frozen at the final coordinate.
        */}
       <circle
-        r="0.82"
+        r={profile === "large" ? "0.943" : "0.82"}
         fill="#dbeafe"
         filter="url(#mby-journey-glow)"
       >
@@ -238,7 +268,229 @@ function MbyLightJourney({
         />
         <animate
           attributeName="r"
-          values="0.82;0.82;1.05"
+          values={
+            profile === "large"
+              ? "0.943;0.943;1.2075"
+              : "0.82;0.82;1.05"
+          }
+          keyTimes="0;0.97;1"
+          dur={`${duration}s`}
+          repeatCount="1"
+          fill="freeze"
+        />
+      </circle>
+    </svg>
+  );
+}
+
+
+/**
+ * MbyLargeScreenJourney
+ *
+ * Grand-screen-only animation based on real DOM measurements.
+ *
+ * Unlike the percentage-based profiles, this component measures:
+ * - the actual MBY panel dimensions;
+ * - the actual divider beneath the MBY monogram;
+ * - the actual signature row.
+ *
+ * This makes the luminous point follow the CSS border and the existing
+ * divider precisely even when the panel becomes taller on large screens.
+ */
+function MbyLargeScreenJourney({
+  disabled,
+  duration = 7,
+  panelRef,
+  dividerRef,
+}: {
+  disabled: boolean;
+  duration?: number;
+  panelRef: React.RefObject<HTMLElement | null>;
+  dividerRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const [path, setPath] = useState("");
+  const [viewBox, setViewBox] = useState("0 0 1 1");
+
+  useLayoutEffect(() => {
+    if (disabled) {
+      return;
+    }
+
+    const updateGeometry = () => {
+      const panel = panelRef.current;
+      const divider = dividerRef.current;
+
+      if (!panel || !divider) {
+        return;
+      }
+
+      const panelRect = panel.getBoundingClientRect();
+      const dividerRect = divider.getBoundingClientRect();
+
+      const width = panelRect.width;
+      const height = panelRect.height;
+
+      if (width <= 0 || height <= 0) {
+        return;
+      }
+
+      // Keep the signal centered directly on the 1px panel border.
+      const inset = 0.5;
+
+      // CSS rounded-3xl = 1.5rem ≈ 24px.
+      // Clamp protects the geometry on unusually small panels.
+      const radius = Math.min(24, width / 4, height / 4);
+
+      // Real divider position relative to the panel.
+      const dividerY = dividerRect.top - panelRect.top;
+      const dividerLeft = dividerRect.left - panelRect.left;
+      const dividerRight = dividerRect.right - panelRect.left;
+
+      // Final position: same X as divider end, vertically centered
+      // on the signature text row below the divider.
+      const finalY =
+        dividerRect.top -
+        panelRect.top +
+        dividerRect.height / 2 +
+        4;
+
+      const left = inset;
+      const top = inset;
+      const right = width - inset;
+      const bottom = height - inset;
+
+      const r = radius;
+
+      /**
+       * Start at the left border aligned with the divider.
+       * Complete one clockwise lap around the exact panel border.
+       * Return to the same point, join the real divider, trace it fully,
+       * then move vertically to the final signature position.
+       */
+      const exactPath = [
+        `M ${left} ${dividerY}`,
+
+        // Left side up to top-left rounded corner.
+        `L ${left} ${top + r}`,
+        `Q ${left} ${top} ${left + r} ${top}`,
+
+        // Top edge + top-right rounded corner.
+        `L ${right - r} ${top}`,
+        `Q ${right} ${top} ${right} ${top + r}`,
+
+        // Right edge + bottom-right rounded corner.
+        `L ${right} ${bottom - r}`,
+        `Q ${right} ${bottom} ${right - r} ${bottom}`,
+
+        // Bottom edge + bottom-left rounded corner.
+        `L ${left + r} ${bottom}`,
+        `Q ${left} ${bottom} ${left} ${bottom - r}`,
+
+        // Back to divider level on the left border.
+        `L ${left} ${dividerY}`,
+
+        // Enter the existing divider under MBY.
+        `L ${dividerLeft} ${dividerY}`,
+
+        // Trace the complete existing divider.
+        `L ${dividerRight} ${dividerY}`,
+
+        // Final docking aligned with the signature row.
+        `L ${dividerRight} ${finalY}`,
+      ].join(" ");
+
+      setViewBox(`0 0 ${width} ${height}`);
+      setPath(exactPath);
+    };
+
+    updateGeometry();
+
+    const observer = new ResizeObserver(updateGeometry);
+
+    if (panelRef.current) {
+      observer.observe(panelRef.current);
+    }
+
+    if (dividerRef.current) {
+      observer.observe(dividerRef.current);
+    }
+
+    window.addEventListener("resize", updateGeometry);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateGeometry);
+    };
+  }, [disabled, panelRef, dividerRef]);
+
+  if (disabled || !path) {
+    return null;
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-30 h-full w-full"
+      viewBox={viewBox}
+      preserveAspectRatio="none"
+    >
+      <defs>
+        <filter
+          id="mby-large-exact-glow"
+          x="-300%"
+          y="-300%"
+          width="600%"
+          height="600%"
+        >
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* 15% larger halo for large screens. */}
+      <circle
+        r="7.2"
+        fill="rgba(96,165,250,0.28)"
+        filter="url(#mby-large-exact-glow)"
+      >
+        <animateMotion
+          path={path}
+          dur={`${duration}s`}
+          repeatCount="1"
+          fill="freeze"
+          calcMode="paced"
+        />
+      </circle>
+
+      {/* 15% larger bright core, following the exact same measured path. */}
+      <circle
+        r="4.1"
+        fill="#dbeafe"
+        filter="url(#mby-large-exact-glow)"
+      >
+        <animateMotion
+          path={path}
+          dur={`${duration}s`}
+          repeatCount="1"
+          fill="freeze"
+          calcMode="paced"
+        />
+
+        <animate
+          attributeName="fill"
+          values="#dbeafe;#dbeafe;#2563eb"
+          keyTimes="0;0.97;1"
+          dur={`${duration}s`}
+          repeatCount="1"
+          fill="freeze"
+        />
+
+        <animate
+          attributeName="r"
+          values="4.1;4.1;4.7"
           keyTimes="0;0.97;1"
           dur={`${duration}s`}
           repeatCount="1"
@@ -274,6 +526,10 @@ export function Hero({
   const shouldReduceMotion = useReducedMotion();
   const pathname = usePathname();
   const [lightRunId, setLightRunId] = useState(0);
+
+  // Real DOM anchors used only by the large-screen light trajectory.
+  const largePanelRef = useRef<HTMLElement | null>(null);
+  const largeDividerRef = useRef<HTMLDivElement | null>(null);
 
   /**
    * Restart the MBY light journey every time the Homepage is entered again.
@@ -477,6 +733,7 @@ export function Hero({
          * de surcharger les écrans mobiles et tablettes.
          */}
         <motion.aside
+          ref={largePanelRef}
           initial={
             shouldReduceMotion
               ? false
@@ -504,12 +761,34 @@ export function Hero({
            * Single light journey:
            * perimeter -> divider under MBY -> permanent signature point.
            */}
-          <MbyLightJourney
-            key={`mby-light-desktop-${lightRunId}`}
-            disabled={Boolean(shouldReduceMotion)}
-            duration={5.5}
-            compact={false}
-          />
+          {/*
+           * Standard desktop / laptop trajectory.
+           * Hidden on tall desktop screens where the panel proportions change.
+           */}
+          <div className="[@media(min-height:900px)]:hidden">
+            <MbyLightJourney
+              key={`mby-light-desktop-${lightRunId}`}
+              disabled={Boolean(shouldReduceMotion)}
+              duration={7.0}
+              profile="desktop"
+            />
+          </div>
+
+          {/*
+           * Tall-screen trajectory.
+           * The internal divider and signature row sit higher inside the
+           * 32rem panel used at min-height: 900px, so this geometry is
+           * calibrated separately without affecting laptop/mobile layouts.
+           */}
+          <div className="hidden [@media(min-height:900px)]:block">
+            <MbyLargeScreenJourney
+              key={`mby-light-large-${lightRunId}`}
+              disabled={Boolean(shouldReduceMotion)}
+              duration={7.0}
+              panelRef={largePanelRef}
+              dividerRef={largeDividerRef}
+            />
+          </div>
 
           {/* Halo décoratif interne du panneau. */}
           <div
@@ -541,7 +820,10 @@ export function Hero({
                 MBY
               </p>
 
-              <div className="-mt-3 relative flex items-center border-t border-[var(--mby-panel-border)] pt-5">
+              <div
+                ref={largeDividerRef}
+                className="-mt-3 relative flex items-center border-t border-[var(--mby-panel-border)] pt-5"
+              >
                 {/*
                  * Final visual destination:
                  * the animated point freezes immediately before the signature text.
@@ -593,8 +875,8 @@ export function Hero({
          <MbyLightJourney
            key={`mby-light-compact-${lightRunId}`}
            disabled={Boolean(shouldReduceMotion)}
-           duration={11.5}
-           compact
+           duration={7.0}
+           profile="compact"
          />
 
          <div
