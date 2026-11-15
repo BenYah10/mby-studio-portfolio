@@ -302,11 +302,13 @@ function MbyLargeScreenJourney({
   duration = 7,
   panelRef,
   dividerRef,
+  targetRef,
 }: {
   disabled: boolean;
   duration?: number;
   panelRef: React.RefObject<HTMLElement | null>;
   dividerRef: React.RefObject<HTMLDivElement | null>;
+  targetRef: React.RefObject<HTMLSpanElement | null>;
 }) {
   const [path, setPath] = useState("");
   const [viewBox, setViewBox] = useState("0 0 1 1");
@@ -319,13 +321,15 @@ function MbyLargeScreenJourney({
     const updateGeometry = () => {
       const panel = panelRef.current;
       const divider = dividerRef.current;
+      const target = targetRef.current;
 
-      if (!panel || !divider) {
+      if (!panel || !divider || !target) {
         return;
       }
 
       const panelRect = panel.getBoundingClientRect();
       const dividerRect = divider.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
 
       const width = panelRect.width;
       const height = panelRect.height;
@@ -338,21 +342,30 @@ function MbyLargeScreenJourney({
       const inset = 0.5;
 
       // CSS rounded-3xl = 1.5rem ≈ 24px.
-      // Clamp protects the geometry on unusually small panels.
       const radius = Math.min(24, width / 4, height / 4);
 
-      // Real divider position relative to the panel.
+      // Real divider geometry relative to the panel.
       const dividerY = dividerRect.top - panelRect.top;
       const dividerLeft = dividerRect.left - panelRect.left;
       const dividerRight = dividerRect.right - panelRect.left;
 
-      // Final position: same X as divider end, vertically centered
-      // on the signature text row below the divider.
+      /**
+       * Language-safe final destination.
+       *
+       * Instead of calculating the final point from the divider dimensions,
+       * measure the invisible target span itself. This keeps the animation
+       * aligned in both English and French even when translated text changes
+       * wrapping, spacing or internal layout.
+       */
+      const finalX =
+        targetRect.left -
+        panelRect.left +
+        targetRect.width / 2;
+
       const finalY =
-        dividerRect.top -
+        targetRect.top -
         panelRect.top +
-        dividerRect.height / 2 +
-        4;
+        targetRect.height / 2;
 
       const left = inset;
       const top = inset;
@@ -396,7 +409,7 @@ function MbyLargeScreenJourney({
         `L ${dividerRight} ${dividerY}`,
 
         // Final docking aligned with the signature row.
-        `L ${dividerRight} ${finalY}`,
+        `L ${finalX} ${finalY}`,
       ].join(" ");
 
       setViewBox(`0 0 ${width} ${height}`);
@@ -415,13 +428,17 @@ function MbyLargeScreenJourney({
       observer.observe(dividerRef.current);
     }
 
+    if (targetRef.current) {
+      observer.observe(targetRef.current);
+    }
+
     window.addEventListener("resize", updateGeometry);
 
     return () => {
       observer.disconnect();
       window.removeEventListener("resize", updateGeometry);
     };
-  }, [disabled, panelRef, dividerRef]);
+  }, [disabled, panelRef, dividerRef, targetRef]);
 
   if (disabled || !path) {
     return null;
@@ -530,6 +547,7 @@ export function Hero({
   // Real DOM anchors used only by the large-screen light trajectory.
   const largePanelRef = useRef<HTMLElement | null>(null);
   const largeDividerRef = useRef<HTMLDivElement | null>(null);
+  const largeTargetRef = useRef<HTMLSpanElement | null>(null);
 
   /**
    * Restart the MBY light journey every time the Homepage is entered again.
@@ -787,6 +805,7 @@ export function Hero({
               duration={7.0}
               panelRef={largePanelRef}
               dividerRef={largeDividerRef}
+              targetRef={largeTargetRef}
             />
           </div>
 
@@ -830,6 +849,7 @@ export function Hero({
                  * No second visible HTML dot is rendered.
                  */}
                 <span
+                  ref={largeTargetRef}
                   aria-hidden="true"
                   className="mr-3 h-2 w-2 shrink-0 opacity-0"
                 />
