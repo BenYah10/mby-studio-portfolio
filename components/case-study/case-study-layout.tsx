@@ -138,7 +138,7 @@ function getProjectResultsSection(
 export default function CaseStudyLayout({
   project,
   caseStudy,
-  locale = "en",
+  locale,
 }: CaseStudyLayoutProps) {
   /**
    * Route-safe project identity.
@@ -149,9 +149,25 @@ export default function CaseStudyLayout({
    */
   const activeProjectSlug = project.slug;
 
-  /** Keep the legacy route in English; localized routes will pass `locale`. */
+  /** The legacy route has no locale and must keep its English behavior. */
+  const resolvedLocale: Locale = locale ?? "en";
   const manufacturingContent =
-    locale === "fr" ? manufacturingContentFr : manufacturingContentEn;
+    resolvedLocale === "fr" ? manufacturingContentFr : manufacturingContentEn;
+
+  /**
+   * Navigation during the migration:
+   * - legacy case studies still return to the legacy #work section;
+   * - localized case studies return to a working localized homepage;
+   * - once the Work pages exist, replace the homepage destinations with
+   *   getLocalizedPath("work", resolvedLocale).
+   */
+  const backHref = locale ? `/${resolvedLocale}/` : "/#work";
+  const backLabel =
+    !locale
+      ? "Back to Selected Work"
+      : resolvedLocale === "fr"
+        ? "Retour à l’accueil"
+        : "Back to Home";
 
   /** Resolve project-specific renderers once per layout render. */
   const ProjectHero = getProjectHero(activeProjectSlug);
@@ -161,15 +177,15 @@ export default function CaseStudyLayout({
     <main className="mx-auto w-full max-w-7xl px-6 pb-24 sm:px-8 lg:px-10">
       {/* ============================================================
           GLOBAL CASE-STUDY NAVIGATION
-          Returns the visitor to the Selected Work section.
+          Preserves the legacy #work anchor and localizes new routes.
          ============================================================ */}
       <div className="pt-8 sm:pt-10">
         <Link
-          href="/#work"
+          href={backHref}
           className="group inline-flex items-center gap-2 text-sm font-medium text-white/55 transition hover:text-white"
         >
           <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-1" />
-          Back to Selected Work
+          {backLabel}
         </Link>
       </div>
 
@@ -177,7 +193,7 @@ export default function CaseStudyLayout({
           PROJECT HERO
           Uses a specialized Hero when one is registered for the slug.
          ============================================================ */}
-      <ProjectHero project={project} caseStudy={caseStudy} locale={locale} />
+      <ProjectHero project={project} caseStudy={caseStudy} locale={resolvedLocale} />
 
       {/* ============================================================
           MAIN CASE-STUDY CONTENT
