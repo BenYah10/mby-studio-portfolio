@@ -241,7 +241,7 @@ export default function CaseStudyLayout({
               <EndToEndProcessSection
                 content={manufacturingContent.endToEnd}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/enterprise-process-map-fr.png"
-                imageAlt="Enterprise process map showing the end-to-end manufacturing business lifecycle across twelve phases"
+                imageAlt={resolvedLocale === "fr" ? "Cartographie des processus manufacturiers en français, présentant le cycle métier de bout en bout en douze phases." : "French-language enterprise process map presenting the end-to-end manufacturing business lifecycle in twelve phases."}
               />
             </CaseStudyReveal>
 
