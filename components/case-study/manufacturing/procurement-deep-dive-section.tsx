@@ -54,6 +54,7 @@ import {
 } from "lucide-react";
 
 import ArchitectureViewer from "./architecture-viewer";
+import type { Locale } from "@/i18n/config";
 
 /**
  * One Procure-to-Pay lifecycle step.
@@ -136,6 +137,8 @@ type ProcurementDeepDiveContent = {
  * Component props.
  */
 type ProcurementDeepDiveSectionProps = {
+  /** Native page locale; omitted on legacy routes (English). */
+  locale?: Locale;
   content: ProcurementDeepDiveContent;
   imageSrc: string;
   imageAlt: string;
@@ -187,6 +190,7 @@ export default function ProcurementDeepDiveSection({
   content,
   imageSrc,
   imageAlt,
+  locale = "en",
 }: ProcurementDeepDiveSectionProps) {
   /**
    * Controls the reusable full-screen viewer.
@@ -563,6 +567,13 @@ export default function ProcurementDeepDiveSection({
         imageSrc={imageSrc}
         imageAlt={imageAlt}
         title={content.viewerCaption}
+        mapLabel={locale === "fr" ? "Diagramme fonctionnel" : "Architecture Map"}
+        closeLabel={locale === "fr" ? "Fermer la visionneuse" : "Close viewer"}
+        instructions={
+          locale === "fr"
+            ? "Faites défiler pour explorer le diagramme. Appuyez sur Échap pour fermer."
+            : "Scroll to explore the diagram. Press Escape to close."
+        }
         onClose={() => setIsViewerOpen(false)}
       />
     </section>

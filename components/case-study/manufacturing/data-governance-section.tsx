@@ -54,6 +54,7 @@ import {
 } from "lucide-react";
 
 import ArchitectureViewer from "./architecture-viewer";
+import type { Locale } from "@/i18n/config";
 
 /**
  * One governance principle.
@@ -131,6 +132,8 @@ type DataGovernanceContent = {
  * Component props.
  */
 type DataGovernanceSectionProps = {
+  /** Native page locale; omitted on legacy routes (English). */
+  locale?: Locale;
   content: DataGovernanceContent;
   imageSrc: string;
   imageAlt: string;
@@ -183,6 +186,7 @@ export default function DataGovernanceSection({
   content,
   imageSrc,
   imageAlt,
+  locale = "en",
 }: DataGovernanceSectionProps) {
   /**
    * Controls the reusable full-screen viewer.
@@ -557,6 +561,13 @@ export default function DataGovernanceSection({
         imageSrc={imageSrc}
         imageAlt={imageAlt}
         title={content.title}
+        mapLabel={locale === "fr" ? "Diagramme fonctionnel" : "Architecture Map"}
+        closeLabel={locale === "fr" ? "Fermer la visionneuse" : "Close viewer"}
+        instructions={
+          locale === "fr"
+            ? "Faites défiler pour explorer le diagramme. Appuyez sur Échap pour fermer."
+            : "Scroll to explore the diagram. Press Escape to close."
+        }
         onClose={() => setIsViewerOpen(false)}
       />
     </section>

@@ -255,36 +255,40 @@ export default function CaseStudyLayout({
             {/* 05 — Process Inventory */}
             <CaseStudyReveal>
               <ProcessInventorySection
+                locale={resolvedLocale}
                 content={manufacturingContent.processInventory}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/process-inventory-fr.png"
-                imageAlt="Process Inventory showing process ownership, systems, analysis status, maturity, documentation, pain points and priority across twelve business processes"
+                imageAlt={resolvedLocale === "fr" ? "Inventaire des processus en français : responsables, systèmes, état d’analyse, maturité et priorités des douze processus métier." : "French-language process inventory diagram showing owners, systems, analysis status, maturity, and priorities for twelve business processes."}
               />
             </CaseStudyReveal>
 
             {/* 06 — CRM Deep Dive */}
             <CaseStudyReveal>
               <CrmDeepDiveSection
+                locale={resolvedLocale}
                 content={manufacturingContent.crmDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/crm-functional-deep-dive-en.png"
-                imageAlt="CRM Functional Deep Dive showing lead qualification, opportunity pipeline, Bid / No-Bid decision, estimation and controlled project handoff across phases P01 to P05"
+                imageAlt={resolvedLocale === "fr" ? "Diagramme CRM en anglais : qualification, pipeline commercial, décision de soumission, estimation et transfert vers le projet, phases P01 à P05." : "English-language CRM diagram showing lead qualification, pipeline, bid decision, estimation and project handoff, phases P01 to P05."}
               />
             </CaseStudyReveal>
 
             {/* 07 — Procurement / P2P Deep Dive */}
             <CaseStudyReveal>
               <ProcurementDeepDiveSection
+                locale={resolvedLocale}
                 content={manufacturingContent.procurementDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/procurement-p2p-functional-deep-dive-en.png"
-                imageAlt="Procurement and Procure-to-Pay functional deep dive showing business need, purchase requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment"
+                imageAlt={resolvedLocale === "fr" ? "Diagramme approvisionnement P2P en anglais : besoin, demande d’achat, approbation, commande, réception, rapprochement à trois pièces et paiement fournisseur." : "English-language procurement/P2P diagram showing requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment."}
               />
             </CaseStudyReveal>
 
             {/* 08 — Data Governance & Control Framework */}
             <CaseStudyReveal>
              <DataGovernanceSection
+                locale={resolvedLocale}
               content={manufacturingContent.dataGovernance}
               imageSrc="/images/projects/manufacturing-business-systems-mapping/data-governance-control-framework-en.png"
-              imageAlt="Data Governance and Control Framework showing data ownership, data quality, validation rules, security and access, integration monitoring, documentation, change management, critical data domains and cross-system controls"
+              imageAlt={resolvedLocale === "fr" ? "Diagramme de gouvernance en anglais : responsabilités, qualité des données, validations, accès, intégrations et contrôles intersystèmes." : "English-language governance diagram showing data ownership, quality, validations, access, integrations and cross-system controls."}
              />
             </CaseStudyReveal>
 
