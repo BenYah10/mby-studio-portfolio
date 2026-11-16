@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import type { Locale } from "@/i18n/config";
+import { getBusinessChallengeCopy } from "@/content/case-studies/manufacturing/business-challenge-copy";
 import {
   ArrowRight,
   Database,
@@ -9,37 +11,17 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
-const challenges = [
-  {
-    title: "Fragmented Processes",
-    description:
-      "Business processes often cross multiple teams and systems, creating handoffs where context, responsibilities or information can be lost.",
-    icon: GitBranch,
-  },
-  {
-    title: "Ownership & Controls",
-    description:
-      "Approvals, responsibilities, business rules and decision gates must remain clear across the end-to-end lifecycle.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Data Reliability",
-    description:
-      "Critical data must remain consistent, owned and trustworthy so operational and management decisions are based on reliable information.",
-    icon: Database,
-  },
-];
+/** Icons remain in a stable order independently of the displayed language. */
+const challengeIcons = [GitBranch, ShieldCheck, Database] as const;
 
-const businessFlow = [
-  "Process",
-  "Ownership",
-  "System",
-  "Data",
-  "Control",
-  "KPI",
-];
+type BusinessChallengeSectionProps = {
+  /** Undefined for historical routes: retain the original English output. */
+  locale?: Locale;
+};
 
-export default function BusinessChallengeSection() {
+export default function BusinessChallengeSection({ locale = "en" }: BusinessChallengeSectionProps) {
+  const copy = getBusinessChallengeCopy(locale);
+
   return (
     <section
       id="business-challenge"
@@ -60,13 +42,12 @@ export default function BusinessChallengeSection() {
             />
 
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
-              Business Challenge
+              {copy.eyebrow}
             </p>
           </div>
 
           <p className="mt-7 max-w-sm text-sm leading-7 text-white/40">
-            A multi-system environment can be technically connected while
-            remaining functionally fragmented.
+            {copy.sideNote}
           </p>
         </div>
 
@@ -75,26 +56,23 @@ export default function BusinessChallengeSection() {
             id="business-challenge-title"
             className="max-w-4xl text-[clamp(2.35rem,4.8vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-white"
           >
-            Multiple systems do not automatically create an integrated
-            business ecosystem.
+            {copy.title}
           </h2>
 
           <p className="mt-8 max-w-3xl text-[clamp(1.25rem,2vw,1.7rem)] font-medium leading-[1.4] tracking-[-0.025em] text-white/70">
-            The challenge is not connecting applications. It is connecting
-            business processes, responsibilities and reliable data across
-            those applications.
+            {copy.introduction}
           </p>
         </div>
       </div>
 
       {/* CHALLENGE CARDS */}
       <div className="mt-14 grid gap-4 md:grid-cols-3 lg:mt-16">
-        {challenges.map((challenge, index) => {
-          const Icon = challenge.icon;
+        {copy.challenges.map((challenge, index) => {
+          const Icon = challengeIcons[index];
 
           return (
             <motion.article
-              key={challenge.title}
+              key={index}
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.25 }}
@@ -116,7 +94,7 @@ export default function BusinessChallengeSection() {
                 </div>
 
                 <p className="mt-8 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-white/25">
-                  Challenge {String(index + 1).padStart(2, "0")}
+                  {copy.challengeLabel} {String(index + 1).padStart(2, "0")}
                 </p>
 
                 <h3 className="mt-3 text-xl font-semibold tracking-[-0.025em] text-white">
@@ -141,21 +119,20 @@ export default function BusinessChallengeSection() {
               <Layers3 className="h-4 w-4 text-white/35" />
 
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/30">
-                System-centric view
+                {copy.systemCentric}
               </p>
             </div>
 
             <h3 className="mt-5 text-2xl font-semibold tracking-[-0.035em] text-white/80">
-              Applications & integrations
+              {copy.systemTitle}
             </h3>
 
             <p className="mt-3 max-w-md text-sm leading-7 text-white/40">
-              A technology map explains which platforms exist and how they may
-              exchange information.
+              {copy.systemDescription}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-2">
-              {["CRM", "ERP", "Project Mgmt", "BI"].map((system, index) => (
+              {["CRM", "ERP", copy.projectManagement, "BI"].map((system, index) => (
                 <div
                   key={system}
                   className="flex items-center gap-2"
@@ -185,29 +162,27 @@ export default function BusinessChallengeSection() {
               <GitBranch className="h-4 w-4 text-accent" />
 
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                Business-centric view
+                {copy.businessCentric}
               </p>
             </div>
 
             <h3 className="mt-5 text-2xl font-semibold tracking-[-0.035em] text-white">
-              How the business actually operates
+              {copy.businessTitle}
             </h3>
 
             <p className="mt-3 max-w-xl text-sm leading-7 text-white/45">
-              Functional analysis connects the business process to ownership,
-              systems, critical data, controls and the measures used to support
-              decisions.
+              {copy.businessDescription}
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-3">
-              {businessFlow.map((item, index) => (
+              {copy.flow.map((item, index) => (
                 <div
                   key={item}
                   className="flex items-center gap-2"
                 >
                   <span
                     className={
-                      index === 0 || index === businessFlow.length - 1
+                      index === 0 || index === copy.flow.length - 1
                         ? "rounded-lg border border-accent/20 bg-accent/[0.07] px-3 py-2 text-xs font-medium text-white/75"
                         : "rounded-lg border border-white/10 bg-white/[0.025] px-3 py-2 text-xs font-medium text-white/60"
                     }
@@ -215,7 +190,7 @@ export default function BusinessChallengeSection() {
                     {item}
                   </span>
 
-                  {index < businessFlow.length - 1 && (
+                  {index < copy.flow.length - 1 && (
                     <ArrowRight className="h-3.5 w-3.5 text-accent/45" />
                   )}
                 </div>

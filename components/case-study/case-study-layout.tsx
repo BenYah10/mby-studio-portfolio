@@ -226,7 +226,7 @@ export default function CaseStudyLayout({
           <>
             {/* 01 — Business Challenge */}
             <CaseStudyReveal>
-              <BusinessChallengeSection />
+              <BusinessChallengeSection locale={resolvedLocale} />
             </CaseStudyReveal>
 
             {/* 02 — My Approach / Methodology */}
