@@ -14,9 +14,9 @@
  * - Manufacturing sections are intentionally rendered outside the max-w-4xl
  *   generic content column because their diagrams and architecture views need
  *   access to the full max-w-7xl case-study width;
- * - Manufacturing content currently defaults to English through
- *   manufacturingContentEn. The structure is ready for the future global
- *   FR / EN locale switch.
+ * - Manufacturing analytical content is selected by the optional locale prop;
+ * - Legacy routes continue using English by default until localized routes
+ *   are connected.
  *
  * Maintenance rule:
  * - Add project-specific UI only when the shared generic renderer is not
@@ -30,6 +30,7 @@ import { ArrowLeft } from "lucide-react";
 import type { ComponentType } from "react";
 
 import type { Project } from "@/content/projects";
+import type { Locale } from "@/i18n/config";
 import type { CaseStudy, CaseStudyMetric } from "@/types/case-study";
 
 /** Shared case-study building blocks. */
@@ -61,9 +62,10 @@ import SystemsDataSection from "./manufacturing/systems-data-section";
 
 /**
  * Manufacturing content source.
- * English remains the current default until the global FR / EN switch is wired.
+ * Each language retains the same component contracts and analytical structure.
  */
 import { manufacturingContentEn } from "@/content/case-studies/manufacturing/en";
+import { manufacturingContentFr } from "@/content/case-studies/manufacturing/fr";
 
 /** Reusable generic case-study sections. */
 import ExecutionTimeline from "./sections/execution-timeline";
@@ -81,6 +83,8 @@ import ConclusionSection from "./manufacturing/conclusion-section";
 type CaseStudyLayoutProps = {
   project: Project;
   caseStudy: CaseStudy;
+  /** Optional until the localized case-study routes are connected. */
+  locale?: Locale;
 };
 
 /** Contract required by project-specific Hero components. */
@@ -133,6 +137,7 @@ function getProjectResultsSection(
 export default function CaseStudyLayout({
   project,
   caseStudy,
+  locale = "en",
 }: CaseStudyLayoutProps) {
   /**
    * Route-safe project identity.
@@ -142,6 +147,10 @@ export default function CaseStudyLayout({
    * accidentally activating another project's specialized sections.
    */
   const activeProjectSlug = project.slug;
+
+  /** Keep the legacy route in English; localized routes will pass `locale`. */
+  const manufacturingContent =
+    locale === "fr" ? manufacturingContentFr : manufacturingContentEn;
 
   /** Resolve project-specific renderers once per layout render. */
   const ProjectHero = getProjectHero(activeProjectSlug);
@@ -206,14 +215,14 @@ export default function CaseStudyLayout({
             {/* 02 — My Approach / Methodology */}
             <CaseStudyReveal>
               <MethodologySection
-                content={manufacturingContentEn.methodology}
+                content={manufacturingContent.methodology}
               />
             </CaseStudyReveal>
 
             {/* 03 — End-to-End Process Architecture */}
             <CaseStudyReveal>
               <EndToEndProcessSection
-                content={manufacturingContentEn.endToEnd}
+                content={manufacturingContent.endToEnd}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/enterprise-process-map-fr.png"
                 imageAlt="Enterprise process map showing the end-to-end manufacturing business lifecycle across twelve phases"
               />
@@ -222,14 +231,14 @@ export default function CaseStudyLayout({
             {/* 04 — Systems & Data Architecture */}
             <CaseStudyReveal>
               <SystemsDataSection
-                content={manufacturingContentEn.systemsData}
+                content={manufacturingContent.systemsData}
               />
             </CaseStudyReveal>
 
             {/* 05 — Process Inventory */}
             <CaseStudyReveal>
               <ProcessInventorySection
-                content={manufacturingContentEn.processInventory}
+                content={manufacturingContent.processInventory}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/process-inventory-fr.png"
                 imageAlt="Process Inventory showing process ownership, systems, analysis status, maturity, documentation, pain points and priority across twelve business processes"
               />
@@ -238,7 +247,7 @@ export default function CaseStudyLayout({
             {/* 06 — CRM Deep Dive */}
             <CaseStudyReveal>
               <CrmDeepDiveSection
-                content={manufacturingContentEn.crmDeepDive}
+                content={manufacturingContent.crmDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/crm-functional-deep-dive-en.png"
                 imageAlt="CRM Functional Deep Dive showing lead qualification, opportunity pipeline, Bid / No-Bid decision, estimation and controlled project handoff across phases P01 to P05"
               />
@@ -247,7 +256,7 @@ export default function CaseStudyLayout({
             {/* 07 — Procurement / P2P Deep Dive */}
             <CaseStudyReveal>
               <ProcurementDeepDiveSection
-                content={manufacturingContentEn.procurementDeepDive}
+                content={manufacturingContent.procurementDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/procurement-p2p-functional-deep-dive-en.png"
                 imageAlt="Procurement and Procure-to-Pay functional deep dive showing business need, purchase requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment"
               />
@@ -256,7 +265,7 @@ export default function CaseStudyLayout({
             {/* 08 — Data Governance & Control Framework */}
             <CaseStudyReveal>
              <DataGovernanceSection
-              content={manufacturingContentEn.dataGovernance}
+              content={manufacturingContent.dataGovernance}
               imageSrc="/images/projects/manufacturing-business-systems-mapping/data-governance-control-framework-en.png"
               imageAlt="Data Governance and Control Framework showing data ownership, data quality, validation rules, security and access, integration monitoring, documentation, change management, critical data domains and cross-system controls"
              />
@@ -265,14 +274,14 @@ export default function CaseStudyLayout({
            {/* 09 — Process Improvement Framework */}
             <CaseStudyReveal>
               <ImprovementFrameworkSection
-               content={manufacturingContentEn.improvementFramework}
+               content={manufacturingContent.improvementFramework}
               />
             </CaseStudyReveal> 
 
             {/* 10 — Conclusion */}
              <CaseStudyReveal>
               <ConclusionSection
-                content={manufacturingContentEn.conclusion}
+                content={manufacturingContent.conclusion}
               />
              </CaseStudyReveal>
           </>
