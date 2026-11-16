@@ -1,6 +1,8 @@
+import type { Locale } from "@/i18n/config";
 type ExecutionTimelineProps = {
   number: string;
   title: string;
+  locale?: Locale;
 };
 
 const phases = [
@@ -41,9 +43,20 @@ const phases = [
   },
 ];
 
+const phasesFr = [
+  { title: "Vision produit", description: "Préciser le concept, les utilisateurs visés et l’opportunité d’affaires." },
+  { title: "Besoins utilisateurs (URS)", description: "Recueillir les besoins fonctionnels, les contraintes et l’expérience attendue." },
+  { title: "Exigences produit (PRD)", description: "Traduire les attentes métier en spécifications mesurables." },
+  { title: "Architecture système", description: "Définir les modules, interfaces et logiques de contrôle." },
+  { title: "Validation d’ingénierie", description: "Évaluer les risques, les jalons qualité et la faisabilité technique." },
+  { title: "Prototype", description: "Construire et valider un premier ensemble intégré." },
+  { title: "Déploiement pilote", description: "Préparer des essais opérationnels en situation réelle." },
+];
+
 export default function ExecutionTimeline({
   number,
   title,
+  locale = "en",
 }: ExecutionTimelineProps) {
   return (
     <section className="border-t border-white/10 pt-20">
@@ -54,7 +67,7 @@ export default function ExecutionTimeline({
 
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-            Execution
+            {locale === "fr" ? "Exécution" : "Execution"}
           </p>
 
           <h2 className="mt-5 text-4xl font-semibold tracking-tight text-white">
@@ -62,7 +75,7 @@ export default function ExecutionTimeline({
           </h2>
 
           <div className="mt-16 space-y-6">
-            {phases.map((phase) => (
+            {(locale === "fr" ? phasesFr : phases).map((phase) => (
               <div
                 key={phase.title}
                 className="flex gap-6 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-all duration-300 hover:border-sky-400/30 hover:bg-white/[0.04]"

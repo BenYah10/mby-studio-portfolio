@@ -1,24 +1,30 @@
 import Image from "next/image";
 
 import type { Project } from "@/content/projects";
+import type { Locale } from "@/i18n/config";
+import { caseStudyLabels, projectDisplay } from "@/i18n/case-study-ui";
 import type { CaseStudy } from "@/types/case-study";
 
 type TripScoreHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
 export default function TripScoreHero({
   project,
   caseStudy,
+  locale = "en",
 }: TripScoreHeroProps) {
+  const labels = caseStudyLabels[locale];
+  const display = projectDisplay(project, locale);
   return (
     <header className="border-b border-white/10 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
       <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch lg:gap-16">
         <div className="flex flex-col">
           <div className="flex items-center gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-              {project.category}
+              {display.category}
             </p>
 
             <span
@@ -42,18 +48,18 @@ export default function TripScoreHero({
           <dl className="mt-auto grid gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3">
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Role
+                {labels.role}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.role}
+                {display.role}
               </dd>
             </div>
 
             {caseStudy.timeline && (
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                  Timeline
+                  {labels.timeline}
                 </dt>
 
                 <dd className="mt-3 text-sm leading-6 text-white/75">
@@ -64,11 +70,11 @@ export default function TripScoreHero({
 
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Status
+                {labels.status}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.status}
+                {display.status}
               </dd>
             </div>
           </dl>
@@ -88,7 +94,7 @@ export default function TripScoreHero({
           <div className="relative h-full min-h-[32rem] overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#020817]">
             <Image
               src="/images/projects/tripscore/TripScore-AI-Journey-Engine.png"
-              alt="TripScore AI Journey Engine showing personalized travel discovery, matching, itinerary building and refinement"
+              alt={locale === "fr" ? "Schéma du parcours de voyage TripScore : découverte, correspondance, itinéraire et ajustement (visuel contenant des libellés anglais)." : "TripScore AI Journey Engine showing personalized travel discovery, matching, itinerary building and refinement"}
               fill
               priority
               sizes="(min-width: 1024px) 55vw, 100vw"
@@ -99,7 +105,7 @@ export default function TripScoreHero({
       </div>
 
       <div className="mt-8 flex flex-wrap gap-2">
-        {project.capabilities.map((capability) => (
+        {display.capabilities.map((capability) => (
           <span
             key={capability}
             className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55"

@@ -40,7 +40,7 @@ export default async function LocalizedCaseStudyPage({ params }: PageProps) {
   }
 
   const project = projects.find((candidate) => candidate.slug === slug);
-  const caseStudy = getCaseStudy(slug);
+  const caseStudy = getCaseStudy(slug, locale);
 
   if (!project || !caseStudy) {
     notFound();

@@ -31,6 +31,7 @@ import type { ComponentType } from "react";
 
 import type { Project } from "@/content/projects";
 import type { Locale } from "@/i18n/config";
+import { projectDisplay } from "@/i18n/case-study-ui";
 import type { CaseStudy, CaseStudyMetric } from "@/types/case-study";
 
 /** Shared case-study building blocks. */
@@ -98,6 +99,7 @@ type ProjectHeroProps = {
 type ProjectResultsSectionProps = {
   number: string;
   metrics: CaseStudyMetric[];
+  locale?: Locale;
 };
 
 type ProjectHero = ComponentType<ProjectHeroProps>;
@@ -170,6 +172,7 @@ export default function CaseStudyLayout({
         : "Back to Home";
 
   /** Resolve project-specific renderers once per layout render. */
+  const display = projectDisplay(project, resolvedLocale);
   const ProjectHero = getProjectHero(activeProjectSlug);
   const ProjectResultsSection = getProjectResultsSection(activeProjectSlug);
 
@@ -325,6 +328,7 @@ export default function CaseStudyLayout({
                     title={section.title}
                     paragraphs={section.paragraphs}
                     highlights={section.highlights}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -342,6 +346,7 @@ export default function CaseStudyLayout({
                     title={section.title}
                     paragraphs={section.paragraphs}
                     highlights={section.highlights}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -357,6 +362,7 @@ export default function CaseStudyLayout({
                   <ExecutionTimeline
                     number={number}
                     title={section.title}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -373,6 +379,7 @@ export default function CaseStudyLayout({
                     <ProjectResultsSection
                       number={number}
                       metrics={caseStudy.metrics ?? []}
+                    locale={resolvedLocale}
                     />
                   </CaseStudyReveal>
                 );
@@ -413,7 +420,7 @@ export default function CaseStudyLayout({
           caseStudy.nextSteps &&
           caseStudy.nextSteps.length > 0 && (
             <CaseStudyReveal>
-              <ProductRoadmap steps={caseStudy.nextSteps} />
+              <ProductRoadmap steps={caseStudy.nextSteps} locale={resolvedLocale} />
             </CaseStudyReveal>
           )}
 
@@ -422,7 +429,7 @@ export default function CaseStudyLayout({
            ============================================================ */}
         {activeProjectSlug === "bluekiosk" && (
           <CaseStudyReveal>
-            <BlueKioskTechEcosystemSection />
+            <BlueKioskTechEcosystemSection locale={resolvedLocale} />
           </CaseStudyReveal>
         )}
 
@@ -430,7 +437,7 @@ export default function CaseStudyLayout({
             SHARED CASE-STUDY FOOTER
            ============================================================ */}
         <CaseStudyReveal>
-          <CaseStudyFooter />
+          <CaseStudyFooter locale={resolvedLocale} />
         </CaseStudyReveal>
       </div>
     </main>

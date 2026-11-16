@@ -1,4 +1,5 @@
 "use client";
+import type { Locale } from "@/i18n/config";
 
 import { motion } from "framer-motion";
 
@@ -14,6 +15,7 @@ type ProductThinkingSectionProps = {
   title: string;
   paragraphs: string[];
   highlights?: string[];
+  locale?: Locale;
 };
 
 export default function ProductThinkingSection({
@@ -21,6 +23,7 @@ export default function ProductThinkingSection({
   title,
   paragraphs,
   highlights = [],
+  locale = "en",
 }: ProductThinkingSectionProps) {
   return (
     <section className="border-t border-white/10 pt-20">
@@ -34,7 +37,7 @@ export default function ProductThinkingSection({
         <div className="grid gap-12 lg:grid-cols-[1.15fr_0.85fr]">
           <AnimatedItem variants={fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Product Thinking
+              {locale === "fr" ? "Réflexion produit" : "Product Thinking"}
             </p>
 
             <h2 className="mt-5 text-4xl font-semibold tracking-tight text-white">

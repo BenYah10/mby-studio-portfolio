@@ -1,3 +1,4 @@
+import type { Locale } from "@/i18n/config";
 import {
   ArrowUpRight,
   FlaskConical,
@@ -55,27 +56,30 @@ const ecosystemLinks: EcosystemLink[] = [
  * - offrir des liens externes accessibles et sécurisés ;
  * - préserver l’architecture spécialisée de la case study.
  */
-export default function BlueKioskTechEcosystemSection() {
+const ecosystemLinksFr: EcosystemLink[] = [
+  { ...ecosystemLinks[0], title: "Expérience produit", description: "Découvrez la vision BlueKioskTech, explorez l’expérience de désinfection en libre-service et partagez votre intérêt sur la plateforme de validation du concept.", cta: "Découvrir le produit" },
+  { ...ecosystemLinks[1], title: "Aperçu du lancement", description: "Découvrez les orientations de BlueKioskTech, sa vision du marché et la préparation des futurs pilotes et du déploiement commercial.", cta: "Voir le lancement" },
+  { ...ecosystemLinks[2], title: "Santé et connaissances", description: "Explorez des articles fondés sur des recherches et des ressources de sensibilisation sur l’hygiène des gourdes réutilisables et le développement du projet.", cta: "Lire les articles" },
+];
+
+export default function BlueKioskTechEcosystemSection({ locale = "en" }: { locale?: Locale }) {
   return (
     <section className="border-t border-white/10 pt-20">
       <div className="mx-auto max-w-6xl">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-          Beyond the Product
+          {locale === "fr" ? "Au-delà du produit" : "Beyond the Product"}
         </p>
 
         <h2 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight text-white">
-          Explore the BlueKioskTech Ecosystem
+          {locale === "fr" ? "Découvrir l’écosystème BlueKioskTech" : "Explore the BlueKioskTech Ecosystem"}
         </h2>
 
         <p className="mt-8 max-w-4xl text-lg leading-8 text-white/60">
-          BlueKioskTech is more than a product. It is a growing ecosystem
-          that combines product innovation, public health awareness and
-          market validation to support the adoption of safer reusable
-          bottle habits.
+          {locale === "fr" ? "BlueKioskTech dépasse le seul produit : son écosystème associe innovation, sensibilisation à l’hygiène et validation du marché autour des gourdes réutilisables." : "BlueKioskTech is more than a product. It is a growing ecosystem that combines product innovation, public health awareness and market validation to support the adoption of safer reusable bottle habits."}
         </p>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
-          {ecosystemLinks.map((item) => {
+          {(locale === "fr" ? ecosystemLinksFr : ecosystemLinks).map((item) => {
             const Icon = item.icon;
 
             return (

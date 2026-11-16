@@ -1,5 +1,7 @@
 "use client";
 
+import type { Locale } from "@/i18n/config";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -22,6 +24,7 @@ import {
 type BixiResultsSectionProps = {
   number: string;
   metrics: CaseStudyMetric[];
+  locale?: Locale;
 };
 
 const operationalCapabilities = [
@@ -51,9 +54,17 @@ const operationalCapabilities = [
   },
 ];
 
+const operationalCapabilitiesFr = [
+  { ...operationalCapabilities[0], label: "Suivi géographique", description: "Azure Maps permet de repérer la disponibilité et les tensions opérationnelles des stations." },
+  { ...operationalCapabilities[1], label: "Disponibilité du réseau", description: "Les KPI synthétisent les vélos, les bornes, les capacités et les états des stations." },
+  { ...operationalCapabilities[2], label: "Analyse temporelle", description: "Les tendances horaires révèlent les variations de disponibilité et les périodes nécessitant une attention." },
+  { ...operationalCapabilities[3], label: "Aide à la décision", description: "Le rapport fournit des éléments pour planifier la redistribution et le service." },
+];
+
 export default function BixiResultsSection({
   number,
   metrics,
+  locale = "en",
 }: BixiResultsSectionProps) {
   return (
     <section className="border-t border-white/10 pt-20">
@@ -67,18 +78,15 @@ export default function BixiResultsSection({
         <div>
           <AnimatedItem variants={fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Operational Dashboard
+              {locale === "fr" ? "Tableau de bord opérationnel" : "Operational Dashboard"}
             </p>
 
             <h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white">
-              A complete operational view of the BIXI network
+              {locale === "fr" ? "Une vue opérationnelle complète du réseau BIXI" : "A complete operational view of the BIXI network"}
             </h2>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-white/60">
-              The final Power BI experience consolidates geographic,
-              station-level and temporal indicators into one operational
-              interface designed to support faster interpretation and
-              decision-making.
+              {locale === "fr" ? "Le rapport Power BI rassemble les indicateurs géographiques, temporels et par station pour faciliter l’analyse et la prise de décision." : "The final Power BI experience consolidates geographic,               station-level and temporal indicators into one operational               interface designed to support faster interpretation and               decision-making."}
             </p>
           </AnimatedItem>
 
@@ -91,11 +99,11 @@ export default function BixiResultsSection({
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
-                    Power BI Showcase
+                    {locale === "fr" ? "Démonstration Power BI" : "Power BI Showcase"}
                   </p>
 
                   <p className="mt-2 text-base font-medium text-white/80">
-                    Real-time operations monitoring and geographic analysis
+                    {locale === "fr" ? "Suivi opérationnel et analyse géographique en temps réel" : "Real-time operations monitoring and geographic analysis"}
                   </p>
                 </div>
 
@@ -103,7 +111,7 @@ export default function BixiResultsSection({
                   <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)]" />
 
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-300">
-                    Portfolio Edition
+                    {locale === "fr" ? "Version portfolio" : "Portfolio Edition"}
                   </span>
                 </div>
               </div>
@@ -122,7 +130,7 @@ export default function BixiResultsSection({
               >
                 <Image
                   src="/images/projects/bixi/BIXI-Operations-Dashboard.png"
-                  alt="BIXI Power BI operations dashboard showing bike availability, station conditions, Azure Maps and hourly analysis"
+                  alt={locale === "fr" ? "Tableau de bord Power BI BIXI : disponibilité, état des stations, Azure Maps et analyse horaire (visuel contenant des libellés anglais)." : "BIXI Power BI operations dashboard showing bike availability, station conditions, Azure Maps and hourly analysis"}
                   width={1536}
                   height={1024}
                   sizes="(max-width: 768px) 100vw, 900px"
@@ -167,7 +175,7 @@ export default function BixiResultsSection({
             amount={0.15}
             className="mt-8 grid gap-4 sm:grid-cols-2"
           >
-            {operationalCapabilities.map((capability) => {
+            {(locale === "fr" ? operationalCapabilitiesFr : operationalCapabilities).map((capability) => {
               const Icon = capability.icon;
 
               return (
@@ -202,14 +210,11 @@ export default function BixiResultsSection({
             className="mt-8 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.055] p-6 sm:p-7"
           >
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
-              Business Value
+              {locale === "fr" ? "Valeur métier" : "Business Value"}
             </p>
 
             <p className="mt-3 max-w-3xl text-base leading-7 text-white/75">
-              The dashboard transforms frequently changing mobility data into
-              actionable operational signals, helping identify empty stations,
-              full stations, low-availability areas and time periods where bike
-              redistribution may be required.
+              {locale === "fr" ? "Le tableau de bord transforme des données évolutives en signaux opérationnels pour repérer les stations vides ou pleines, les zones à faible disponibilité et les périodes où une redistribution pourrait être nécessaire." : "The dashboard transforms frequently changing mobility data into               actionable operational signals, helping identify empty stations,               full stations, low-availability areas and time periods where bike               redistribution may be required."}
             </p>
           </AnimatedItem>
         </div>
