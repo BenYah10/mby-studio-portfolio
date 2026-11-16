@@ -36,6 +36,10 @@ type EndToEndContent = {
   insights: readonly EndToEndInsight[];
   viewerLabel: string;
   viewerCaption: string;
+  scopeLabel: string;
+  mapLabel: string;
+  viewerCloseLabel: string;
+  viewerInstructions: string;
 };
 
 type EndToEndProcessSectionProps = {
@@ -83,7 +87,7 @@ export default function EndToEndProcessSection({
           </div>
 
           <p className="mt-7 max-w-sm text-sm leading-7 text-white/40">
-            Enterprise-level view of the full operating lifecycle.
+            {content.scopeLabel}
           </p>
         </div>
 
@@ -166,7 +170,7 @@ export default function EndToEndProcessSection({
         <div className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-              Enterprise Process Map
+              {content.mapLabel}
             </p>
 
             <p className="mt-3 max-w-2xl text-sm leading-7 text-white/40">
@@ -237,6 +241,9 @@ export default function EndToEndProcessSection({
          imageSrc={imageSrc}
          imageAlt={imageAlt}
          title={content.viewerCaption}
+         mapLabel={content.mapLabel}
+         closeLabel={content.viewerCloseLabel}
+         instructions={content.viewerInstructions}
          onClose={() => setIsViewerOpen(false)}
     />
     </section>

@@ -188,6 +188,13 @@ export const manufacturingContentEn = {
     },
   ],
 
+  // Labels shared by section 03 and its accessible architecture viewer.
+  scopeLabel: "Enterprise-level view of the full operating lifecycle.",
+  mapLabel: "ENTERPRISE PROCESS MAP",
+  viewerCloseLabel: "Close architecture viewer",
+  viewerInstructions:
+    "Scroll horizontally or vertically to inspect the full architecture. Press Esc to close.",
+
   viewerLabel: "View full architecture",
 
   viewerCaption:

@@ -74,12 +74,12 @@ phases: [
 
     transformationSteps: [
       "AS-IS",
-      "Pain Points",
-      "Root Causes",
-      "Business Rules",
-      "Requirements",
+      "Points de friction",
+      "Causes racines",
+      "Règles d’affaires",
+      "Exigences",
       "TO-BE",
-      "Automation",
+      "Automatisation",
       "KPI",
       "Validation",
     ],
@@ -100,19 +100,19 @@ phases: [
       phases: [
         {
           id: "P01",
-          title: "Lead & Qualification",
+          title: "Prospect et qualification",
         },
         {
           id: "P02",
-          title: "Opportunité & Pipeline CRM",
+          title: "Opportunité et pipeline CRM",
         },
         {
           id: "P03",
-          title: "Bid / No-Bid & Go / No-Go",
+          title: "Décision de soumission et Go / No-Go",
         },
         {
           id: "P04",
-          title: "Estimation & Proposition",
+          title: "Estimation et proposition",
         },
       ],
     },
@@ -121,11 +121,11 @@ phases: [
       phases: [
         {
           id: "P05",
-          title: "Contrat gagné / Handoff projet",
+          title: "Contrat obtenu / Transfert vers le projet",
         },
         {
           id: "P06",
-          title: "Planification, conception & baseline",
+          title: "Planification, conception et référence de projet",
         },
       ],
     },
@@ -142,11 +142,11 @@ phases: [
         },
         {
           id: "P09",
-          title: "Facturation & Contrôle financier",
+          title: "Facturation et contrôle financier",
         },
         {
           id: "P10",
-          title: "Clôture projet / Service / Garantie",
+          title: "Clôture de projet / Service / Garantie",
         },
       ],
     },
@@ -155,7 +155,7 @@ phases: [
       phases: [
         {
           id: "P11",
-          title: "Backlog / Réels / EAC / ETC",
+          title: "Carnet de commandes / Réels / EAC / ETC",
         },
         {
           id: "P12",
@@ -188,10 +188,17 @@ phases: [
     },
   ],
 
+  // Libellés propres à la section 03 et à la visionneuse du diagramme.
+  scopeLabel: "Vue d’ensemble du cycle opérationnel complet.",
+  mapLabel: "CARTOGRAPHIE DES PROCESSUS D’ENTREPRISE",
+  viewerCloseLabel: "Fermer la visionneuse de l’architecture",
+  viewerInstructions:
+    "Faites défiler horizontalement ou verticalement pour explorer l’architecture complète. Appuyez sur Échap pour fermer.",
+
   viewerLabel: "Voir l’architecture complète",
 
   viewerCaption:
-    "Enterprise Process Map — vue conceptuelle de bout en bout des processus, systèmes, données, contrôles et handoffs métier.",
+    "Cartographie des processus d’entreprise — vue conceptuelle de bout en bout des processus, systèmes, données, contrôles et transferts métier.",
 },
 
 systemsData: {
@@ -522,31 +529,31 @@ crmDeepDive: {
   lifecycle: [
     {
       id: "P01",
-      title: "Lead & Qualification",
+      title: "Prospect et qualification",
       description:
         "Capturer, qualifier et contextualiser le lead avant son entrée dans le pipeline commercial actif.",
     },
     {
       id: "P02",
-      title: "Opportunité & Pipeline CRM",
+      title: "Opportunité et pipeline CRM",
       description:
         "Développer l’opportunité, documenter les besoins du client et maintenir des informations fiables dans le pipeline.",
     },
     {
       id: "P03",
-      title: "Bid / No-Bid & Go / No-Go",
+      title: "Décision de soumission et Go / No-Go",
       description:
         "Appliquer des critères de décision explicites afin de déterminer si l’opportunité doit être poursuivie.",
     },
     {
       id: "P04",
-      title: "Estimation & Proposition",
+      title: "Estimation et proposition",
       description:
         "Transformer l’opportunité en estimation, proposition et offre pouvant être revue commercialement.",
     },
     {
       id: "P05",
-      title: "Contrat gagné / Handoff projet",
+      title: "Contrat obtenu / Transfert vers le projet",
       description:
         "Transférer le contexte commercial, le contrat, la portée, les dates et les contraintes vers l’exécution projet.",
     },
