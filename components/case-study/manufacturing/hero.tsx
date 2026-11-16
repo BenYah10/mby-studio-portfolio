@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import type React from "react";
+import React from "react";
 import {
   BarChart3,
   Building2,
@@ -13,43 +13,22 @@ import {
 
 import type { Project } from "@/content/projects";
 import type { CaseStudy } from "@/types/case-study";
+import type { Locale } from "@/i18n/config";
+import { getManufacturingHeroCopy } from "@/content/case-studies/manufacturing/hero-copy";
 
 type ManufacturingHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
+/** Stable node identities also drive flow and glow timings across locales. */
 const ecosystemNodes = [
-  {
-    label: "Sales / CRM",
-    description: "Lead, qualification, pipeline and commercial handoff",
-    icon: UsersRound,
-  },
-  {
-    label: "Project Execution",
-    description: "Planning, delivery, scope and project controls",
-    icon: Building2,
-  },
-  {
-    label: "ERP / P2P",
-    description: "Procurement, inventory, finance and transactions",
-    icon: Factory,
-  },
-  {
-    label: "Data / BI",
-    description: "Reporting, KPIs, forecast and decision support",
-    icon: Database,
-  },
-];
-
-const analysisDimensions = [
-  "People",
-  "Process",
-  "Systems",
-  "Data",
-  "Controls",
-  "KPI",
-];
+  { id: "crm", icon: UsersRound },
+  { id: "project", icon: Building2 },
+  { id: "erp", icon: Factory },
+  { id: "bi", icon: Database },
+] as const;
 
 /**
  * Slow data-flow animation settings.
@@ -66,13 +45,14 @@ const FLOW_DURATION_SECONDS = 2.5;
  * These timings are intentionally staggered to create a continuous sequence.
  */
 const CARD_PULSE_DELAYS: Record<string, number> = {
-  "Sales / CRM": 0.0,
-  "Project Execution": 1.0,
-  "ERP / P2P": 2.0,
-  "Data / BI": 3.0,
+  crm: 0.0,
+  project: 1.0,
+  erp: 2.0,
+  bi: 3.0,
 };
 
 type FlowReactiveCardProps = {
+  id: string;
   label: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -87,13 +67,14 @@ type FlowReactiveCardProps = {
  * The pulse is decorative and follows the same cycle as the data-flow particles.
  */
 function FlowReactiveCard({
+  id,
   label,
   description,
   icon: Icon,
   className = "",
   entranceDelay,
 }: FlowReactiveCardProps) {
-  const pulseDelay = CARD_PULSE_DELAYS[label] ?? 0;
+  const pulseDelay = CARD_PULSE_DELAYS[id] ?? 0;
 
   return (
     <motion.div
@@ -332,7 +313,10 @@ function OperatingModelFlow() {
 
 export default function ManufacturingHero({
   project,
+  locale = "en",
 }: ManufacturingHeroProps) {
+  const copy = getManufacturingHeroCopy(locale);
+
   return (
     <header className="border-b border-white/10 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
       <div className="grid gap-14 lg:grid-cols-[0.92fr_1.08fr] lg:items-stretch lg:gap-16">
@@ -348,7 +332,7 @@ export default function ManufacturingHero({
         >
           <div className="flex items-center gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-              Business Systems Analysis
+              {copy.eyebrow}
             </p>
 
             <span
@@ -358,53 +342,50 @@ export default function ManufacturingHero({
           </div>
 
           <h1 className="mt-8 text-[clamp(3rem,6vw,6rem)] font-semibold leading-[0.95] tracking-[-0.06em] text-white">
-            Manufacturing
-            <br />
-            Business Systems
-            <br />
-            Mapping
+            {copy.titleLines.map((line, index) => (
+              <React.Fragment key={line}>
+                {index > 0 && <br />}
+                {line}
+              </React.Fragment>
+            ))}
           </h1>
 
           <p className="mt-8 max-w-3xl text-[clamp(1.35rem,2.3vw,2rem)] font-medium leading-[1.25] tracking-[-0.03em] text-white/85">
-            Conceptual functional architecture mapping end-to-end business
-            processes, system responsibilities and critical data across a
-            project-driven manufacturing environment.
+            {copy.description}
           </p>
 
           <p className="mt-7 max-w-2xl text-sm leading-6 text-white/40">
-            Personal conceptual case study · No client implementation
-            represented
+            {copy.disclosure}
           </p>
 
           <dl className="mt-10 grid gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-2 sm:gap-x-10 lg:mt-auto lg:grid-cols-3">
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Role
+                {copy.roleLabel}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                Functional Analysis · Business Systems Analysis · Process
-                Mapping
+                {copy.role}
               </dd>
             </div>
 
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Focus
+                {copy.focusLabel}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                Processes · Systems · Data · Controls · KPI
+                {copy.focus}
               </dd>
             </div>
 
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Status
+                {copy.statusLabel}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.status}
+                {locale === "fr" ? copy.status : project.status}
               </dd>
             </div>
           </dl>
@@ -437,11 +418,11 @@ export default function ManufacturingHero({
             <div className="flex items-start justify-between gap-6 border-b border-white/10 pb-6">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/30">
-                  Functional Ecosystem
+                  {copy.ecosystemEyebrow}
                 </p>
 
                 <p className="mt-3 max-w-md text-xl font-semibold tracking-tight text-white">
-                  Business systems working as one operating model
+                  {copy.ecosystemTitle}
                 </p>
               </div>
 
@@ -458,8 +439,6 @@ export default function ManufacturingHero({
 
                 <div className="relative z-10 grid grid-cols-2 items-center gap-4 sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-2 sm:gap-x-5 sm:gap-y-5">
                 {ecosystemNodes.map((node, index) => {
-                  const Icon = node.icon;
-
                   const positions = [
                     "col-start-1 row-start-1 sm:col-start-1 sm:row-start-1",
                     "col-start-2 row-start-1 sm:col-start-3 sm:row-start-1",
@@ -469,10 +448,11 @@ export default function ManufacturingHero({
 
                   return (
                     <FlowReactiveCard
-                      key={node.label}
-                      label={node.label}
-                      description={node.description}
-                      icon={Icon}
+                      key={node.id}
+                      id={node.id}
+                      label={copy.nodes[node.id].label}
+                      description={copy.nodes[node.id].description}
+                      icon={node.icon}
                       className={positions[index]}
                       entranceDelay={0.28 + index * 0.08}
                     />
@@ -518,9 +498,9 @@ export default function ManufacturingHero({
                   <ShieldCheck className="h-5 w-5 text-accent" />
 
                   <p className="mt-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-white/75 sm:text-xs">
-                    Operating
+                    {copy.operatingModelLines[0]}
                     <br />
-                    Model
+                    {copy.operatingModelLines[1]}
                   </p>
                 </motion.div>
                 </div>
@@ -533,12 +513,12 @@ export default function ManufacturingHero({
                 <BarChart3 className="h-4 w-4 text-accent" />
 
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/30">
-                  Analysis dimensions
+                  {copy.dimensionsLabel}
                 </p>
               </div>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {analysisDimensions.map((dimension) => (
+                {copy.dimensions.map((dimension) => (
                   <span
                     key={dimension}
                     className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/55"
@@ -563,13 +543,7 @@ export default function ManufacturingHero({
         }}
         className="mt-8 flex flex-wrap gap-2"
       >
-        {[
-          "Business Analysis",
-          "Functional Analysis",
-          "Process Mapping",
-          "ERP / CRM",
-          "Data Governance",
-        ].map((capability) => (
+        {copy.capabilities.map((capability) => (
           <span
             key={capability}
             className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55"

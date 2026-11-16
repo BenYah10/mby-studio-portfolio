@@ -91,6 +91,7 @@ type CaseStudyLayoutProps = {
 type ProjectHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
 /** Contract required by project-specific Results sections. */
@@ -176,7 +177,7 @@ export default function CaseStudyLayout({
           PROJECT HERO
           Uses a specialized Hero when one is registered for the slug.
          ============================================================ */}
-      <ProjectHero project={project} caseStudy={caseStudy} />
+      <ProjectHero project={project} caseStudy={caseStudy} locale={locale} />
 
       {/* ============================================================
           MAIN CASE-STUDY CONTENT
