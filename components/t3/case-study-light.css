@@ -307,3 +307,56 @@ html[lang="fr"] .mby-case-light .mby-case-content > main > header > div.grid > :
 .mby-case-light .mby-case-content > main section > div[class*="rounded-"][class*="bg-accent/"] > :is(h2,h3,p)[class*="text-white"] {
   color: #07162b !important;
 }
+
+
+/* ========================================================================
+ * MBY Studio T4.09 — Laptop hero proportions, localized studies only.
+ * Preserve desktop >=1536px, existing tablet/mobile styles, dark diagrams,
+ * animations and historical /projects/* routes.
+ * These selectors reach only the outer case-study hero editorial grid.
+ * ======================================================================== */
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+  /* Avoid squeezing complex illustrations beside oversized headings. */
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > * {
+    min-width: 0;
+  }
+
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > :first-child h1 {
+    font-size: clamp(2.75rem, 5vw, 4rem);
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1535px) {
+  /* A balanced 50/50 split prevents a 14-inch laptop's copy from crowding
+     the interactive system diagram and keeps the original large-screen look. */
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 2.5vw, 2.5rem);
+  }
+
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > * {
+    min-width: 0;
+  }
+
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > :first-child h1 {
+    font-size: clamp(2.65rem, 4vw, 3.65rem);
+    letter-spacing: -0.045em;
+    overflow-wrap: anywhere;
+  }
+
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > :first-child > p.font-medium {
+    font-size: clamp(1.35rem, 1.9vw, 1.75rem);
+  }
+
+  /* Metadata should not be confined to three narrow columns. */
+  .mby-case-light .mby-case-content > main > header > div.grid:first-child > :first-child dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.25rem;
+  }
+}
