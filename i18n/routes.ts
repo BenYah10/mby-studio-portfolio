@@ -44,6 +44,10 @@ export const routePaths = {
     fr: "/fr/contact/",
     en: "/en/contact/",
   },
+  privacy: {
+    fr: "/fr/politique-de-confidentialite/",
+    en: "/en/privacy-policy/",
+  },
 } as const satisfies Record<
   string,
   Record<Locale, string>

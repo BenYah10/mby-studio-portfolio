@@ -32,6 +32,7 @@ import type { ComponentType } from "react";
 import type { Project } from "@/content/projects";
 import type { Locale } from "@/i18n/config";
 import { projectDisplay } from "@/i18n/case-study-ui";
+import { getLocalizedPath } from "@/i18n/routes";
 import type { CaseStudy, CaseStudyMetric } from "@/types/case-study";
 
 /** Shared case-study building blocks. */
@@ -159,17 +160,16 @@ export default function CaseStudyLayout({
   /**
    * Navigation during the migration:
    * - legacy case studies still return to the legacy #work section;
-   * - localized case studies return to a working localized homepage;
-   * - once the Work pages exist, replace the homepage destinations with
-   *   getLocalizedPath("work", resolvedLocale).
+   * - localized case studies return to their localized Work index;
+   * - legacy case studies retain their original anchor destination.
    */
-  const backHref = locale ? `/${resolvedLocale}/` : "/#work";
+  const backHref = locale ? getLocalizedPath("work", resolvedLocale) : "/#work";
   const backLabel =
     !locale
       ? "Back to Selected Work"
       : resolvedLocale === "fr"
-        ? "Retour à l’accueil"
-        : "Back to Home";
+        ? "Retour aux réalisations"
+        : "Back to Work";
 
   /** Resolve project-specific renderers once per layout render. */
   const display = projectDisplay(project, resolvedLocale);

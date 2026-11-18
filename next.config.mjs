@@ -12,6 +12,16 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
+  // T4.07.6 - Permanent redirect to French homepage.
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/fr/",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

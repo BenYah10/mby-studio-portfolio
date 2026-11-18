@@ -1,0 +1,309 @@
+/* MBY Studio T3.05 — case-study light preview (localized routes only).
+ * External background and editorial typography only. Interactive dashboards,
+ * diagrams and motion canvases retain their original dark styling.
+ * Do not move these rules to globals.css: historical routes stay dark.
+ */
+.mby-case-light {
+  --case-ink: #16283f;
+  --case-muted: #53677e;
+  --case-blue: #315f9c;
+  --case-bg: #eef5fc;
+  background: radial-gradient(ellipse at 12% 9%, #d9e7fa 0%, transparent 48%),
+              linear-gradient(118deg, #f4f8fe 0%, #e7f0fb 100%);
+  color: var(--case-ink);
+  min-height: 100vh;
+}
+/* The marketing header styles are reused without affecting case-study visuals. */
+.mby-case-light .mby-case-header { min-height: 0; background: #fff; }
+.mby-case-light .mby-case-content { padding: 1px 0 2rem; }
+.mby-case-light .mby-case-content > main { color: var(--case-ink); }
+/* Return link, which formerly used light text on a dark page. */
+.mby-case-light .mby-case-content > main > div:first-child a {
+  color: #345a87;
+}
+.mby-case-light .mby-case-content > main > div:first-child a:hover {
+  color: #17385e;
+}
+/* The project heading / metadata panel is the FIRST column of each hero.
+ * Do not recolor the second column: it contains the original dark visuals.
+ */
+.mby-case-light .mby-case-content > main > header > div > :first-child h1 {
+  color: #14243c;
+}
+.mby-case-light .mby-case-content > main > header > div > :first-child p[class*="text-white"] {
+  color: #405670;
+}
+.mby-case-light .mby-case-content > main > header > div > :first-child p[class*="text-accent"] {
+  color: #315f9c;
+}
+.mby-case-light .mby-case-content > main > header > div > :first-child dt {
+  color: #64758a;
+}
+.mby-case-light .mby-case-content > main > header > div > :first-child dd {
+  color: #273d56;
+}
+.mby-case-light .mby-case-content > main > header {
+  border-bottom-color: #cbdcf1;
+}
+.mby-case-light .mby-case-content > main > header > div > :first-child dl {
+  border-top-color: #cbdcf1;
+}
+/* T3.05C: editorial sections share the light page canvas.
+ * Do not add a dark background to reveal/section wrappers; individual cards,
+ * process diagrams and dashboards are intentionally isolated below. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] {
+  padding-top: 48px;
+}
+
+
+/* ================================================================
+ * MBY Studio T3.05A — visual refinements approved on 17 Nov 2026.
+ * Scope: localized case studies only. Legacy project routes are untouched.
+ * Keep analytical articles / animated diagrams in their original dark theme.
+ * ================================================================ */
+
+/* The header's OWN wrapper must be sticky: sticky on .t3-header alone
+ * cannot work beyond its short .mby-case-header parent. */
+.mby-case-light > .mby-case-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  isolation: isolate;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(49, 95, 156, 0.12);
+}
+.mby-case-light > .mby-case-header .t3-header {
+  background: #fff;
+}
+
+/* A continuous blue-grey canvas behind all non-article content. */
+.mby-case-light {
+  --case-bg: #e7eff9;
+  background: #e7eff9;
+  background-image: linear-gradient(115deg, #dce8f7 0%, #e7eff9 55%, #edf3fb 100%);
+}
+.mby-case-light .mby-case-content,
+.mby-case-light .mby-case-content > main {
+  background: transparent;
+}
+
+/* White typography from the old dark hero is now brand blue on the
+ * light editorial surface. We only touch the FIRST (copy) column.
+ * Never recolor text inside the second column's functional diagrams. */
+.mby-case-light .mby-case-content > main > header > div:first-child > :first-child :is(h1,h2,h3,p,span,dt,dd)[class*="text-white"] {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > header > div:first-child > :first-child h1 {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > header > div:first-child > :first-child :is(p,dt,dd)[class*="text-white"] {
+  color: #315f9c !important;
+}
+
+/* The Manufacturing ecosystem preview includes WHITE captions and
+ * MUST retain a dark backing, even though the overall page is light.
+ * Also protects subtle icons/flow lines on that diagram. */
+.mby-case-light .mby-case-content > main > header > div:first-child > :nth-child(2)[class*="bg-white"] {
+  background: linear-gradient(145deg, #202c45 0%, #141d31 100%) !important;
+  border-color: rgba(122, 153, 214, 0.32);
+}
+
+/* Pills below light-surface heroes may otherwise keep white lettering. */
+.mby-case-light .mby-case-content > main > header > div[class*="flex-wrap"] > span[class*="text-white"] {
+  color: #315f9c !important;
+  border-color: rgba(49, 95, 156, .22);
+  background: rgba(255, 255, 255, .45);
+}
+
+/* Preserve text white inside articles, graphs and dashboards. The
+ * original T3.05 section rules above remain the source of truth. */
+
+/* ================================================================
+ * MBY Studio T3.05B — validated DevTools color refinements.
+ * Applied to the editorial FIRST COLUMN in all five localized case
+ * studies. Technical visualizations and dark article panels are
+ * intentionally excluded. Legacy routes and marketing pages untouched.
+ * ================================================================ */
+
+/* Match the inspected design: solid navy project heading, readable
+ * dark intro copy, MBY brand blue supporting copy and small labels. */
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child h1[class*="text-white"] {
+  color: #07162b !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child > p[class*="text-white/85"] {
+  color: #031731 !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child > p[class*="text-white/55"],
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child > p[class*="text-white/40"] {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child > div > p[class*="text-accent"] {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child dt[class*="text-white"] {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child dd[class*="text-white"] {
+  color: #040f4b !important;
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child dl {
+  border-top-color: rgba(49, 95, 156, 0.16);
+}
+.mby-case-light .mby-case-content > main > header > div.grid > :first-child [class*="bg-white/15"] {
+  background-color: rgba(49, 95, 156, 0.20);
+}
+/* Small French diagram-caption adjustment observed in DevTools.
+ * Restrict this to French and caption text only. Do not globally
+ * shrink all texts, pills, data labels, or English pages. */
+html[lang="fr"] .mby-case-light .mby-case-content > main > header > div.grid > :nth-child(2) p[class*="text-center"][class*="tracking-"] {
+  font-size: 0.65em;
+}
+
+/* =====================================================================
+ * MBY Studio T3.05C — approved light editorial study sections.
+ * Scope: localized five case studies only; historical routes unaffected.
+ * Change outer section surfaces and introductory copy, not the diagrams.
+ * ===================================================================== */
+
+/* Reset the former full-width navy panels without touching content order,
+ * animation wrappers, graphs or responsive grids. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] > * {
+  background: transparent;
+  color: #031731;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section {
+  background: transparent;
+  color: #031731;
+  border-color: rgba(49, 95, 156, .20);
+}
+
+/* The section's introductory grid uses the same typography as the Hero.
+ * Constrain to the first editorial grid to avoid recoloring inner cards. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child :is(h2, h3)[class*="text-white"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #07162b !important;
+}
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child p[class*="text-white"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #315f9c !important;
+}
+/* Intro emphasis stays dark navy; labels use the studio brand blue. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child p[class*="font-medium"][class*="text-white"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #031731 !important;
+}
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child p[class*="uppercase"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #315f9c !important;
+}
+
+/* Generic and project-specific section headings are light editorial text,
+ * unless contained in a semantic card or a self-contained dark panel. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section h2[class*="text-white"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #07162b !important;
+}
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section p[class*="text-white"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #315f9c !important;
+}
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section p[class*="text-white"][class*="font-medium"]:not(:is(article *, li *, [class*="rounded"][class*="bg-"] *)) {
+  color: #031731 !important;
+}
+
+/* Technical cards, list items and their labels remain navy with light text.
+ * Explicit card surfaces protect contrast when their original backgrounds
+ * were semi-transparent white on a previously dark page. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section article,
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section li {
+  background-color: #151b2e;
+  color: #f5f7fa;
+  border-color: rgba(125, 153, 215, .23);
+}
+/* Non-semantic diagram/card panels already carry a rounded background.
+ * Keep the internal diagram typography and controls unchanged. */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section div[class*="rounded"][class*="bg-white/"] {
+  background-color: #151b2e;
+}
+
+/* Headings and paragraphs from basic/generic cases where the intro is
+ * wrapped in an animation div (but the panels themselves are excluded). */
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child > div > div > h2[class*="text-white"],
+.mby-case-light .mby-case-content > main > div[class*="space-y-"] section > div.grid:first-child > div > h2[class*="text-white"] {
+  color: #07162b !important;
+}
+
+@media (max-width: 767px) {
+  .mby-case-light .mby-case-content > main > div[class*="space-y-"] > * {
+    border-radius: 0;
+    padding: 0;
+  }
+}
+
+/* ========================================================================
+ * MBY Studio T3.05D — contrast corrections after T3.05C visual QA.
+ * Five localized case studies; existing React content and animation intact.
+ * Only explicit surfaces are recolored: no universal div/li overrides.
+ * ======================================================================== */
+
+/* The shared back-to-top button sat on the new pale canvas but still used
+ * a translucent white foreground from the original dark design. */
+.mby-case-light .mby-case-content > main footer button[class*="rounded-full"] {
+  color: #315f9c !important;
+  background-color: rgba(255,255,255,.84);
+  border-color: rgba(49,95,156,.42);
+  box-shadow: 0 2px 12px rgba(7,22,43,.07);
+}
+.mby-case-light .mby-case-content > main footer button[class*="rounded-full"]:hover,
+.mby-case-light .mby-case-content > main footer button[class*="rounded-full"]:focus-visible {
+  color: #07162b !important;
+  background-color: #fff;
+  border-color: #315f9c;
+}
+.mby-case-light .mby-case-content > main footer {
+  border-top-color: rgba(49,95,156,.20);
+}
+
+/* BlueKioskTech — the 3 ecosystem links are large card ANCHORS rather than
+ * semantic articles or list items. Reinstate their original dark surface so
+ * the existing white labels/descriptions remain legible. */
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"] {
+  background: #151b2e !important;
+  border-color: rgba(125,153,215,.25) !important;
+}
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"]:hover,
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"]:focus-visible {
+  background: #202c45 !important;
+  border-color: rgba(125,153,215,.58) !important;
+}
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"] h3,
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"] p[class*="text-white"] {
+  color: #f5f7fc !important;
+}
+.mby-case-light .mby-case-content > main section > div[class*="max-w-6xl"] > div.grid > a[class*="rounded-3xl"] p[class*="text-white/55"] {
+  color: #c8d3e6 !important;
+}
+
+/* Manufacturing / BIXI — stand-alone tinted closing or business-value
+ * statements now use the blue-grey background. Change their foreground and
+ * leave their internal technical cards intact. */
+.mby-case-light .mby-case-content > main section > div[class*="rounded-"][class*="bg-accent/"] > p[class*="text-white"],
+.mby-case-light .mby-case-content > main section div[class*="rounded-"][class*="bg-emerald-"] > p[class*="text-white"] {
+  color: #07162b !important;
+}
+.mby-case-light .mby-case-content > main section div[class*="rounded-"][class*="bg-emerald-"] > p[class*="text-emerald"] {
+  color: #17644a !important;
+}
+
+/* Manufacturing — data ownership prompts previously inherited dark cards
+ * that appeared washed out against the blue-grey canvas. */
+.mby-case-light #systems-data [class*="grid-cols-5"] > div[class*="rounded"],
+.mby-case-light #systems-data [class*="grid-cols-5"] > article {
+  background: #151b2e !important;
+  border-color: rgba(125,153,215,.27) !important;
+  color: #f5f7fc;
+}
+
+/* Generic editorial outro text which is not housed inside a dark card.
+ * Keep this limited to sections and never reach into their diagrams. */
+.mby-case-light .mby-case-content > main section > div[class*="rounded-"][class*="bg-accent/"] > :is(h2,h3,p)[class*="text-white"] {
+  color: #07162b !important;
+}

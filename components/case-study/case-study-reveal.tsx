@@ -39,9 +39,13 @@ export default function CaseStudyReveal({
               scale: 1,
             }
       }
+      // Sections can be several screens tall on phones. A percentage-based
+      // threshold (previously 15%) may never be reached in a short viewport,
+      // leaving the entire section at opacity: 0 despite scrolling.
+      // Reveal as soon as any part enters the viewport, once per section.
       viewport={{
         once: true,
-        amount: 0.15,
+        amount: "some",
       }}
       transition={{
         duration: 0.85,
