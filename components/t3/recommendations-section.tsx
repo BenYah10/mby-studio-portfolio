@@ -32,7 +32,8 @@ const copy = {
   },
 } as const;
 
-function trustedLinkedInUrl(url: string): string | null {
+function trustedLinkedInUrl(url?: string): string | null {
+  if (!url) return null;
   try {
     const parsed = new URL(url);
     if (parsed.protocol !== "https:") return null;
