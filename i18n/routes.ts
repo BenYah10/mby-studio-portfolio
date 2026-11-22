@@ -36,9 +36,18 @@ export const routePaths = {
     fr: "/fr/a-propos/",
     en: "/en/about/",
   },
-  recommendations: {
+    recommendations: {
     fr: "/fr/recommandations/",
     en: "/en/recommendations/",
+  },
+  /**
+   * MBY Studio — R2.21-C
+   * Dedicated professional recommendation submission pages.
+   * Routes prepared for testing; public CTA not yet enabled.
+   */
+  recommendationSubmit: {
+    fr: "/fr/recommandations/soumettre/",
+    en: "/en/recommendations/submit/",
   },
   contact: {
     fr: "/fr/contact/",
