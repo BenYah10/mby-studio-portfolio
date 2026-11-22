@@ -11,6 +11,7 @@
  * Ce layout est indépendant du layout historique.
  */
 
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 
@@ -30,6 +31,27 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+/** Public FR/EN page metadata. Domain-dependent canonical/hreflang are deferred. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  return locale === "fr"
+    ? {
+        title: "MBY Consulting | Analyse d'affaires et systÃ¨mes",
+        description:
+          "Portfolio professionnel de Mohamed Ben Yahmed. Analyse d'affaires et fonctionnelle, cartographie des systÃ¨mes et processus, ERP et amÃ©lioration opÃ©rationnelle.",
+      }
+    : {
+        title: "MBY Consulting | Business & Systems Analysis",
+        description:
+          "Professional portfolio of Mohamed Ben Yahmed. Business and functional analysis, systems and process mapping, ERP applications, and operational improvement.",
+      };
+}
 export default async function LocalizedRootLayout({
   children,
   params,

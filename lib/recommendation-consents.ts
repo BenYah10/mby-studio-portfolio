@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  * MBY Studio — Recommendation consent catalog
  *
  * R2.20-E | Draft for Supabase Test only.
@@ -49,7 +49,7 @@ export const RECOMMENDATION_CONSENTS: Record<
     private_processing: {
       label: "Traitement prive",
       notice:
-        "J'autorise MBY Studio a traiter les renseignements transmis afin de recevoir, verifier et evaluer ma recommandation. Cette autorisation ne permet aucune publication automatique.",
+        "J'autorise MBY Consulting a traiter les renseignements transmis afin de recevoir, verifier et evaluer ma recommandation. Cette autorisation ne permet aucune publication automatique.",
       required: true,
     },
     publish_quote: {
@@ -105,7 +105,7 @@ export const RECOMMENDATION_CONSENTS: Record<
     private_processing: {
       label: "Private processing",
       notice:
-        "I authorize MBY Studio to process the information submitted to receive, verify, and review my recommendation. This authorization does not permit automatic publication.",
+        "I authorize MBY Consulting to process the information submitted to receive, verify, and review my recommendation. This authorization does not permit automatic publication.",
       required: true,
     },
     publish_quote: {

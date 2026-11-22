@@ -14,7 +14,7 @@ const copy = {
   fr: {
     title: "Soumettre une recommandation professionnelle",
     introduction:
-      "Partagez votre expérience professionnelle avec MBY Studio. Votre recommandation sera examinée avant toute publication.",
+      "Partagez votre expérience professionnelle avec MBY Consulting. Votre recommandation sera examinée avant toute publication.",
     sections: {
       identity: "Votre identité",
       professional: "Votre parcours professionnel",
@@ -59,7 +59,7 @@ const copy = {
   en: {
     title: "Submit a professional recommendation",
     introduction:
-      "Share your professional experience with MBY Studio. Your recommendation will be reviewed before any publication.",
+      "Share your professional experience with MBY Consulting. Your recommendation will be reviewed before any publication.",
     sections: {
       identity: "Your identity",
       professional: "Your professional background",

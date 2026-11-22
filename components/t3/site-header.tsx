@@ -11,7 +11,7 @@ const links = ["home", "services", "work", "about", "recommendations", "contact"
 export function SiteHeader({locale,dictionary}:{locale:Locale;dictionary:Dictionary}){
   const [open,setOpen]=useState(false);const pathname=usePathname();
   return <header className="t3-header"><div className="t3-container t3-header-inner">
-    <Link href={routePaths.home[locale]} className="t3-brand" aria-label="MBY Studio — Home">MBY<span>Studio</span></Link>
+    <Link href={routePaths.home[locale]} className="t3-brand" aria-label="MBY Consulting — Home">MBY<span>Consulting</span></Link>
     <nav className="t3-desktop-nav" aria-label={dictionary.accessibility.primaryNavigation}>
       {links.map(key=><Link key={key} href={routePaths[key][locale]} aria-current={pathname.replace(/\/$/,"")===routePaths[key][locale].replace(/\/$/,"")?"page":undefined}>{dictionary.navigation[key]}</Link>)}
     </nav>

@@ -7,7 +7,7 @@ export const t3 = {
     introduction: "Je relie les besoins d’affaires, les processus et les systèmes pour rendre les opérations plus claires et les solutions plus utiles.",
     location: "Basé à Montréal · Mandats et collaborations",
     seeWork: "Explorer les réalisations", talk: "Parlons de votre besoin",
-    heroEyebrow: "Portfolio professionnel · MBY Studio",
+    heroEyebrow: "Portfolio professionnel · MBY Consulting",
     imagePending: "Portrait professionnel à intégrer",
     pages: {
       services: { eyebrow: "Services", title: "Donner de la clarté aux processus et aux systèmes.", lead: "Une démarche structurée pour comprendre les opérations, formaliser les besoins et préparer des améliorations réalisables." },
@@ -22,17 +22,17 @@ export const t3 = {
       {title:"Analyse applicative ERP",description:"Compréhension des processus, anomalies, échanges de données et impacts fonctionnels."},
       {title:"Amélioration opérationnelle",description:"Identification des irritants, priorisation et recommandations pragmatiques."},
     ],
-    story: ["IT Analyst — Supply Chain Management", "Functional & Business Systems Analysis", "Systems Mapping & Process Improvement", "MBY Studio — Independent Consulting (en développement)"],
+    story: ["IT Analyst — Supply Chain Management", "Functional & Business Systems Analysis", "Systems Mapping & Process Improvement", "MBY Consulting — Independent Consulting (en développement)"],
     disclaimer: "Étude conceptuelle personnelle — aucune implantation chez un client n’est revendiquée.",
     pending: "Aucune recommandation n’est affichée avant vérification de son authenticité et de son autorisation de publication.",
     contactNote: "Aucun formulaire n’est activé dans ce lot. Les coordonnées et le traitement des données seront validés avant publication.",
-    caseStudy: "Consulter l’étude de cas", footer: "Portfolio professionnel indépendant · MBY Studio en développement",
+    caseStudy: "Consulter l’étude de cas", footer: "Portfolio professionnel indépendant · MBY Consulting en développement",
   },
   en: {
     tagline: "Business Analysis · Functional Analysis · ERP Systems",
     introduction: "I connect business needs, processes and systems to make operations clearer and solutions more effective.",
     location: "Montréal-based · Projects and collaborations", seeWork: "Explore selected work", talk: "Let's discuss your needs",
-    heroEyebrow: "Professional portfolio · MBY Studio", imagePending: "Professional portrait to be added",
+    heroEyebrow: "Professional portfolio · MBY Consulting", imagePending: "Professional portrait to be added",
     pages: {
       services: { eyebrow: "Services", title: "Bringing clarity to processes and systems.", lead: "A structured approach to understanding operations, defining requirements and preparing actionable improvements." },
       work: { eyebrow: "Work", title: "Analysis, models and exploratory products.", lead: "A selection of independent projects, demonstrations and conceptual studies. Each case study describes its scope and status." },
@@ -46,11 +46,11 @@ export const t3 = {
       {title:"ERP application analysis",description:"Business workflows, incident analysis, data exchanges and functional impacts."},
       {title:"Operational improvement",description:"Identifying friction points, prioritizing opportunities and pragmatic recommendations."},
     ],
-    story: ["IT Analyst — Supply Chain Management", "Functional & Business Systems Analysis", "Systems Mapping & Process Improvement", "MBY Studio — Independent Consulting (in development)"],
+    story: ["IT Analyst — Supply Chain Management", "Functional & Business Systems Analysis", "Systems Mapping & Process Improvement", "MBY Consulting — Independent Consulting (in development)"],
     disclaimer: "Independent conceptual case study — no client implementation is claimed.",
     pending: "Recommendations will only be displayed after authenticity and publication permissions are verified.",
     contactNote: "No form is enabled in this batch. Contact details and data handling will be validated before publication.",
-    caseStudy: "View case study", footer: "Independent professional portfolio · MBY Studio in development",
+    caseStudy: "View case study", footer: "Independent professional portfolio · MBY Consulting in development",
   },
 } satisfies Record<Locale, {
   tagline:string;introduction:string;location:string;seeWork:string;talk:string;heroEyebrow:string;imagePending:string;

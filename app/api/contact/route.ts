@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
   const locale = body.locale as Locale;
   const subjectLabel = SUBJECTS[locale][Number(subject)];
   const content = [
-    `MBY Studio — ${subjectLabel}`,
+    `MBY Consulting — ${subjectLabel}`,
     `Nom / Name: ${name}`,
     `Email: ${email}`,
     `Organisation / Organization: ${organization || "—"}`,
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
     method: "POST",
     headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from, to: [to], reply_to: email,
-      subject: `MBY Studio — ${subjectLabel}`, text: content }),
+      subject: `MBY Consulting — ${subjectLabel}`, text: content }),
     cache: "no-store", signal: AbortSignal.timeout(9000),
   }).catch(() => null);
   if (!emailResponse?.ok) return reject(502);

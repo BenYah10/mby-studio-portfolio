@@ -35,3 +35,5 @@ Thumbs.db
 .t3-*-backup/
 .t4-*-backup/
 .gitignore.backup-local
+.vercel
+.env*
