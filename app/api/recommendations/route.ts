@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createHash } from "node:crypto";
+import { isRecommendationSubmissionEnabled } from "../../../lib/recommendation-deployment-gate";
 
 import {
   buildRecommendationConsents,
@@ -187,20 +188,12 @@ async function withinRateLimit(
 }
 
 export async function POST(request: NextRequest) {
-  // Production is explicitly blocked during the pilot.
-  if (process.env.VERCEL_ENV === "production") {
-    return reject(503);
-  }
-
-  if (
-    process.env.MBY_RECOMMENDATIONS_FORM_ENABLED !== "true" ||
-    process.env.MBY_RECOMMENDATIONS_VERIFICATION_ENABLED !== "true"
-  ) {
-    return reject(503);
-  }
+  // Three independent controls: general flags, production opt-in,
+  // and exact public hostname. Defaults to disabled (HTTP 503).
+  if (!isRecommendationSubmissionEnabled(request)) return reject(503);
 
   // No confirmation means no submission, even if other toggles were enabled.
-  // Production remains blocked independently above.
+  // Deployment permission is evaluated independently above.
   const confirmationSecret = process.env.MBY_RECOMMENDATIONS_OTP_HMAC_SECRET;
   if (!confirmationSecret || confirmationSecret.length < 32) return reject(503);
 

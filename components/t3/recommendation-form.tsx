@@ -4,11 +4,12 @@
  * MBY Studio — Professional recommendation form
  * R2.21-H.11 | Bilingual local preview only
  *
- * No fetch, submit handler, persistence, or automatic publication.
+ * R10.3C: Development-only OTP submission workflow; publication remains manual.
  * Legal consent text is imported from the established catalog.
  */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Script from "next/script";
 import {
   RECOMMENDATION_CONSENTS,
   RECOMMENDATION_CONSENT_TYPES,
@@ -32,6 +33,15 @@ type FormFields = {
   quote: string;
 };
 
+// The public form is enabled only through an explicit build-time switch.
+// API permissions are enforced independently on the server.
+const formUiEnabled = process.env.NODE_ENV === "development" ||
+  process.env.NEXT_PUBLIC_MBY_RECOMMENDATIONS_ENABLED === "true";
+const turnstileSiteKey = process.env.NEXT_PUBLIC_MBY_TURNSTILE_SITE_KEY || "";
+
+type Stage = "editing" | "requesting" | "code" | "verifying" | "verified" | "submitting" | "complete";
+type ApiSuccess = { ok: true; challenge_id?: string; confirmation_token?: string };
+
 const initialFields: FormFields = {
   fullName: "", email: "", linkedin: "", role: "", organization: "",
   sectorOther: "", relationship: "", quote: "",
@@ -43,7 +53,7 @@ const initialPermissions = Object.fromEntries(
 
 function getInitials(fullName: string): string {
   return fullName.trim().split(/\s+/).filter(Boolean)
-    .map(part => part[0]?.toLocaleUpperCase() ?? "").join(".");
+    .map(part => Array.from(part)[0]?.toLocaleUpperCase() ?? "").join(".");
 }
 
 export function RecommendationForm({ locale }: Props) {
@@ -57,6 +67,50 @@ export function RecommendationForm({ locale }: Props) {
   const [sectorChoice, setSectorChoice] = useState("");
   const [templateChoice, setTemplateChoice] = useState("");
   const [linkedinTouched, setLinkedinTouched] = useState(false);
+  const [stage, setStage] = useState<Stage>("editing");
+  const [challengeId, setChallengeId] = useState("");
+  const [confirmationToken, setConfirmationToken] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [scriptReady, setScriptReady] = useState(false);
+  const turnstileContainer = useRef<HTMLDivElement>(null);
+  const turnstileId = useRef<string | null>(null);
+
+  // Same client-side Turnstile mechanism as the Contact form. A token is
+  // consumed when requesting the code; the final POST requires a fresh one.
+  useEffect(() => {
+    if (!formUiEnabled || !turnstileSiteKey || !scriptReady ||
+        !turnstileContainer.current || !window.turnstile || turnstileId.current) return;
+    const id = window.turnstile.render(turnstileContainer.current, {
+      sitekey: turnstileSiteKey,
+      callback: (value: unknown) => setTurnstileToken(String(value)),
+      "expired-callback": () => setTurnstileToken(""),
+      "error-callback": () => setTurnstileToken(""),
+    });
+    turnstileId.current = id;
+    return () => {
+      window.turnstile?.remove?.(id);
+      turnstileId.current = null;
+    };
+  }, [scriptReady]);
+
+  function resetTurnstile() {
+    setTurnstileToken("");
+    if (turnstileId.current) window.turnstile?.reset(turnstileId.current);
+  }
+
+  function invalidateApproval() {
+    // Any change invalidates a previously verified exact submission snapshot.
+    setStage("editing");
+    setChallengeId("");
+    setConfirmationToken("");
+    setOtpCode("");
+    setFeedback("");
+  }
+
+  const busy = stage === "requesting" || stage === "verifying" || stage === "submitting";
+  const locked = busy || stage === "complete";
 
   const validLinkedin = normalizeLinkedInProfileUrl(fields.linkedin);
 
@@ -74,10 +128,14 @@ export function RecommendationForm({ locale }: Props) {
   const selectedTemplate = options.templates.find(item => item.id === templateChoice);
 
   function updateField(key: keyof FormFields, value: string) {
+    if (locked) return;
+    invalidateApproval();
     setFields(previous => ({ ...previous, [key]: value }));
   }
 
   function updatePermission(type: RecommendationConsentType, granted: boolean) {
+    if (locked) return;
+    invalidateApproval();
     setPermissions(previous => ({ ...previous, [type]: granted }));
   }
 
@@ -91,6 +149,7 @@ export function RecommendationForm({ locale }: Props) {
         <span>{label}{config.required ? " *" : ""}</span>
         <input
           className={styles.control}
+          disabled={locked}
           type={config.type ?? "text"}
           value={fields[key]}
           required={config.required}
@@ -101,6 +160,125 @@ export function RecommendationForm({ locale }: Props) {
         />
       </label>
     );
+  }
+
+  function normalizedData() {
+    return {
+      author_full_name: fields.fullName.trim(),
+      author_email: fields.email.trim().toLowerCase(),
+      professional_role: fields.role.trim(),
+      organization_name: fields.organization.trim(),
+      industry_sector: sectorValue,
+      professional_relationship: fields.relationship.trim(),
+      linkedin_url: validLinkedin ?? "",
+      locale,
+      quote: fields.quote.trim(),
+    };
+  }
+
+  function consentInputs() {
+    return RECOMMENDATION_CONSENT_TYPES.map(type => {
+      const granted = !!permissions[type];
+      let value: string | undefined;
+      if (granted) {
+        if (type === "publish_identity") value = publicIdentity;
+        if (type === "publish_role") value = fields.role.trim();
+        if (type === "publish_organization") value = fields.organization.trim();
+        if (type === `publish_relationship_${locale}`) value = fields.relationship.trim();
+        if (type === "publish_linkedin") value = validLinkedin ?? undefined;
+      }
+      return value ? { type, granted, value } : { type, granted };
+    });
+  }
+
+  function isValidSubmission() {
+    const data = normalizedData();
+    return data.author_full_name.length >= 2 && data.author_full_name.length <= 120 &&
+      /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(data.author_email) &&
+      data.author_email.length <= 254 &&
+      data.professional_role.length >= 2 && data.professional_role.length <= 150 &&
+      data.organization_name.length <= 180 && data.industry_sector.length <= 120 &&
+      !!(data.organization_name || data.industry_sector) &&
+      data.professional_relationship.length >= 5 && data.professional_relationship.length <= 250 &&
+      !!validLinkedin && data.quote.length >= 20 && data.quote.length <= 4000 &&
+      (!permissions.publish_organization || !!data.organization_name) &&
+      !permissions[`publish_relationship_${locale === "fr" ? "en" : "fr"}`] &&
+      RECOMMENDATION_CONSENT_TYPES.every(type => !catalog[type].required || permissions[type]);
+  }
+
+  async function postJson(endpoint: string, data: Record<string, unknown>): Promise<ApiSuccess> {
+    const response = await fetch(endpoint, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data), cache: "no-store",
+    });
+    if (!response.ok) throw new Error(String(response.status));
+    const result: unknown = await response.json();
+    if (!result || typeof result !== "object" || !("ok" in result) || result.ok !== true) throw new Error("invalid response");
+    return result as ApiSuccess;
+  }
+
+  async function requestCode() {
+    if (!formUiEnabled || busy || !isValidSubmission()) {
+      setFeedback(locale === "fr" ? "Vérifiez les champs et les autorisations obligatoires." : "Review all fields and required permissions.");
+      return;
+    }
+    if (!turnstileToken) {
+      setFeedback(locale === "fr" ? "Terminez la vérification antispam." : "Complete the anti-spam verification.");
+      return;
+    }
+    setStage("requesting"); setFeedback("");
+    try {
+      const result = await postJson("/api/recommendations/otp/request/", {
+        email: normalizedData().author_email, locale, token: turnstileToken, website: "",
+      });
+      if (typeof result.challenge_id !== "string") throw new Error("missing challenge");
+      setChallengeId(result.challenge_id);
+      setOtpCode("");
+      setStage("code");
+      setFeedback(locale === "fr" ? "Code envoyé. Vérifiez votre boîte courriel (validité : 10 minutes)." : "Code sent. Check your inbox (valid for 10 minutes).");
+    } catch {
+      setStage("editing");
+      setFeedback(locale === "fr" ? "Envoi du code impossible. Vérifiez la configuration de test ou réessayez plus tard." : "Could not send the code. Check the test configuration or try again later.");
+    } finally { resetTurnstile(); }
+  }
+
+  async function verifyCode() {
+    if (!formUiEnabled || stage !== "code" || !/^\d{6}$/.test(otpCode) || !challengeId) return;
+    setStage("verifying"); setFeedback("");
+    try {
+      const result = await postJson("/api/recommendations/otp/verify/", {
+        ...normalizedData(), consents: consentInputs(), challenge_id: challengeId, code: otpCode,
+      });
+      if (typeof result.confirmation_token !== "string" || result.confirmation_token.length !== 64) throw new Error("invalid confirmation");
+      setConfirmationToken(result.confirmation_token);
+      setStage("verified");
+      setFeedback(locale === "fr" ? "Courriel vérifié. Terminez la vérification antispam pour envoyer la recommandation." : "Email verified. Complete the anti-spam verification to submit your recommendation.");
+    } catch {
+      setStage("code");
+      setFeedback(locale === "fr" ? "Code invalide, expiré ou vérification indisponible. Vérifiez le code ; après expiration, recommencez la demande." : "Invalid or expired code, or verification unavailable. Check the code; request a new one after expiry.");
+    }
+  }
+
+  async function submitRecommendation() {
+    if (!formUiEnabled || stage !== "verified" || !challengeId || !confirmationToken || !isValidSubmission()) return;
+    if (!turnstileToken) {
+      setFeedback(locale === "fr" ? "Terminez la nouvelle vérification antispam." : "Complete the new anti-spam verification.");
+      return;
+    }
+    setStage("submitting"); setFeedback("");
+    try {
+      await postJson("/api/recommendations/", {
+        ...normalizedData(), consents: consentInputs(), challenge_id: challengeId,
+        confirmation_token: confirmationToken, token: turnstileToken, website: "",
+      });
+      setStage("complete");
+      setFeedback(locale === "fr" ? "Recommandation reçue pour examen. Aucune publication automatique." : "Recommendation received for review. No automatic publication.");
+    } catch {
+      // The final API consumes the confirmation before writing to PostgreSQL.
+      // Never retry automatically: the user must start a new OTP workflow.
+      setStage("editing"); setChallengeId(""); setConfirmationToken(""); setOtpCode("");
+      setFeedback(locale === "fr" ? "Soumission non confirmée. Vérifiez si la recommandation a été reçue avant de recommencer avec un nouveau code." : "Submission not confirmed. Check whether it was received before requesting a new code.");
+    } finally { resetTurnstile(); }
   }
 
   function insertTemplate() {
@@ -127,6 +305,7 @@ export function RecommendationForm({ locale }: Props) {
           <input
             id="recommendation-linkedin-url"
             className={styles.control}
+            disabled={locked}
             type="text"
             inputMode="url"
             autoComplete="url"
@@ -171,6 +350,7 @@ export function RecommendationForm({ locale }: Props) {
           <span>{copy.fields.sector}{needsSector ? " *" : ""}</span>
           <select
             className={`${styles.control} ${styles.select}`}
+            disabled={locked}
             value={sectorChoice}
             required={needsSector}
             onChange={event => {
@@ -191,6 +371,7 @@ export function RecommendationForm({ locale }: Props) {
             <span>{options.sectorOtherLabel} *</span>
             <input
               className={styles.control}
+              disabled={locked}
               value={fields.sectorOther}
               onChange={event => updateField("sectorOther", event.target.value)}
               required
@@ -210,6 +391,7 @@ export function RecommendationForm({ locale }: Props) {
           <span>{options.templateLabel}</span>
           <select
             className={`${styles.control} ${styles.select}`}
+            disabled={locked}
             value={templateChoice}
             onChange={event => setTemplateChoice(event.target.value)}
           >
@@ -221,13 +403,14 @@ export function RecommendationForm({ locale }: Props) {
         </label>
         <p className={styles.help}>{options.templateHint}</p>
         <button type="button" className={styles.templateButton}
-          disabled={!selectedTemplate} onClick={insertTemplate}>
+          disabled={locked || !selectedTemplate} onClick={insertTemplate}>
           {options.templateApply}
         </button>
         <label className={styles.label}>
           <span>{copy.fields.quote} *</span>
           <textarea
             className={styles.control}
+            disabled={locked}
             style={{ resize: "vertical" }}
             value={fields.quote}
             onChange={event => updateField("quote", event.target.value)}
@@ -241,7 +424,8 @@ export function RecommendationForm({ locale }: Props) {
             <label key={option}>
               <input type="radio" name="recommendation-public-identity"
                 checked={identityChoice === option}
-                onChange={() => setIdentityChoice(option)} />
+                disabled={locked}
+                onChange={() => { invalidateApproval(); setIdentityChoice(option); }} />
               {copy.identityOptions[option]}
             </label>
           ))}
@@ -262,7 +446,7 @@ export function RecommendationForm({ locale }: Props) {
               <input
                 type="checkbox"
                 checked={permissions[type] && canApprove}
-                disabled={!canApprove}
+                disabled={!canApprove || locked}
                 required={definition.required}
                 onChange={event => updatePermission(type, event.target.checked)}
               />
@@ -282,11 +466,59 @@ export function RecommendationForm({ locale }: Props) {
         })}
       </section>
 
-      <div role="status" className={styles.notice}>
-        <strong>{copy.unavailable}</strong>
-        <p>{copy.pending}</p>
-      </div>
-      <button type="button" disabled className={styles.submitButton}>{copy.submit}</button>
+      {!formUiEnabled ? (
+        <div role="status" className={styles.notice}>
+          <strong>{copy.unavailable}</strong>
+          <p>{copy.pending}</p>
+        </div>
+      ) : (
+        <section className={styles.section} aria-label={locale === "fr" ? "Vérification par courriel" : "Email verification"}>
+          <h2 className={styles.sectionTitle}>{locale === "fr" ? "Vérification du courriel" : "Email verification"}</h2>
+          <p className={styles.help}>{locale === "fr"
+            ? "Votre adresse courriel est vérifiée avant l'envoi. Chaque recommandation est examinée avant toute publication."
+            : "Your email address is verified before submission. Every testimonial is reviewed before publication."}</p>
+          {turnstileSiteKey ? (
+            <>
+              <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+                strategy="afterInteractive" onReady={() => setScriptReady(true)} />
+              <div ref={turnstileContainer} aria-label={locale === "fr" ? "Vérification antispam" : "Anti-spam verification"} />
+            </>
+          ) : <p className={styles.errorHint}>{locale === "fr" ? "Clé publique Turnstile non configurée." : "Turnstile public site key is not configured."}</p>}
+          {(stage === "editing" || stage === "requesting") && (
+            <button type="button" className={styles.submitButton}
+              style={{ opacity: 1, cursor: "pointer" }}
+              disabled={busy || !turnstileSiteKey || !turnstileToken || !isValidSubmission()}
+              onClick={requestCode}>
+              {stage === "requesting" ? (locale === "fr" ? "Envoi du code…" : "Sending code…") :
+                (locale === "fr" ? "Recevoir mon code de vérification" : "Send my verification code")}
+            </button>
+          )}
+          {(stage === "code" || stage === "verifying") && (
+            <div className={styles.label}>
+              <label htmlFor="recommendation-otp-code">{locale === "fr" ? "Code à six chiffres" : "Six-digit code"}</label>
+              <input id="recommendation-otp-code" className={styles.control}
+                type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6}
+                value={otpCode} disabled={busy}
+                onChange={event => setOtpCode(event.target.value.replace(/\D/g, "").slice(0, 6))} />
+              <button type="button" className={styles.submitButton}
+                style={{ opacity: 1, cursor: "pointer" }}
+                disabled={busy || !/^\d{6}$/.test(otpCode)} onClick={verifyCode}>
+                {stage === "verifying" ? (locale === "fr" ? "Vérification…" : "Verifying…") :
+                  (locale === "fr" ? "Vérifier mon code" : "Verify my code")}
+              </button>
+            </div>
+          )}
+          {(stage === "verified" || stage === "submitting") && (
+            <button type="button" className={styles.submitButton}
+              style={{ opacity: 1, cursor: "pointer" }}
+              disabled={busy || !turnstileToken} onClick={submitRecommendation}>
+              {stage === "submitting" ? (locale === "fr" ? "Soumission…" : "Submitting…") : copy.submit}
+            </button>
+          )}
+          {stage === "complete" && <strong>{locale === "fr" ? "Soumission terminée." : "Submission complete."}</strong>}
+          <p role="status" aria-live="polite" className={styles.help}>{feedback}</p>
+        </section>
+      )}
     </div>
   );
 }

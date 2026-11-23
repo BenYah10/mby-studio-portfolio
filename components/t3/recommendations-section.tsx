@@ -4,6 +4,8 @@
  * unless an author-approved translation has been supplied.
  */
 import type { Locale } from "@/i18n/config";
+import Link from "next/link";
+import { routePaths } from "@/i18n/routes";
 import {
   approvedRecommendations,
   type ApprovedRecommendation,
@@ -83,7 +85,19 @@ function RecommendationCard({ item, locale }: { item: ApprovedRecommendation; lo
 
 export function RecommendationsSection({ locale }: { locale: Locale }) {
   const c = copy[locale];
-  const published = approvedRecommendations.filter(item => item.publicationApproved === true);
+  // A public LinkedIn URL with explicit approval is mandatory.
+  const published = approvedRecommendations.filter(
+    item => item.publicationApproved === true && trustedLinkedInUrl(item.linkedinUrl) !== null
+  );
+  const canSubmit = process.env.NODE_ENV === "development" ||
+    process.env.NEXT_PUBLIC_MBY_RECOMMENDATIONS_ENABLED === "true";
+  const submissionLink = canSubmit ? (
+    <p style={{ marginTop: 24 }}>
+      <Link className="t3-button" href={routePaths.recommendationSubmit[locale]}>
+        {locale === "fr" ? "Soumettre une recommandation" : "Submit a recommendation"}
+      </Link>
+    </p>
+  ) : null;
 
   if (!published.length) {
     return (
@@ -93,10 +107,16 @@ export function RecommendationsSection({ locale }: { locale: Locale }) {
           <h2>{c.emptyTitle}</h2>
           <p>{c.emptyLead}</p>
           <p className="t3-recommendations-footnote">{c.emptyNote}</p>
+          {submissionLink}
         </div>
       </section>
     );
   }
 
-  return <div className="t3-recommendations-grid">{published.map(item => <RecommendationCard key={item.id} item={item} locale={locale} />)}</div>;
+  return <>
+    {submissionLink}
+    <div className="t3-recommendations-grid">
+      {published.map(item => <RecommendationCard key={item.id} item={item} locale={locale} />)}
+    </div>
+  </>;
 }
