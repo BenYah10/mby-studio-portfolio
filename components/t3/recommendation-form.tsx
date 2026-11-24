@@ -72,6 +72,7 @@ export function RecommendationForm({ locale }: Props) {
   const [confirmationToken, setConfirmationToken] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [feedbackKind, setFeedbackKind] = useState<"info" | "error">("info");
   const [turnstileToken, setTurnstileToken] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
   const turnstileContainer = useRef<HTMLDivElement>(null);
@@ -206,6 +207,40 @@ export function RecommendationForm({ locale }: Props) {
       RECOMMENDATION_CONSENT_TYPES.every(type => !catalog[type].required || permissions[type]);
   }
 
+  // Explain missing/invalid fields and *required* authorizations on an attempted action.
+  // This is UX only: isValidSubmission() and all server validation stay in place.
+  function getValidationIssues(): string[] {
+    const data = normalizedData();
+    const problems: string[] = [];
+    if (data.author_full_name.length < 2 || data.author_full_name.length > 120) problems.push(copy.fields.fullName);
+    if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(data.author_email) || data.author_email.length > 254) problems.push(copy.fields.email);
+    if (!validLinkedin) problems.push(copy.fields.linkedin);
+    if (data.professional_role.length < 2 || data.professional_role.length > 150) problems.push(copy.fields.role);
+    if (data.organization_name.length > 180) problems.push(copy.fields.organization);
+    if (!data.organization_name && !data.industry_sector) problems.push(copy.fields.sector);
+    if (data.industry_sector.length > 120) problems.push(copy.fields.sector);
+    if (data.professional_relationship.length < 5 || data.professional_relationship.length > 250) problems.push(copy.fields.relationship);
+    if (data.quote.length < 20 || data.quote.length > 4000) problems.push(copy.fields.quote);
+    if (permissions.publish_organization && !data.organization_name) problems.push(copy.fields.organization);
+    for (const type of RECOMMENDATION_CONSENT_TYPES) {
+      if (catalog[type].required && !permissions[type]) {
+        problems.push(catalog[type].label);
+      }
+    }
+    if (permissions[`publish_relationship_${locale === "fr" ? "en" : "fr"}`]) {
+      problems.push(locale === "fr" ? "Autorisation de traduction non applicable" : "Non-applicable translation permission");
+    }
+    return Array.from(new Set(problems));
+  }
+
+  function reportIncompleteSubmission() {
+    const problems = getValidationIssues();
+    setFeedbackKind("error");
+    setFeedback(
+      (locale === "fr" ? "Veuillez compléter ou corriger les champs et autorisations obligatoires :" : "Please complete or correct the required fields and permissions:") +
+      (problems.length ? "\n• " + problems.join("\n• ") : "\n" + (locale === "fr" ? "Vérifiez les données saisies." : "Please review your entries."))
+    );
+  }
   async function postJson(endpoint: string, data: Record<string, unknown>): Promise<ApiSuccess> {
     const response = await fetch(endpoint, {
       method: "POST", headers: { "Content-Type": "application/json" },
@@ -218,12 +253,13 @@ export function RecommendationForm({ locale }: Props) {
   }
 
   async function requestCode() {
-    if (!formUiEnabled || busy || !isValidSubmission()) {
-      setFeedback(locale === "fr" ? "Vérifiez les champs et les autorisations obligatoires." : "Review all fields and required permissions.");
+    if (!formUiEnabled || busy) return;
+    if (!isValidSubmission()) {
+      reportIncompleteSubmission();
       return;
     }
     if (!turnstileToken) {
-      setFeedback(locale === "fr" ? "Terminez la vérification antispam." : "Complete the anti-spam verification.");
+      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Terminez la vérification antispam." : "Complete the anti-spam verification.");
       return;
     }
     setStage("requesting"); setFeedback("");
@@ -235,10 +271,10 @@ export function RecommendationForm({ locale }: Props) {
       setChallengeId(result.challenge_id);
       setOtpCode("");
       setStage("code");
-      setFeedback(locale === "fr" ? "Code envoyé. Vérifiez votre boîte courriel (validité : 10 minutes)." : "Code sent. Check your inbox (valid for 10 minutes).");
+      setFeedbackKind("info"); setFeedback(locale === "fr" ? "Code envoyé. Vérifiez votre boîte courriel (validité : 10 minutes)." : "Code sent. Check your inbox (valid for 10 minutes).");
     } catch {
       setStage("editing");
-      setFeedback(locale === "fr" ? "Envoi du code impossible. Vérifiez la configuration de test ou réessayez plus tard." : "Could not send the code. Check the test configuration or try again later.");
+      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Envoi du code impossible. Vérifiez la configuration de test ou réessayez plus tard." : "Could not send the code. Check the test configuration or try again later.");
     } finally { resetTurnstile(); }
   }
 
@@ -252,17 +288,21 @@ export function RecommendationForm({ locale }: Props) {
       if (typeof result.confirmation_token !== "string" || result.confirmation_token.length !== 64) throw new Error("invalid confirmation");
       setConfirmationToken(result.confirmation_token);
       setStage("verified");
-      setFeedback(locale === "fr" ? "Courriel vérifié. Terminez la vérification antispam pour envoyer la recommandation." : "Email verified. Complete the anti-spam verification to submit your recommendation.");
+      setFeedbackKind("info"); setFeedback(locale === "fr" ? "Courriel vérifié. Terminez la vérification antispam pour envoyer la recommandation." : "Email verified. Complete the anti-spam verification to submit your recommendation.");
     } catch {
       setStage("code");
-      setFeedback(locale === "fr" ? "Code invalide, expiré ou vérification indisponible. Vérifiez le code ; après expiration, recommencez la demande." : "Invalid or expired code, or verification unavailable. Check the code; request a new one after expiry.");
+      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Code invalide, expiré ou vérification indisponible. Vérifiez le code ; après expiration, recommencez la demande." : "Invalid or expired code, or verification unavailable. Check the code; request a new one after expiry.");
     }
   }
 
   async function submitRecommendation() {
-    if (!formUiEnabled || stage !== "verified" || !challengeId || !confirmationToken || !isValidSubmission()) return;
+    if (!formUiEnabled || stage !== "verified" || !challengeId || !confirmationToken || busy) return;
+    if (!isValidSubmission()) {
+      reportIncompleteSubmission();
+      return;
+    }
     if (!turnstileToken) {
-      setFeedback(locale === "fr" ? "Terminez la nouvelle vérification antispam." : "Complete the new anti-spam verification.");
+      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Terminez la nouvelle vérification antispam." : "Complete the new anti-spam verification.");
       return;
     }
     setStage("submitting"); setFeedback("");
@@ -272,12 +312,12 @@ export function RecommendationForm({ locale }: Props) {
         confirmation_token: confirmationToken, token: turnstileToken, website: "",
       });
       setStage("complete");
-      setFeedback(locale === "fr" ? "Recommandation reçue pour examen. Aucune publication automatique." : "Recommendation received for review. No automatic publication.");
+      setFeedbackKind("info"); setFeedback(locale === "fr" ? "Recommandation reçue pour examen. Aucune publication automatique." : "Recommendation received for review. No automatic publication.");
     } catch {
       // The final API consumes the confirmation before writing to PostgreSQL.
       // Never retry automatically: the user must start a new OTP workflow.
       setStage("editing"); setChallengeId(""); setConfirmationToken(""); setOtpCode("");
-      setFeedback(locale === "fr" ? "Soumission non confirmée. Vérifiez si la recommandation a été reçue avant de recommencer avec un nouveau code." : "Submission not confirmed. Check whether it was received before requesting a new code.");
+      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Soumission non confirmée. Vérifiez si la recommandation a été reçue avant de recommencer avec un nouveau code." : "Submission not confirmed. Check whether it was received before requesting a new code.");
     } finally { resetTurnstile(); }
   }
 
@@ -487,7 +527,7 @@ export function RecommendationForm({ locale }: Props) {
           {(stage === "editing" || stage === "requesting") && (
             <button type="button" className={styles.submitButton}
               style={{ opacity: 1, cursor: "pointer" }}
-              disabled={busy || !turnstileSiteKey || !turnstileToken || !isValidSubmission()}
+              disabled={busy}
               onClick={requestCode}>
               {stage === "requesting" ? (locale === "fr" ? "Envoi du code…" : "Sending code…") :
                 (locale === "fr" ? "Recevoir mon code de vérification" : "Send my verification code")}
@@ -511,12 +551,12 @@ export function RecommendationForm({ locale }: Props) {
           {(stage === "verified" || stage === "submitting") && (
             <button type="button" className={styles.submitButton}
               style={{ opacity: 1, cursor: "pointer" }}
-              disabled={busy || !turnstileToken} onClick={submitRecommendation}>
+              disabled={busy} onClick={submitRecommendation}>
               {stage === "submitting" ? (locale === "fr" ? "Soumission…" : "Submitting…") : copy.submit}
             </button>
           )}
           {stage === "complete" && <strong>{locale === "fr" ? "Soumission terminée." : "Submission complete."}</strong>}
-          <p role="status" aria-live="polite" className={styles.help}>{feedback}</p>
+          <p role="status" aria-live={feedbackKind === "error" ? "assertive" : "polite"} className={feedbackKind === "error" ? styles.submissionWarning : styles.submissionInfo}>{feedback}</p>
         </section>
       )}
     </div>

@@ -9,8 +9,8 @@ import { routePaths } from "@/i18n/routes";
 
 declare global { interface Window { turnstile?: { render:(element:HTMLElement,options:Record<string,unknown>)=>string; reset:(id:string)=>void; remove?:(id:string)=>void; }; } }
 const copy = {
-  fr: {name:"Nom complet",email:"Adresse courriel",organization:"Organisation (facultatif)",subject:"Objet de votre demande",message:"Votre message",privacy:"J'accepte que mes coordonnées et mon message soient utilisés pour répondre à ma demande.",send:"Envoyer mon message",sending:"Envoi en cours…",success:"Merci. Votre message a été transmis.",error:"L'envoi n'a pas abouti. Veuillez réessayer plus tard.",paused:"Le formulaire est en préparation. L'envoi sera activé après les tests de sécurité.",verification:"Veuillez terminer la vérification antispam.",required:"Tous les champs obligatoires doivent être remplis.",subjects:["Demande de mandat","Collaboration","Recrutement","Autre"],character:"Maximum 2 000 caractères",challenge:"Vérification antispam"},
-  en: {name:"Full name",email:"Email address",organization:"Organization (optional)",subject:"Subject",message:"Your message",privacy:"I agree that my contact information and message may be used to respond to my request.",send:"Send message",sending:"Sending…",success:"Thank you. Your message has been submitted.",error:"Your message could not be submitted. Please try again later.",paused:"The form is being prepared. Sending will be enabled after security testing.",verification:"Please complete the spam verification.",required:"Please fill in the required fields.",subjects:["Project inquiry","Collaboration","Recruitment","Other"],character:"Maximum 2,000 characters",challenge:"Spam verification"},
+  fr: {name:"Nom complet",email:"Adresse courriel",organization:"Organisation (facultatif)",subject:"Objet de votre demande",message:"Votre message",privacy:"J'accepte que mes coordonnées et mon message soient utilisés pour répondre à ma demande.",send:"Envoyer mon message",sending:"Envoi en cours…",success:"Merci. Votre message a été transmis.",error:"L'envoi n'a pas abouti. Veuillez réessayer plus tard.",paused:"Le formulaire de contact professionnel sera activé après l'incorporation officielle de MBY Consulting et la finalisation de ses démarches d'immatriculation et d'enregistrement fiscal. Merci de votre compréhension.",verification:"Veuillez terminer la vérification antispam.",required:"Tous les champs obligatoires doivent être remplis.",subjects:["Demande de mandat","Collaboration","Recrutement","Autre"],character:"Maximum 2 000 caractères",challenge:"Vérification antispam"},
+  en: {name:"Full name",email:"Email address",organization:"Organization (optional)",subject:"Subject",message:"Your message",privacy:"I agree that my contact information and message may be used to respond to my request.",send:"Send message",sending:"Sending…",success:"Thank you. Your message has been submitted.",error:"Your message could not be submitted. Please try again later.",paused:"The professional contact form will become available after MBY Consulting is officially incorporated and its business registration and tax registration formalities are completed. Thank you for your understanding.",verification:"Please complete the spam verification.",required:"Please fill in the required fields.",subjects:["Project inquiry","Collaboration","Recruitment","Other"],character:"Maximum 2,000 characters",challenge:"Spam verification"},
 } as const;
 const enabled = process.env.NEXT_PUBLIC_MBY_CONTACT_FORM_ENABLED === "true";
 const siteKey = process.env.NEXT_PUBLIC_MBY_TURNSTILE_SITE_KEY || "";
@@ -31,6 +31,10 @@ export function ContactForm({locale}:{locale:Locale}) {
  }
  return <section className="t3-contact-wrap" aria-label={locale==="fr"?"Formulaire de contact":"Contact form"}>
  {enabled&&siteKey&&<Script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onReady={()=>setScriptReady(true)}/>}
+ {!enabled && <div className="t3-contact-availability" role="status" aria-live="polite">
+   <strong>{locale === "fr" ? "Formulaire de contact temporairement indisponible" : "Contact form temporarily unavailable"}</strong>
+   <p>{c.paused}</p>
+ </div>}
  <form className="t3-contact-form" onSubmit={submit}>
  <div className="t3-contact-grid"><label>{c.name} *<input required autoComplete="name" name="name" maxLength={100} disabled={!enabled||status==="sending"}/></label><label>{c.email} *<input required type="email" autoComplete="email" name="email" maxLength={254} disabled={!enabled||status==="sending"}/></label></div>
  <label>{c.organization}<input autoComplete="organization" name="organization" maxLength={120} disabled={!enabled||status==="sending"}/></label>
@@ -40,6 +44,6 @@ export function ContactForm({locale}:{locale:Locale}) {
  <div className="t3-honeypot" aria-hidden="true"><label>Website<input name="website" tabIndex={-1} autoComplete="off"/></label></div>
  {enabled&&siteKey&&<div aria-label={c.challenge} ref={widgetElement}/>}
  <button className="t3-button" type="submit" disabled={!enabled||!siteKey||status==="sending"||status==="success"}>{status==="sending"?c.sending:c.send}</button>
- <p className="t3-contact-status" role="status" aria-live="polite">{!enabled||!siteKey?c.paused:message}</p>
+ <>{enabled && <p className="t3-contact-status" role="status" aria-live="polite">{!siteKey ? c.paused : message}</p>}</>
  </form></section>;
 }

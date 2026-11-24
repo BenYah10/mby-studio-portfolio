@@ -78,3 +78,25 @@
 .mby-t3 .t3-recommendation-link:focus-visible,.mby-t3 .t3-recommendation-original summary:focus-visible{outline:3px solid #9fc4ed;outline-offset:3px}
 @media(max-width:800px){.mby-t3 .t3-recommendations-grid{grid-template-columns:1fr}}
 @media(max-width:690px){.mby-t3 .t3-recommendations-empty{grid-template-columns:1fr;gap:8px}.mby-t3 .t3-recommendations-symbol{text-align:left;font-size:75px}}
+/* R10.4N: bilingual contact notice above the disabled form. */
+.mby-t3 .t3-contact-availability {
+  margin: 0 0 20px;
+  padding: clamp(18px, 3vw, 25px);
+  background: #edf4fd;
+  border: 1px solid #bdd3ed;
+  border-left: 5px solid #315f9c;
+  border-radius: 12px;
+  color: #193f6e;
+  box-shadow: 0 6px 20px rgba(31,73,124,.04);
+}
+.mby-t3 .t3-contact-availability strong {
+  display: block;
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.mby-t3 .t3-contact-availability p {
+  margin: 0;
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.65;
+}

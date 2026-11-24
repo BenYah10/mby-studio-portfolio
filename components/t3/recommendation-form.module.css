@@ -58,3 +58,34 @@
 .templateButton:hover { background: #e0edfb; }
 .submitButton { border: 0; border-radius: 12px; padding: 15px 24px; background: #315f9c; color: #fff; font-weight: 700; opacity: .58; cursor: not-allowed; }
 @media (max-width: 640px) { .layoutPair { grid-template-columns: 1fr; } .consent { padding: 13px; } }
+/* R10.4K: warning under submit / OTP controls (+20% vs .help at .94rem) */
+.submissionWarning {
+  color: #92001b;
+  background: #fff1f3;
+  border-left: 4px solid #b00020;
+  border-radius: 7px;
+  padding: 11px 13px;
+  line-height: 1.55;
+  margin: 0;
+  font-size: 1.128rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+/* R10.4L: status below OTP/final action, readable (+20% vs .help at .94rem). */
+.submissionInfo {
+  color: #284b7b;
+  background: #edf4fd;
+  border-left: 4px solid #315f9c;
+  border-radius: 7px;
+  padding: 11px 13px;
+  line-height: 1.55;
+  margin: 0;
+  font-size: 1.128rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+/* Display each missing field/mandatory authorization on its own line. */
+.submissionWarning {
+  white-space: pre-line;
+}

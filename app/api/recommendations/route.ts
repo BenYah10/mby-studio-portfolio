@@ -401,7 +401,7 @@ export async function POST(request: NextRequest) {
     // Parameterized query: visitor data is never SQL code.
     const result = await recommendationsDb`
       SELECT mby_private.create_recommendation_pending(
-        ${JSON.stringify(payload)}::jsonb
+        ${recommendationsDb.json(payload)}::jsonb
       ) AS submission_id
     `;
 
