@@ -185,6 +185,7 @@ export function RecommendationForm({ locale }: Props) {
         if (type === "publish_identity") value = publicIdentity;
         if (type === "publish_role") value = fields.role.trim();
         if (type === "publish_organization") value = fields.organization.trim();
+        if (type === "publish_industry_sector") value = sectorValue;
         if (type === `publish_relationship_${locale}`) value = fields.relationship.trim();
         if (type === "publish_linkedin") value = validLinkedin ?? undefined;
       }
@@ -203,6 +204,7 @@ export function RecommendationForm({ locale }: Props) {
       data.professional_relationship.length >= 5 && data.professional_relationship.length <= 250 &&
       !!validLinkedin && data.quote.length >= 20 && data.quote.length <= 4000 &&
       (!permissions.publish_organization || !!data.organization_name) &&
+       (!permissions.publish_industry_sector || !!data.industry_sector) &&
       !permissions[`publish_relationship_${locale === "fr" ? "en" : "fr"}`] &&
       RECOMMENDATION_CONSENT_TYPES.every(type => !catalog[type].required || permissions[type]);
   }
@@ -222,6 +224,7 @@ export function RecommendationForm({ locale }: Props) {
     if (data.professional_relationship.length < 5 || data.professional_relationship.length > 250) problems.push(copy.fields.relationship);
     if (data.quote.length < 20 || data.quote.length > 4000) problems.push(copy.fields.quote);
     if (permissions.publish_organization && !data.organization_name) problems.push(copy.fields.organization);
+    if (permissions.publish_industry_sector && !data.industry_sector) problems.push(copy.fields.sector);
     for (const type of RECOMMENDATION_CONSENT_TYPES) {
       if (catalog[type].required && !permissions[type]) {
         problems.push(catalog[type].label);
@@ -480,7 +483,7 @@ export function RecommendationForm({ locale }: Props) {
         {RECOMMENDATION_CONSENT_TYPES.map(type => {
           const definition = catalog[type];
           const isOtherLanguageRelationship = (type === "publish_relationship_fr" || type === "publish_relationship_en") && type !== `publish_relationship_${locale}`;
-          const canApprove = !isOtherLanguageRelationship && (type !== "publish_organization" || !!fields.organization.trim());
+          const canApprove = !isOtherLanguageRelationship && (type !== "publish_organization" || !!fields.organization.trim()) && (type !== "publish_industry_sector" || !!sectorValue);
           return (
             <label className={styles.consent} key={type}>
               <input

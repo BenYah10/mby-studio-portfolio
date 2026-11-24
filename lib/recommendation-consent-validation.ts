@@ -1,4 +1,4 @@
-﻿/**
+/**
  * MBY Studio — Recommendation consent validation
  *
  * R2.20-G | Supabase Test only
@@ -33,6 +33,7 @@ const VALUE_REQUIRED = new Set<RecommendationConsentType>([
   "publish_identity",
   "publish_role",
   "publish_organization",
+  "publish_industry_sector",
   "publish_relationship_fr",
   "publish_relationship_en",
   "publish_linkedin",

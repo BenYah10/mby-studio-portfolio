@@ -1,4 +1,4 @@
-﻿/**
+/**
  * MBY Studio — Publication consent consistency
  *
  * R2.20-I | Supabase Test only
@@ -22,6 +22,7 @@ export type RecommendationPublicationContext = {
   author_full_name: string;
   professional_role: string;
   organization_name: string;
+  industry_sector: string;
   professional_relationship: string;
   linkedin_url: string | null;
 };
@@ -83,6 +84,8 @@ export function validatePublicationConsistency(
   if (!check("publish_organization", context.organization_name)) {
     return false;
   }
+
+  if (!check("publish_industry_sector", context.industry_sector)) return false;
 
   if (!check("publish_linkedin", context.linkedin_url)) {
     return false;

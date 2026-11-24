@@ -114,6 +114,7 @@ export async function POST(request: NextRequest) {
     author_full_name: name,
     professional_role: role,
     organization_name: organization,
+    industry_sector: sector,
     professional_relationship: relationship,
     linkedin_url: normalizedLinkedin,
   }, consents)) return reply(400);
