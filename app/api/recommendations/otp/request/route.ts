@@ -49,9 +49,33 @@ async function parseBody(request: Request): Promise<Record<string, unknown> | nu
   finally { reader.releaseLock(); }
 }
 
+
 export async function POST(request: NextRequest) {
+  // TEMPORARY PREVIEW DIAGNOSTIC — remove after investigation.
+  if (process.env.VERCEL_ENV === "preview") {
+    console.info("[OTP-PREVIEW-EARLY-GATE]", {
+      vercelEnv: process.env.VERCEL_ENV,
+      gateEnabled: isRecommendationSubmissionEnabled(request),
+      formFlagEnabled:
+        process.env.MBY_RECOMMENDATIONS_FORM_ENABLED === "true",
+      verificationFlagEnabled:
+        process.env.MBY_RECOMMENDATIONS_VERIFICATION_ENABLED === "true",
+      otpSecretValid:
+        (process.env.MBY_RECOMMENDATIONS_OTP_HMAC_SECRET?.length ?? 0) >= 32,
+      saltValid:
+        (process.env.MBY_RATE_LIMIT_SALT?.length ?? 0) >= 24,
+      turnstileConfigured:
+        Boolean(process.env.MBY_TURNSTILE_SECRET) &&
+        Boolean(process.env.MBY_TURNSTILE_HOSTNAME),
+      resendConfigured:
+        Boolean(process.env.RESEND_API_KEY) &&
+        Boolean(process.env.MBY_MAIL_FROM),
+    });
+  }
+
   // Fail closed independently of deployment configuration.
   if (!isRecommendationSubmissionEnabled(request)) return reply(503);
+
 
   const otpSecret = process.env.MBY_RECOMMENDATIONS_OTP_HMAC_SECRET;
   const salt = process.env.MBY_RATE_LIMIT_SALT;
