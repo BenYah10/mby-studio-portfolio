@@ -67,6 +67,22 @@ export async function POST(request: NextRequest) {
   const network = process.env.VERCEL === "1"
     ? request.headers.get("x-vercel-forwarded-for")?.split(",")[0]?.trim()
     : process.env.NODE_ENV === "development" ? "local-development" : undefined;
+   // TEMPORARY PREVIEW DIAGNOSTIC — remove after investigation.
+   // Logs only configuration status, never credentials or visitor IP.
+   console.info("[OTP-PREVIEW-DIAGNOSTIC]", {
+    vercelEnv: process.env.VERCEL_ENV,
+    otpSecretValid: Boolean(otpSecret && otpSecret.length >= 32),
+    saltValid: Boolean(salt && salt.length >= 24),
+    turnstileConfigured: Boolean(siteSecret && hostname),
+    resendConfigured: Boolean(resendKey && from),
+    vercelForwardedForPresent: Boolean(
+    request.headers.get("x-vercel-forwarded-for")
+  ),
+  forwardedForPresent: Boolean(
+    request.headers.get("x-forwarded-for")
+  ),
+  networkAvailable: Boolean(network && network.length <= 100),
+  });
   if (!network || network.length > 100) return reply(503);
 
   const body = await parseBody(request);
