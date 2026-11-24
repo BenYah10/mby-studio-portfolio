@@ -11,11 +11,14 @@ import {
 } from "lucide-react";
 
 import type { Project } from "@/content/projects";
+import type { Locale } from "@/i18n/config";
+import { caseStudyLabels, projectDisplay } from "@/i18n/case-study-ui";
 import type { CaseStudy } from "@/types/case-study";
 
 type BixiHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
 const dashboardSignals = [
@@ -55,10 +58,24 @@ const analyticsFlow = [
   },
 ];
 
+const dashboardSignalsFr = [
+  { ...dashboardSignals[0], label: "Stations" },
+  { ...dashboardSignals[1], label: "KPI clés" },
+  { ...dashboardSignals[2], value: "Horaire", label: "Analyse" },
+];
+const analyticsFlowFr = [
+  { ...analyticsFlow[0], label: "Données sources" },
+  { ...analyticsFlow[1], label: "Power Query" },
+  { ...analyticsFlow[2], label: "Modèle DAX" },
+  { ...analyticsFlow[3], label: "Aide à la décision" },
+];
 export default function BixiHero({
   project,
   caseStudy,
+  locale = "en",
 }: BixiHeroProps) {
+  const labels = caseStudyLabels[locale];
+  const display = projectDisplay(project, locale);
   return (
     <header className="border-b border-white/10 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
       <div className="grid gap-14 lg:grid-cols-[0.92fr_1.08fr] lg:items-stretch lg:gap-16">
@@ -73,7 +90,7 @@ export default function BixiHero({
         >
           <div className="flex items-center gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-              {project.category}
+              {display.category}
             </p>
 
             <span
@@ -97,18 +114,18 @@ export default function BixiHero({
           <dl className="mt-12 grid gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-2 sm:gap-x-10 lg:mt-auto lg:grid-cols-3">
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Role
+                {labels.role}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.role}
+                {display.role}
               </dd>
             </div>
 
             {caseStudy.timeline && (
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                  Timeline
+                  {labels.timeline}
                 </dt>
 
                 <dd className="mt-3 text-sm leading-6 text-white/75">
@@ -119,11 +136,11 @@ export default function BixiHero({
 
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Status
+                {labels.status}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.status}
+                {display.status}
               </dd>
             </div>
           </dl>
@@ -153,11 +170,11 @@ export default function BixiHero({
             <div className="flex flex-col gap-5 border-b border-white/10 px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/30">
-                  Analytics System
+                  {locale === "fr" ? "Système analytique" : "Analytics System"}
                 </p>
 
                 <p className="mt-3 text-xl font-semibold tracking-tight text-white">
-                  Operational Intelligence
+                  {locale === "fr" ? "Pilotage opérationnel" : "Operational Intelligence"}
                 </p>
               </div>
 
@@ -183,7 +200,7 @@ export default function BixiHero({
               >
                 <Image
                   src="/images/projects/bixi/BIXI-Operations-Dashboard.png"
-                  alt="BIXI Power BI operations dashboard showing network availability, Azure Maps and hourly mobility analysis"
+                  alt={locale === "fr" ? "Tableau de bord opérationnel BIXI avec disponibilité des stations, Azure Maps et analyse horaire (visuel contenant des libellés anglais)." : "BIXI Power BI operations dashboard showing network availability, Azure Maps and hourly mobility analysis"}
                   width={1536}
                   height={1024}
                   priority
@@ -195,7 +212,7 @@ export default function BixiHero({
               </motion.div>
 
               <div className="mt-4 grid grid-cols-3 gap-3">
-                {dashboardSignals.map((signal, index) => {
+                {(locale === "fr" ? dashboardSignalsFr : dashboardSignals).map((signal, index) => {
                   const Icon = signal.icon;
 
                   return (
@@ -233,17 +250,17 @@ export default function BixiHero({
 
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/30">
-                    Analytics Pipeline
+                    {locale === "fr" ? "Chaîne analytique" : "Analytics Pipeline"}
                   </p>
 
                   <p className="mt-1 text-sm text-white/65">
-                    From mobility data to operational decisions
+                    {locale === "fr" ? "Des données de mobilité aux décisions opérationnelles" : "From mobility data to operational decisions"}
                   </p>
                 </div>
               </div>
 
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {analyticsFlow.map((step) => (
+                {(locale === "fr" ? analyticsFlowFr : analyticsFlow).map((step) => (
                   <div
                     key={step.label}
                     className="rounded-xl border border-white/10 bg-white/[0.025] px-3 py-3"
@@ -263,8 +280,7 @@ export default function BixiHero({
                 <MapPinned className="h-4 w-4 shrink-0 text-sky-300" />
 
                 <p className="text-sm text-white/50">
-                  Geographic monitoring · Station prioritization · Hourly
-                  availability analysis
+{locale === "fr" ? "Suivi géographique · Priorisation des stations · Analyse horaire" : "Geographic monitoring · Station prioritization · Hourly availability analysis"}
                 </p>
               </div>
             </div>
@@ -282,7 +298,7 @@ export default function BixiHero({
         }}
         className="mt-8 flex flex-wrap gap-2"
       >
-        {project.capabilities.map((capability) => (
+        {display.capabilities.map((capability) => (
           <span
             key={capability}
             className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55"

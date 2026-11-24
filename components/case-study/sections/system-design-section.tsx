@@ -1,4 +1,5 @@
 "use client";
+import type { Locale } from "@/i18n/config";
 
 import { motion } from "framer-motion";
 
@@ -15,6 +16,7 @@ type SystemDesignSectionProps = {
   title: string;
   paragraphs: string[];
   highlights?: string[];
+  locale?: Locale;
 };
 
 export default function SystemDesignSection({
@@ -22,6 +24,7 @@ export default function SystemDesignSection({
   title,
   paragraphs,
   highlights = [],
+  locale = "en",
 }: SystemDesignSectionProps) {
   return (
     <section className="border-t border-white/10 pt-20">
@@ -35,7 +38,7 @@ export default function SystemDesignSection({
         <div>
           <AnimatedItem variants={fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-              System Design
+              {locale === "fr" ? "Conception du système" : "System Design"}
             </p>
 
             <h2 className="mt-5 max-w-4xl text-4xl font-semibold tracking-tight text-white">
@@ -64,16 +67,15 @@ export default function SystemDesignSection({
                 <div className="flex justify-center">
                   <div className="w-full max-w-md rounded-2xl border border-sky-400/30 bg-sky-400/[0.08] px-6 py-5 text-center">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
-                      Core Controller
+                      {locale === "fr" ? "Contrôleur central" : "Core Controller"}
                     </p>
 
                     <p className="mt-2 text-lg font-semibold text-white">
-                      BlueKioskTech Control System
+                      {locale === "fr" ? "Système de commande BlueKioskTech" : "BlueKioskTech Control System"}
                     </p>
 
                     <p className="mt-2 text-sm leading-6 text-white/50">
-                      Coordinates operating modes, safety rules and cycle
-                      execution.
+                      {locale === "fr" ? "Coordonne les modes de fonctionnement, les règles de sécurité et les cycles." : "Coordinates operating modes, safety rules and cycle execution."}
                     </p>
                   </div>
                 </div>
@@ -169,10 +171,10 @@ export default function SystemDesignSection({
                   className="rounded-xl border border-white/10 px-4 py-3 text-center"
                 >
                   <p className="text-xs uppercase tracking-[0.16em] text-white/40">
-                    Input
+                    {locale === "fr" ? "Entrée" : "Input"}
                   </p>
                   <p className="mt-1 text-sm font-medium text-white/70">
-                    Sensors & user actions
+                    {locale === "fr" ? "Capteurs et actions utilisateur" : "Sensors & user actions"}
                   </p>
                 </motion.div>
 
@@ -181,10 +183,10 @@ export default function SystemDesignSection({
                   className="rounded-xl border border-white/10 px-4 py-3 text-center"
                 >
                   <p className="text-xs uppercase tracking-[0.16em] text-white/40">
-                    Orchestration
+                    {locale === "fr" ? "Orchestration" : "Orchestration"}
                   </p>
                   <p className="mt-1 text-sm font-medium text-white/70">
-                    Business rules & interlocks
+                    {locale === "fr" ? "Règles métier et verrouillages" : "Business rules & interlocks"}
                   </p>
                 </motion.div>
 
@@ -193,10 +195,10 @@ export default function SystemDesignSection({
                   className="rounded-xl border border-white/10 px-4 py-3 text-center"
                 >
                   <p className="text-xs uppercase tracking-[0.16em] text-white/40">
-                    Output
+                    {locale === "fr" ? "Sortie" : "Output"}
                   </p>
                   <p className="mt-1 text-sm font-medium text-white/70">
-                    Controlled sanitation cycle
+                    {locale === "fr" ? "Cycle de désinfection contrôlé" : "Controlled sanitation cycle"}
                   </p>
                 </motion.div>
               </AnimatedItem>

@@ -1,0 +1,91 @@
+/* MBY Studio — R2.21-H.8. Local preview, FR/EN. */
+.form { display: grid; gap: 26px; color: #172b46; }
+.intro { line-height: 1.75; }
+.pageTitle { color: #315f9c; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2; }
+.section { background: #fff; border: 1px solid #d9e5f2; border-radius: 16px; padding: clamp(18px, 3vw, 28px); display: grid; gap: 18px; }
+.sectionTitle { color: #183153; font-size: clamp(1.4rem, 2.5vw, 1.95rem); line-height: 1.2; margin: 0; }
+.label { display: grid; gap: 8px; font-weight: 600; }
+.control {
+  width: 100%; min-width: 0; padding: 12px 14px; border-radius: 10px;
+  border: 1px solid #9fb7d2 !important;
+  background: #f3f8fe !important; color: #183153 !important;
+  -webkit-text-fill-color: #183153 !important;
+  font: inherit; font-weight: 500; outline: 0;
+  transition: background-color 160ms, border-color 160ms, box-shadow 160ms;
+}
+.control:hover { border-color: #638cc0 !important; background: #edf5ff !important; }
+.control:focus, .control:focus-visible {
+  border-color: #315f9c !important; background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(49, 95, 156, .15) !important;
+}
+.control::placeholder { color: #647b97; -webkit-text-fill-color: #647b97; opacity: 1; }
+.control:-webkit-autofill,
+.control:-webkit-autofill:hover,
+.control:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #edf5ff inset !important;
+  -webkit-text-fill-color: #183153 !important;
+  caret-color: #183153;
+}
+.select { cursor: pointer; }
+.help { color: #526c8b; line-height: 1.6; margin: 0; font-size: .94rem; font-weight: 400; }
+.successHint { color: #246149; line-height: 1.5; margin: 0; font-size: .9rem; }
+.errorHint { color: #9b4c16; line-height: 1.5; margin: 0; font-size: .9rem; }
+.layoutPair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.consent {
+  display: flex; gap: 12px; align-items: flex-start;
+  border: 1px solid #dce6f0; border-radius: 11px; padding: 15px;
+  cursor: pointer; background: #fcfdff;
+}
+.consent:has(input:checked) { background: #f1f6fd; border-color: #8baad3; }
+.consent input { margin-top: 4px; width: 17px; height: 17px; accent-color: #315f9c; flex-shrink: 0; }
+.consentBody { display: grid; gap: 7px; min-width: 0; }
+.consentHeader { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.consentTitle { color: #183153; font-weight: 700; }
+.requiredBadge {
+  font-size: .77rem; font-weight: 700; border-radius: 6px;
+  padding: 4px 8px; color: #88450a; background: #fff1db; border: 1px solid #eabf79;
+}
+.optionalBadge {
+  font-size: .77rem; font-weight: 700; border-radius: 6px;
+  padding: 4px 8px; color: #315f9c; background: #e8f1fb; border: 1px solid #bdd2ea;
+}
+.identityChoice { border: 1px solid #d9e5f2; padding: 16px; border-radius: 12px; }
+.identityChoice label { display: flex; gap: 9px; align-items: center; margin-top: 12px; cursor: pointer; }
+.identityChoice input { accent-color: #315f9c; }
+.previewName { color: #315f9c; font-weight: 600; margin-top: 12px; }
+.notice { border: 1px solid #c8d7e8; border-radius: 12px; padding: 17px; line-height: 1.7; background: #f1f6fc; }
+.templateButton { border: 1px solid #315f9c; color: #315f9c; background: #edf4fc; border-radius: 10px; padding: 10px 14px; font: inherit; font-weight: 700; cursor: pointer; justify-self: start; }
+.templateButton:hover { background: #e0edfb; }
+.submitButton { border: 0; border-radius: 12px; padding: 15px 24px; background: #315f9c; color: #fff; font-weight: 700; opacity: .58; cursor: not-allowed; }
+@media (max-width: 640px) { .layoutPair { grid-template-columns: 1fr; } .consent { padding: 13px; } }
+/* R10.4K: warning under submit / OTP controls (+20% vs .help at .94rem) */
+.submissionWarning {
+  color: #92001b;
+  background: #fff1f3;
+  border-left: 4px solid #b00020;
+  border-radius: 7px;
+  padding: 11px 13px;
+  line-height: 1.55;
+  margin: 0;
+  font-size: 1.128rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+/* R10.4L: status below OTP/final action, readable (+20% vs .help at .94rem). */
+.submissionInfo {
+  color: #284b7b;
+  background: #edf4fd;
+  border-left: 4px solid #315f9c;
+  border-radius: 7px;
+  padding: 11px 13px;
+  line-height: 1.55;
+  margin: 0;
+  font-size: 1.128rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+/* Display each missing field/mandatory authorization on its own line. */
+.submissionWarning {
+  white-space: pre-line;
+}

@@ -9,6 +9,10 @@ type ArchitectureViewerProps = {
   imageSrc: string;
   imageAlt: string;
   title: string;
+  // Optional for legacy callers; localized views pass explicit translations.
+  mapLabel?: string;
+  closeLabel?: string;
+  instructions?: string;
   onClose: () => void;
 };
 
@@ -17,6 +21,9 @@ export default function ArchitectureViewer({
   imageSrc,
   imageAlt,
   title,
+  mapLabel = "Architecture Map",
+  closeLabel = "Close viewer",
+  instructions = "Scroll to explore the diagram. Press Escape to close.",
   onClose,
 }: ArchitectureViewerProps) {
   useEffect(() => {
@@ -62,7 +69,7 @@ export default function ArchitectureViewer({
       <div className="flex shrink-0 items-center justify-between gap-6 border-b border-white/10 px-4 py-4 sm:px-6 lg:px-8">
         <div className="min-w-0">
           <p className="text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-accent">
-            Enterprise Process Map
+            {mapLabel}
           </p>
 
           <h2 className="mt-1 truncate text-sm font-semibold text-white/80 sm:text-base">
@@ -73,7 +80,7 @@ export default function ArchitectureViewer({
         <button
           type="button"
           onClick={onClose}
-          aria-label="Close architecture viewer"
+          aria-label={closeLabel}
           className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.035] text-white/65 transition hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
         >
           <X className="h-5 w-5" />
@@ -100,8 +107,7 @@ export default function ArchitectureViewer({
       {/* VIEWER FOOTER */}
       <div className="shrink-0 border-t border-white/10 px-4 py-3 text-center sm:px-6">
         <p className="text-xs leading-5 text-white/35">
-          Scroll horizontally or vertically to inspect the full architecture.
-          Press Esc to close.
+          {instructions}
         </p>
       </div>
     </div>

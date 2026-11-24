@@ -29,3 +29,11 @@ pnpm-debug.log*
 # Operating System
 .DS_Store
 Thumbs.db
+# MBY Studio - Local development backups
+.t3-*-backup-*/
+.t4-*-backup-*/
+.t3-*-backup/
+.t4-*-backup/
+.gitignore.backup-local
+.vercel
+.env*

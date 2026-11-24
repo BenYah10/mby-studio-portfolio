@@ -1,17 +1,23 @@
 import Image from "next/image";
 
 import type { Project } from "@/content/projects";
+import type { Locale } from "@/i18n/config";
+import { caseStudyLabels, projectDisplay } from "@/i18n/case-study-ui";
 import type { CaseStudy } from "@/types/case-study";
 
 type BlueKioskTechHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
 export default function BlueKioskTechHero({
   project,
   caseStudy,
+  locale = "en",
 }: BlueKioskTechHeroProps) {
+  const labels = caseStudyLabels[locale];
+  const display = projectDisplay(project, locale);
   return (
     <header className="border-b border-white/10 pb-16 pt-12 sm:pb-20 sm:pt-16 lg:pb-24 lg:pt-20">
       <div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-14">
@@ -19,7 +25,7 @@ export default function BlueKioskTechHero({
         <div className="flex flex-col">
           <div className="flex items-center gap-4">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent">
-              {project.category}
+              {display.category}
             </p>
 
             <span
@@ -43,18 +49,18 @@ export default function BlueKioskTechHero({
           <dl className="mt-10 grid gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-3 sm:gap-x-8">
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Role
+                {labels.role}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.role}
+                {display.role}
               </dd>
             </div>
 
             {caseStudy.timeline && (
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                  Timeline
+                  {labels.timeline}
                 </dt>
 
                 <dd className="mt-3 text-sm leading-6 text-white/75">
@@ -65,11 +71,11 @@ export default function BlueKioskTechHero({
 
             <div>
               <dt className="text-xs font-medium uppercase tracking-[0.18em] text-white/30">
-                Status
+                {labels.status}
               </dt>
 
               <dd className="mt-3 text-sm leading-6 text-white/75">
-                {project.status}
+                {display.status}
               </dd>
             </div>
           </dl>
@@ -85,7 +91,7 @@ export default function BlueKioskTechHero({
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#020817] shadow-[0_30px_100px_rgba(0,0,0,0.45)]">
             <Image
               src="/images/projects/bluekiosktech/VUCS-mby-portfolio-v1.png"
-              alt="BlueKioskTech VUCS sanitization process combining steam, UV-C treatment and filtered drying"
+              alt={locale === "fr" ? "Processus de désinfection VUCS : vapeur, UV-C et séchage filtré (visuel contenant des libellés anglais)." : "BlueKioskTech VUCS sanitization process combining steam, UV-C treatment and filtered drying"}
               fill
               priority
               sizes="(min-width: 1024px) 58vw, 100vw"
@@ -101,7 +107,7 @@ export default function BlueKioskTechHero({
       </div>
 
       <div className="mt-8 flex flex-wrap gap-2">
-        {project.capabilities.map((capability) => (
+        {display.capabilities.map((capability) => (
           <span
             key={capability}
             className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55"

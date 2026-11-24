@@ -14,9 +14,9 @@
  * - Manufacturing sections are intentionally rendered outside the max-w-4xl
  *   generic content column because their diagrams and architecture views need
  *   access to the full max-w-7xl case-study width;
- * - Manufacturing content currently defaults to English through
- *   manufacturingContentEn. The structure is ready for the future global
- *   FR / EN locale switch.
+ * - Manufacturing analytical content is selected by the optional locale prop;
+ * - Legacy routes continue using English by default until localized routes
+ *   are connected.
  *
  * Maintenance rule:
  * - Add project-specific UI only when the shared generic renderer is not
@@ -30,6 +30,9 @@ import { ArrowLeft } from "lucide-react";
 import type { ComponentType } from "react";
 
 import type { Project } from "@/content/projects";
+import type { Locale } from "@/i18n/config";
+import { projectDisplay } from "@/i18n/case-study-ui";
+import { getLocalizedPath } from "@/i18n/routes";
 import type { CaseStudy, CaseStudyMetric } from "@/types/case-study";
 
 /** Shared case-study building blocks. */
@@ -61,9 +64,10 @@ import SystemsDataSection from "./manufacturing/systems-data-section";
 
 /**
  * Manufacturing content source.
- * English remains the current default until the global FR / EN switch is wired.
+ * Each language retains the same component contracts and analytical structure.
  */
 import { manufacturingContentEn } from "@/content/case-studies/manufacturing/en";
+import { manufacturingContentFr } from "@/content/case-studies/manufacturing/fr";
 
 /** Reusable generic case-study sections. */
 import ExecutionTimeline from "./sections/execution-timeline";
@@ -81,18 +85,22 @@ import ConclusionSection from "./manufacturing/conclusion-section";
 type CaseStudyLayoutProps = {
   project: Project;
   caseStudy: CaseStudy;
+  /** Optional until the localized case-study routes are connected. */
+  locale?: Locale;
 };
 
 /** Contract required by project-specific Hero components. */
 type ProjectHeroProps = {
   project: Project;
   caseStudy: CaseStudy;
+  locale?: Locale;
 };
 
 /** Contract required by project-specific Results sections. */
 type ProjectResultsSectionProps = {
   number: string;
   metrics: CaseStudyMetric[];
+  locale?: Locale;
 };
 
 type ProjectHero = ComponentType<ProjectHeroProps>;
@@ -133,6 +141,7 @@ function getProjectResultsSection(
 export default function CaseStudyLayout({
   project,
   caseStudy,
+  locale,
 }: CaseStudyLayoutProps) {
   /**
    * Route-safe project identity.
@@ -143,7 +152,27 @@ export default function CaseStudyLayout({
    */
   const activeProjectSlug = project.slug;
 
+  /** The legacy route has no locale and must keep its English behavior. */
+  const resolvedLocale: Locale = locale ?? "en";
+  const manufacturingContent =
+    resolvedLocale === "fr" ? manufacturingContentFr : manufacturingContentEn;
+
+  /**
+   * Navigation during the migration:
+   * - legacy case studies still return to the legacy #work section;
+   * - localized case studies return to their localized Work index;
+   * - legacy case studies retain their original anchor destination.
+   */
+  const backHref = locale ? getLocalizedPath("work", resolvedLocale) : "/#work";
+  const backLabel =
+    !locale
+      ? "Back to Selected Work"
+      : resolvedLocale === "fr"
+        ? "Retour aux réalisations"
+        : "Back to Work";
+
   /** Resolve project-specific renderers once per layout render. */
+  const display = projectDisplay(project, resolvedLocale);
   const ProjectHero = getProjectHero(activeProjectSlug);
   const ProjectResultsSection = getProjectResultsSection(activeProjectSlug);
 
@@ -151,15 +180,15 @@ export default function CaseStudyLayout({
     <main className="mx-auto w-full max-w-7xl px-6 pb-24 sm:px-8 lg:px-10">
       {/* ============================================================
           GLOBAL CASE-STUDY NAVIGATION
-          Returns the visitor to the Selected Work section.
+          Preserves the legacy #work anchor and localizes new routes.
          ============================================================ */}
       <div className="pt-8 sm:pt-10">
         <Link
-          href="/#work"
+          href={backHref}
           className="group inline-flex items-center gap-2 text-sm font-medium text-white/55 transition hover:text-white"
         >
           <ArrowLeft className="h-4 w-4 transition group-hover:-translate-x-1" />
-          Back to Selected Work
+          {backLabel}
         </Link>
       </div>
 
@@ -167,7 +196,7 @@ export default function CaseStudyLayout({
           PROJECT HERO
           Uses a specialized Hero when one is registered for the slug.
          ============================================================ */}
-      <ProjectHero project={project} caseStudy={caseStudy} />
+      <ProjectHero project={project} caseStudy={caseStudy} locale={resolvedLocale} />
 
       {/* ============================================================
           MAIN CASE-STUDY CONTENT
@@ -200,79 +229,83 @@ export default function CaseStudyLayout({
           <>
             {/* 01 — Business Challenge */}
             <CaseStudyReveal>
-              <BusinessChallengeSection />
+              <BusinessChallengeSection locale={resolvedLocale} />
             </CaseStudyReveal>
 
             {/* 02 — My Approach / Methodology */}
             <CaseStudyReveal>
               <MethodologySection
-                content={manufacturingContentEn.methodology}
+                content={manufacturingContent.methodology}
               />
             </CaseStudyReveal>
 
             {/* 03 — End-to-End Process Architecture */}
             <CaseStudyReveal>
               <EndToEndProcessSection
-                content={manufacturingContentEn.endToEnd}
+                content={manufacturingContent.endToEnd}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/enterprise-process-map-fr.png"
-                imageAlt="Enterprise process map showing the end-to-end manufacturing business lifecycle across twelve phases"
+                imageAlt={resolvedLocale === "fr" ? "Cartographie des processus manufacturiers en français, présentant le cycle métier de bout en bout en douze phases." : "French-language enterprise process map presenting the end-to-end manufacturing business lifecycle in twelve phases."}
               />
             </CaseStudyReveal>
 
             {/* 04 — Systems & Data Architecture */}
             <CaseStudyReveal>
               <SystemsDataSection
-                content={manufacturingContentEn.systemsData}
+                content={manufacturingContent.systemsData}
               />
             </CaseStudyReveal>
 
             {/* 05 — Process Inventory */}
             <CaseStudyReveal>
               <ProcessInventorySection
-                content={manufacturingContentEn.processInventory}
+                locale={resolvedLocale}
+                content={manufacturingContent.processInventory}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/process-inventory-fr.png"
-                imageAlt="Process Inventory showing process ownership, systems, analysis status, maturity, documentation, pain points and priority across twelve business processes"
+                imageAlt={resolvedLocale === "fr" ? "Inventaire des processus en français : responsables, systèmes, état d’analyse, maturité et priorités des douze processus métier." : "French-language process inventory diagram showing owners, systems, analysis status, maturity, and priorities for twelve business processes."}
               />
             </CaseStudyReveal>
 
             {/* 06 — CRM Deep Dive */}
             <CaseStudyReveal>
               <CrmDeepDiveSection
-                content={manufacturingContentEn.crmDeepDive}
+                locale={resolvedLocale}
+                content={manufacturingContent.crmDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/crm-functional-deep-dive-en.png"
-                imageAlt="CRM Functional Deep Dive showing lead qualification, opportunity pipeline, Bid / No-Bid decision, estimation and controlled project handoff across phases P01 to P05"
+                imageAlt={resolvedLocale === "fr" ? "Diagramme CRM en anglais : qualification, pipeline commercial, décision de soumission, estimation et transfert vers le projet, phases P01 à P05." : "English-language CRM diagram showing lead qualification, pipeline, bid decision, estimation and project handoff, phases P01 to P05."}
               />
             </CaseStudyReveal>
 
             {/* 07 — Procurement / P2P Deep Dive */}
             <CaseStudyReveal>
               <ProcurementDeepDiveSection
-                content={manufacturingContentEn.procurementDeepDive}
+                locale={resolvedLocale}
+                content={manufacturingContent.procurementDeepDive}
                 imageSrc="/images/projects/manufacturing-business-systems-mapping/procurement-p2p-functional-deep-dive-en.png"
-                imageAlt="Procurement and Procure-to-Pay functional deep dive showing business need, purchase requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment"
+                imageAlt={resolvedLocale === "fr" ? "Diagramme approvisionnement P2P en anglais : besoin, demande d’achat, approbation, commande, réception, rapprochement à trois pièces et paiement fournisseur." : "English-language procurement/P2P diagram showing requisition, approval, purchase order, receipt, three-way invoice matching and supplier payment."}
               />
             </CaseStudyReveal>
 
             {/* 08 — Data Governance & Control Framework */}
             <CaseStudyReveal>
              <DataGovernanceSection
-              content={manufacturingContentEn.dataGovernance}
+                locale={resolvedLocale}
+              content={manufacturingContent.dataGovernance}
               imageSrc="/images/projects/manufacturing-business-systems-mapping/data-governance-control-framework-en.png"
-              imageAlt="Data Governance and Control Framework showing data ownership, data quality, validation rules, security and access, integration monitoring, documentation, change management, critical data domains and cross-system controls"
+              imageAlt={resolvedLocale === "fr" ? "Diagramme de gouvernance en anglais : responsabilités, qualité des données, validations, accès, intégrations et contrôles intersystèmes." : "English-language governance diagram showing data ownership, quality, validations, access, integrations and cross-system controls."}
              />
             </CaseStudyReveal>
 
            {/* 09 — Process Improvement Framework */}
             <CaseStudyReveal>
               <ImprovementFrameworkSection
-               content={manufacturingContentEn.improvementFramework}
+               content={manufacturingContent.improvementFramework}
               />
             </CaseStudyReveal> 
 
             {/* 10 — Conclusion */}
              <CaseStudyReveal>
               <ConclusionSection
-                content={manufacturingContentEn.conclusion}
+                content={manufacturingContent.conclusion}
               />
              </CaseStudyReveal>
           </>
@@ -295,6 +328,7 @@ export default function CaseStudyLayout({
                     title={section.title}
                     paragraphs={section.paragraphs}
                     highlights={section.highlights}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -312,6 +346,7 @@ export default function CaseStudyLayout({
                     title={section.title}
                     paragraphs={section.paragraphs}
                     highlights={section.highlights}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -327,6 +362,7 @@ export default function CaseStudyLayout({
                   <ExecutionTimeline
                     number={number}
                     title={section.title}
+                    locale={resolvedLocale}
                   />
                 </CaseStudyReveal>
               );
@@ -343,6 +379,7 @@ export default function CaseStudyLayout({
                     <ProjectResultsSection
                       number={number}
                       metrics={caseStudy.metrics ?? []}
+                    locale={resolvedLocale}
                     />
                   </CaseStudyReveal>
                 );
@@ -383,7 +420,7 @@ export default function CaseStudyLayout({
           caseStudy.nextSteps &&
           caseStudy.nextSteps.length > 0 && (
             <CaseStudyReveal>
-              <ProductRoadmap steps={caseStudy.nextSteps} />
+              <ProductRoadmap steps={caseStudy.nextSteps} locale={resolvedLocale} />
             </CaseStudyReveal>
           )}
 
@@ -392,7 +429,7 @@ export default function CaseStudyLayout({
            ============================================================ */}
         {activeProjectSlug === "bluekiosk" && (
           <CaseStudyReveal>
-            <BlueKioskTechEcosystemSection />
+            <BlueKioskTechEcosystemSection locale={resolvedLocale} />
           </CaseStudyReveal>
         )}
 
@@ -400,7 +437,7 @@ export default function CaseStudyLayout({
             SHARED CASE-STUDY FOOTER
            ============================================================ */}
         <CaseStudyReveal>
-          <CaseStudyFooter />
+          <CaseStudyFooter locale={resolvedLocale} />
         </CaseStudyReveal>
       </div>
     </main>

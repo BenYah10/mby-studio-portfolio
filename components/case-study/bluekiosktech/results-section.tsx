@@ -1,5 +1,7 @@
 "use client";
 
+import type { Locale } from "@/i18n/config";
+
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 
@@ -21,6 +23,7 @@ type ResultMetric = {
 type ResultsSectionProps = {
   number: string;
   metrics: ResultMetric[];
+  locale?: Locale;
 };
 
 type DashboardMetric = ResultMetric & {
@@ -66,6 +69,7 @@ function getMetricProgress(metric: ResultMetric): number {
 export default function ResultsSection({
   number,
   metrics,
+  locale = "en",
 }: ResultsSectionProps) {
   const dashboardMetrics: DashboardMetric[] = metrics.map((metric) => ({
     ...metric,
@@ -84,16 +88,15 @@ export default function ResultsSection({
         <div>
           <AnimatedItem variants={fadeUp}>
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-sky-400">
-              Expected Results
+              {locale === "fr" ? "Résultats attendus" : "Expected Results"}
             </p>
 
             <h2 className="mt-5 max-w-3xl text-4xl font-semibold tracking-tight text-white">
-              Pilot validation dashboard
+              {locale === "fr" ? "Tableau de bord de validation du pilote" : "Pilot validation dashboard"}
             </h2>
 
             <p className="mt-8 max-w-3xl text-lg leading-8 text-white/60">
-              The pilot phase will validate product performance against defined
-              operational, technical and user-experience acceptance criteria.
+              {locale === "fr" ? "La phase pilote devra vérifier la performance du produit selon des critères d’acceptation opérationnels, techniques et liés à l’expérience utilisateur." : "The pilot phase will validate product performance against defined               operational, technical and user-experience acceptance criteria."}
             </p>
           </AnimatedItem>
 
@@ -106,11 +109,11 @@ export default function ResultsSection({
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/40">
-                    Pilot Performance
+                    {locale === "fr" ? "Performance du pilote" : "Pilot Performance"}
                   </p>
 
                   <p className="mt-2 text-base font-medium text-white/80">
-                    Engineering targets and acceptance criteria
+                    {locale === "fr" ? "Objectifs techniques et critères d’acceptation" : "Engineering targets and acceptance criteria"}
                   </p>
                 </div>
 
@@ -118,7 +121,7 @@ export default function ResultsSection({
                   <span className="h-2 w-2 rounded-full bg-sky-400 shadow-[0_0_12px_rgba(56,189,248,0.75)]" />
 
                   <span className="text-xs font-semibold uppercase tracking-[0.14em] text-sky-300">
-                    Pre-pilot targets
+                    {locale === "fr" ? "Objectifs pré-pilote" : "Pre-pilot targets"}
                   </span>
                 </div>
               </div>
@@ -179,8 +182,8 @@ export default function ResultsSection({
                     </div>
 
                     <div className="mt-3 flex items-center justify-between text-xs text-white/35">
-                      <span>Baseline</span>
-                      <span>Target</span>
+                      <span>{locale === "fr" ? "Référence" : "Baseline"}</span>
+                      <span>{locale === "fr" ? "Cible" : "Target"}</span>
                     </div>
                   </div>
                 </motion.article>
@@ -202,7 +205,7 @@ export default function ResultsSection({
                   </p>
 
                   <p className="mt-2 text-sm font-medium text-white/75">
-                    Controlled pilot testing
+                    {locale === "fr" ? "Essais pilotes contrôlés" : "Controlled pilot testing"}
                   </p>
                 </motion.div>
 
@@ -215,7 +218,7 @@ export default function ResultsSection({
                   </p>
 
                   <p className="mt-2 text-sm font-medium text-white/75">
-                    Operational KPI tracking
+                    {locale === "fr" ? "Suivi des KPI opérationnels" : "Operational KPI tracking"}
                   </p>
                 </motion.div>
 
@@ -228,7 +231,7 @@ export default function ResultsSection({
                   </p>
 
                   <p className="mt-2 text-sm font-medium text-white/75">
-                    Pilot go / no-go assessment
+                    {locale === "fr" ? "Évaluation de la poursuite du pilote" : "Pilot go / no-go assessment"}
                   </p>
                 </motion.div>
               </AnimatedItem>

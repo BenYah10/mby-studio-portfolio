@@ -46,6 +46,7 @@ import {
 } from "lucide-react";
 
 import ArchitectureViewer from "./architecture-viewer";
+import type { Locale } from "@/i18n/config";
 
 /**
  * One representative process shown in the coded snapshot.
@@ -144,6 +145,8 @@ type ProcessInventoryContent = {
  * Component props.
  */
 type ProcessInventorySectionProps = {
+  /** Native page locale; omitted on legacy routes (English). */
+  locale?: Locale;
   content: ProcessInventoryContent;
   imageSrc: string;
   imageAlt: string;
@@ -169,6 +172,7 @@ export default function ProcessInventorySection({
   content,
   imageSrc,
   imageAlt,
+  locale = "en",
 }: ProcessInventorySectionProps) {
   /**
    * Controls the reusable full-screen visual viewer.
@@ -509,6 +513,13 @@ export default function ProcessInventorySection({
         imageSrc={imageSrc}
         imageAlt={imageAlt}
         title={content.viewerCaption}
+        mapLabel={locale === "fr" ? "Diagramme fonctionnel" : "Architecture Map"}
+        closeLabel={locale === "fr" ? "Fermer la visionneuse" : "Close viewer"}
+        instructions={
+          locale === "fr"
+            ? "Faites défiler pour explorer le diagramme. Appuyez sur Échap pour fermer."
+            : "Scroll to explore the diagram. Press Escape to close."
+        }
         onClose={() => setIsViewerOpen(false)}
       />
     </section>

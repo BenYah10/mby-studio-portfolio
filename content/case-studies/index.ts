@@ -1,4 +1,6 @@
 import type { CaseStudy } from "@/types/case-study";
+import type { Locale } from "@/i18n/config";
+import { caseStudiesFr } from "./fr";
 
 import { benEnglishCoachCaseStudy } from "./ben-english-coach";
 import { bixiCaseStudy } from "./bixi";
@@ -15,7 +17,8 @@ export const caseStudies: Record<string, CaseStudy> = {
 };
 
 export function getCaseStudy(
-  slug: string
+  slug: string,
+  locale: Locale = "en",
 ): CaseStudy | undefined {
-  return caseStudies[slug];
+  return locale === "fr" ? caseStudiesFr[slug] ?? caseStudies[slug] : caseStudies[slug];
 }
