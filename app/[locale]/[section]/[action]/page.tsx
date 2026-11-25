@@ -61,3 +61,5 @@ export default async function RecommendationSubmitPage({
     </SiteShell>
   );
 }
+
+export async function generateMetadata({params}:{params:Promise<{locale:string;section:string;action:string}>}) {const {locale,section,action}=await params;if(!isLocale(locale)||routePaths.recommendationSubmit[locale]!==`/${locale}/${section}/${action}/`)notFound();return {title:locale==='fr'?'Soumettre une recommandation | MBY Consulting':'Submit a recommendation | MBY Consulting',robots:{index:false,follow:true}};}
