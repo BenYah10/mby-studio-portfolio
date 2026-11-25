@@ -13,3 +13,6 @@ export default async function Page({params}:{params:Promise<{locale:string;secti
  const page=sections.find(key=>routePaths[key][locale]===`/${locale}/${section}/`);
  if(!page)notFound();return <MarketingPages locale={locale} page={page}/>;
 }
+
+import { marketingMetadata, publicKeys } from '@/lib/seo';
+export async function generateMetadata({params}:{params:Promise<{locale:string;section:string}>}) {const {locale,section}=await params;if(!isLocale(locale))notFound(); const key=publicKeys.find(key=>routePaths[key][locale]===`/${locale}/${section}/`);if(!key||key==='home')notFound();return marketingMetadata(locale,key);}

@@ -12,6 +12,9 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
+  async headers() {
+    return process.env.VERCEL_ENV === 'production' ? [] : [{source:'/:path*',headers:[{key:'X-Robots-Tag',value:'noindex, follow'}]}];
+  },
   // T4.07.6 - Permanent redirect to French homepage.
   async redirects() {
     return [
@@ -20,6 +23,7 @@ const nextConfig = {
         destination: "/fr/",
         permanent: true,
       },
+      {source: "/projects/:slug/", destination: "/fr/projects/:slug/", permanent: true},
     ];
   },
 };

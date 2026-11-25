@@ -45,3 +45,6 @@ export default async function LocalizedCaseStudyPage({ params }: PageProps) {
     </div>
   );
 }
+
+import { projectMetadata } from '@/lib/seo';
+export async function generateMetadata({params}:PageProps) {const {locale,slug}=await params;if(!isLocale(locale))notFound();const project=projects.find(p=>p.slug===slug);if(!project||!getCaseStudy(slug,locale))notFound();const title='title' in project && typeof project.title==='string'?project.title:slug.replace(/-/g,' ');return projectMetadata(locale,slug,title);}
