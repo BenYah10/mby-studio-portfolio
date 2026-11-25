@@ -1,44 +1,218 @@
-/** MBY Consulting R10.4R — bilingual privacy notice v0.3. Draft awaiting operational and governance approval. */
+
+/**
+ * MBY Consulting — Bilingual Privacy Policy V1.0
+ *
+ * Publication candidate.
+ * Effective date and final approval must be confirmed
+ * before public recommendation collection is enabled.
+ */
+
 import type { Locale } from "@/i18n/config";
 
 const notice = {
   fr: {
-    eyebrow: "Confidentialité · Projet de politique v0.3",
+    eyebrow: "Confidentialité · Version 1.0",
     title: "Politique de confidentialité",
-    intro: "Cette version provisoire décrit les renseignements recueillis par le site MBY Consulting et les règles proposées pour les recommandations professionnelles.",
+
+    intro:
+      "Cette politique décrit les pratiques de MBY Consulting concernant la collecte, l’utilisation, la communication, la conservation et la suppression des renseignements personnels.",
+
     sections: [
-      ["1. Responsable de la protection des renseignements personnels", "MBY Consulting est un projet professionnel indépendant exploité au Québec par Mohamed Ben Yahmed; il ne s’agit pas actuellement d’une société incorporée. Le site visé est mbyconsulting.ca. Responsable de la protection des renseignements personnels : Mohamed Ben Yahmed. Pour toute question sur la confidentialité, demande d’accès, de rectification ou de retrait, écrivez à privacy@mbyconsulting.ca."],
-      ["2. Renseignements personnels recueillis", "La collecte de recommandations professionnelles demande le nom complet, une adresse courriel personnelle, un lien vers le profil LinkedIn, la relation professionnelle, les renseignements sur la fonction et un témoignage. Le nom de l’organisation peut être facultatif; un secteur d’activité peut être proposé à la place. Des choix d’affichage et consentements distincts sont recueillis, y compris l’autorisation de rendre public le lien LinkedIn. Le nom complet et le courriel sont utilisés pour la vérification privée; le courriel n’est pas destiné à être publié. Des renseignements techniques nécessaires à la sécurité, tels que les données liées à la vérification antispam et aux limites de requêtes, peuvent aussi être traités. Le formulaire Contact est actuellement désactivé : s’il est ouvert ultérieurement, il pourra recueillir le nom, le courriel, l’objet, le message et, facultativement, l’organisation. Ne transmettez aucune donnée sensible ou confidentielle dans les formulaires."],
-      ["3. Finalités, vérification et publication", "Les renseignements liés aux recommandations servent à vérifier l’identité professionnelle et le contrôle de l’adresse courriel, à recevoir et examiner le témoignage, à documenter les autorisations et à prévenir les abus. La vérification du courriel repose sur un code temporaire envoyé par courriel. Les recommandations sont examinées par une personne avant toute publication; l’envoi du formulaire ne provoque jamais de publication automatique. Une recommandation ne peut être publiée que si son auteur a expressément autorisé la publication de son lien LinkedIn. Le texte, les éléments professionnels, le nom complet ou les initiales et toute traduction ne peuvent être diffusés que conformément aux autorisations applicables; une traduction exige une approbation distincte. Les données ne sont pas vendues ni utilisées pour de la publicité ciblée."],
-      ["4. Fournisseurs et services techniques", "Le portfolio est hébergé sur Vercel. Les recommandations utilisent Cloudflare Turnstile pour la vérification antispam, Upstash Redis pour les contrôles de fréquence et la vérification temporaire, Resend pour les codes envoyés par courriel et une base PostgreSQL hébergée sur Supabase pour les soumissions, versions et consentements. L’adresse de confidentialité privacy@mbyconsulting.ca est transférée par ImprovMX vers une boîte de réception Gmail. Ces prestataires peuvent traiter des renseignements nécessaires à leurs services, selon leurs engagements et leurs sous-traitants. Les configurations, les accès et les lieux de traitement doivent faire l’objet d’une vérification opérationnelle et contractuelle avant l’ouverture publique."],
-      ["5. Conservation et suppression", "La règle de conservation envisagée pour les échanges professionnels est d’au plus 24 mois après le dernier échange, sauf obligation légale applicable. Pour les recommandations, une durée maximale de 24 mois après la soumission ou le dernier échange relatif à cette recommandation est proposée pour les soumissions non publiées, les versions et les preuves de consentement, sous réserve de la validation des obligations de preuve et de retrait. La durée applicable aux témoignages publiés et la suppression synchronisée de leurs données et preuves doivent être arrêtées avant l’ouverture publique; aucune conservation illimitée n’est présumée. Les renseignements devenus inutiles sont supprimés plus tôt lorsque possible, sous réserve d’obligations légales. Les codes temporaires et les clés anti-abus expirent suivant des délais techniques courts; la rétention des journaux et copies chez les fournisseurs reste à vérifier. Un mécanisme documenté de suppression doit être mis en œuvre avant publication définitive de cette politique."],
-      ["6. Traitement des renseignements hors Québec", "Certains prestataires ou leurs sous-traitants peuvent recueillir, conserver ou traiter des renseignements hors Québec, notamment aux États-Unis. Avant les communications visées par la loi, MBY Consulting doit procéder aux évaluations des facteurs relatifs à la vie privée requises, vérifier les protections adéquates et les engagements contractuels applicables. Le choix d’une région canadienne pour un service ne garantit pas à lui seul que tous les traitements demeurent au Québec."],
-      ["7. Droits des personnes concernées", "Sous réserve des conditions et exceptions légales, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, et retirer votre consentement. Si une recommandation est publiée, vous pouvez en demander le retrait. Adressez votre demande à privacy@mbyconsulting.ca; une vérification raisonnable de votre identité pourra être nécessaire. Le retrait d’une publication ne signifie pas nécessairement l’effacement immédiat de toute preuve dont la conservation est exigée par la loi."],
-      ["8. Mesures de sécurité", "Les mécanismes mis en place pour les recommandations incluent la validation côté serveur, la vérification antispam, des limites de fréquence, un code temporaire de vérification du courriel et une validation humaine avant publication. Les accès aux systèmes et aux renseignements doivent être limités aux personnes autorisées, avec une protection appropriée des secrets et des données. Ces contrôles réduisent les risques sans garantir une sécurité absolue. Le formulaire Contact demeure désactivé jusqu’à l’incorporation et la finalisation des démarches d’immatriculation et d’enregistrement fiscal annoncées sur le site."],
-      ["9. Mise à jour et entrée en vigueur", "Cette version v0.3 est un projet de politique à vérifier et approuver avant de permettre la collecte publique de recommandations. Une fois adoptée, la politique affichera une date d’entrée en vigueur et sera accessible depuis le portfolio mbyconsulting.ca. Toute mise à jour importante sera communiquée selon les exigences applicables."],
+      [
+        "1. Responsable de la protection des renseignements personnels",
+
+        "MBY Consulting est un projet professionnel indépendant exploité au Québec par Mohamed Ben Yahmed. Il ne constitue pas actuellement une société incorporée. Le site visé est mbyconsulting.ca. Le responsable de la protection des renseignements personnels est Mohamed Ben Yahmed. Pour toute question ou demande relative à vos renseignements personnels, communiquez avec privacy@mbyconsulting.ca.",
+      ],
+
+      [
+        "2. Renseignements personnels recueillis",
+
+        "Le formulaire de recommandations professionnelles recueille le nom complet, une adresse courriel personnelle, le lien LinkedIn, la fonction professionnelle, la relation professionnelle et le témoignage. Le nom de l’organisation ou un secteur d’activité est également demandé. Des choix d’affichage et des consentements distincts sont recueillis. Le courriel demeure privé et n’est jamais publié. Des renseignements techniques nécessaires à la sécurité, à la vérification du courriel et à la prévention des abus peuvent également être traités. La participation est volontaire. Ne transmettez aucun renseignement sensible, confidentiel ou concernant un tiers sans autorisation.",
+      ],
+
+      [
+        "3. Finalités, vérification et publication",
+
+        "Les renseignements recueillis servent à recevoir, examiner et vérifier les recommandations professionnelles, à documenter les consentements et à prévenir les abus. Un code temporaire permet de vérifier le contrôle de l’adresse courriel, sans constituer à lui seul une preuve d’identité. Une vérification professionnelle et une validation humaine sont effectuées avant toute publication. Aucune recommandation n’est publiée automatiquement. La publication nécessite notamment l’autorisation explicite du témoignage, de l’identité affichée et du lien LinkedIn. Les autres renseignements professionnels et les traductions sont publiés conformément aux autorisations applicables. L’affichage des initiales ne garantit pas l’anonymat, notamment lorsque le profil LinkedIn est accessible. Les renseignements personnels ne sont ni vendus ni utilisés à des fins de publicité ciblée.",
+      ],
+
+      [
+        "4. Fournisseurs et services techniques",
+
+        "Le site est hébergé sur Vercel. Cloudflare Turnstile assure les contrôles antispam. Upstash Redis est utilisé pour la limitation des requêtes et les mécanismes temporaires de vérification. Resend assure l’envoi des codes de vérification par courriel. Supabase héberge la base PostgreSQL utilisée pour les recommandations, leurs versions et les preuves de consentement. Les communications adressées à privacy@mbyconsulting.ca sont transférées par ImprovMX vers une boîte Gmail. Ces prestataires et leurs sous-traitants peuvent traiter les renseignements nécessaires à la fourniture de leurs services.",
+      ],
+
+      [
+        "5. Conservation et suppression",
+
+        "Les recommandations non publiées sont soumises à une échéance de conservation initiale de 90 jours après leur soumission. Les recommandations rejetées ou retirées sont soumises à une échéance de 30 jours après le rejet ou le retrait. Les recommandations publiées font l’objet d’une révision annuelle de la nécessité de leur conservation. Un mécanisme quotidien de purge traite les renseignements arrivés à échéance et admissibles à la suppression, y compris les données associées. Les échanges professionnels sont conservés au maximum 24 mois après le dernier échange, sauf obligation légale applicable. Les codes temporaires et les données anti-abus expirent selon leurs durées techniques respectives. L’historique technique des tâches de conservation MBY est soumis à une durée de 30 jours. Des exceptions de conservation peuvent s’appliquer lorsqu’une obligation légale ou un litige le justifie. Les journaux et sauvegardes des prestataires peuvent suivre des délais distincts.",
+      ],
+
+      [
+        "6. Traitement des renseignements hors Québec",
+
+        "Certains prestataires ou sous-traitants peuvent traiter ou conserver des renseignements personnels à l’extérieur du Québec, notamment ailleurs au Canada et aux États-Unis. Ces renseignements peuvent être soumis aux lois des territoires concernés. MBY Consulting doit évaluer les risques associés à ces traitements et vérifier les mesures de protection et les engagements contractuels applicables avant les communications visées par la loi.",
+      ],
+
+      [
+        "7. Droits des personnes concernées",
+
+        "Sous réserve des conditions et exceptions prévues par la loi, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, ainsi que leur portabilité dans un format technologique structuré et couramment utilisé. Vous pouvez retirer votre consentement et demander le retrait d’une recommandation publiée. Adressez votre demande à privacy@mbyconsulting.ca. Une vérification raisonnable de votre identité peut être nécessaire. Les demandes d’accès et de rectification sont traitées dans le délai légal applicable, généralement au plus tard 30 jours suivant leur réception. Certaines preuves peuvent être conservées lorsque la loi le justifie. Vous pouvez également adresser une plainte à la Commission d’accès à l’information du Québec.",
+      ],
+
+      [
+        "8. Mesures de sécurité",
+
+        "Les mesures de sécurité comprennent notamment la validation côté serveur, la protection antispam, les limites de fréquence, les codes temporaires de vérification, la restriction des accès à la base de données et la validation humaine avant publication. Les environnements de test et de production sont séparés. Ces mesures réduisent les risques sans garantir une sécurité absolue. Le formulaire Contact demeure désactivé jusqu’à l’incorporation et à la finalisation des démarches administratives annoncées sur le site.",
+      ],
+
+      [
+        "9. Mise à jour et entrée en vigueur",
+
+        "La présente version 1.0 est destinée à encadrer la collecte des recommandations professionnelles. Sa date d’entrée en vigueur sera confirmée lors de son adoption officielle. Toute modification importante sera communiquée conformément aux exigences applicables.",
+      ],
     ],
-    foot: "Projet v0.3 — à approuver après validation des durées de conservation, des transferts et des mécanismes de suppression.",
+
+    foot:
+      "Version 1.0 — En attente d’adoption officielle.",
   },
+
   en: {
-    eyebrow: "Privacy · Draft policy v0.3",
+    eyebrow: "Privacy · Version 1.0",
     title: "Privacy Policy",
-    intro: "This draft describes the personal information collected by the MBY Consulting website and proposed rules for professional recommendations.",
+
+    intro:
+      "This policy describes MBY Consulting’s practices regarding the collection, use, disclosure, retention and deletion of personal information.",
+
     sections: [
-      ["1. Person Responsible for Personal Information", "MBY Consulting is an independent professional project operated in Québec by Mohamed Ben Yahmed; it is not currently an incorporated company. The relevant website is mbyconsulting.ca. Person responsible for personal information: Mohamed Ben Yahmed. For privacy questions or requests for access, correction or removal, contact privacy@mbyconsulting.ca."],
-      ["2. Personal Information Collected", "The professional recommendation form requires a full name, personal email address, LinkedIn profile URL, professional relationship, professional role details and testimonial text. Organization name may be optional, with an industry sector offered instead. Separate display choices and permissions are collected, including explicit approval to publish the LinkedIn link. Full name and email are used for private verification; email is not intended to be published. Technical information required for security, including anti-spam checks and rate limits, may also be processed. The Contact form is currently disabled. If opened later, it may collect name, email, subject, message and optionally organization. Do not submit sensitive or confidential data through the forms."],
-      ["3. Purposes, Verification and Publication", "Recommendation data is used to verify professional identity and control of the email address, receive and review testimonials, document permissions and prevent abuse. Email verification uses a temporary code sent by email. Every testimonial is reviewed by a person before any publication; submitting the form never results in automatic publication. A recommendation may be published only when its author expressly authorizes publication of their LinkedIn profile link. The text, professional details, full name or initials and any translation may be displayed only within the applicable approvals; translated text requires separate approval. Personal information is not sold or used for targeted advertising."],
-      ["4. Service Providers and Technical Services", "The portfolio is hosted on Vercel. Recommendations use Cloudflare Turnstile for anti-spam checks, Upstash Redis for rate limiting and temporary verification, Resend for verification emails, and a PostgreSQL database hosted by Supabase for submissions, versions and consent records. The privacy address privacy@mbyconsulting.ca is forwarded through ImprovMX to a Gmail inbox. Providers may process information needed to supply their services under their commitments and subprocessor arrangements. Configurations, access permissions and processing locations require operational and contractual review before public launch."],
-      ["5. Retention and Deletion", "The proposed retention rule for professional correspondence is no more than 24 months after the last exchange, subject to applicable legal obligations. For recommendations, a maximum of 24 months after submission or the last related exchange is proposed for unpublished submissions, versions and evidence of consent, subject to validation of recordkeeping and withdrawal obligations. The retention period for published testimonials and synchronized deletion of associated records and evidence must be settled before public launch; indefinite retention is not assumed. Data no longer necessary should be deleted earlier where possible, subject to legal obligations. Temporary codes and anti-abuse keys expire within short technical periods; provider logs and copies require separate retention verification. A documented deletion process must be implemented before this policy is finalized."],
-      ["6. Processing Outside Québec", "Some service providers or subprocessors may collect, store or process personal information outside Québec, including in the United States. Before disclosures covered by applicable law, MBY Consulting must carry out required privacy impact assessments and verify adequate safeguards and relevant contractual commitments. Choosing a Canadian service region does not guarantee that all processing remains within Québec."],
-      ["7. Individual Rights", "Subject to legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, and withdraw consent. If a recommendation has been published, you may request its removal. Contact privacy@mbyconsulting.ca; reasonable identity verification may be required. Removing a published item does not necessarily require immediate deletion of evidence that must be retained by law."],
-      ["8. Security Measures", "Recommendation safeguards include server-side validation, anti-spam checks, rate limiting, temporary email verification codes and human approval before publication. Access to systems and personal information must be restricted to authorized persons, with appropriate protection of secrets and data. These safeguards reduce risks but cannot guarantee absolute security. The Contact form remains disabled pending the incorporation and business and tax registration formalities announced on the site."],
-      ["9. Policy Updates and Effective Date", "Version v0.3 is a working draft requiring review and approval before public recommendation collection starts. Once adopted, this policy will display an effective date and be available from the mbyconsulting.ca portfolio. Material updates will be communicated as required by applicable law."],
+      [
+        "1. Person Responsible for Personal Information",
+
+        "MBY Consulting is an independent professional project operated in Québec by Mohamed Ben Yahmed. It is not currently an incorporated company. The relevant website is mbyconsulting.ca. The person responsible for personal information is Mohamed Ben Yahmed. For privacy questions or requests concerning your personal information, contact privacy@mbyconsulting.ca.",
+      ],
+
+      [
+        "2. Personal Information Collected",
+
+        "The professional recommendation form collects your full name, personal email address, LinkedIn profile URL, professional role, professional relationship and testimonial. An organization name or industry sector is also requested. Separate display preferences and consents are collected. Your email address remains private and is never published. Technical information necessary for security, email verification and abuse prevention may also be processed. Participation is voluntary. Do not submit sensitive or confidential information or information concerning third parties without authorization.",
+      ],
+
+      [
+        "3. Purposes, Verification and Publication",
+
+        "The information collected is used to receive, review and verify professional recommendations, document consent and prevent abuse. A temporary code verifies control of the email address but does not independently establish identity. Professional verification and human approval are performed before publication. Recommendations are never published automatically. Publication requires explicit authorization of the testimonial, displayed identity and LinkedIn profile link. Other professional information and translations are published according to the applicable permissions. Displaying initials does not guarantee anonymity, particularly when the LinkedIn profile is accessible. Personal information is neither sold nor used for targeted advertising.",
+      ],
+
+      [
+        "4. Service Providers and Technical Services",
+
+        "The website is hosted on Vercel. Cloudflare Turnstile provides anti-spam checks. Upstash Redis is used for rate limiting and temporary verification mechanisms. Resend delivers email verification codes. Supabase hosts the PostgreSQL database used for recommendations, their versions and consent evidence. Messages sent to privacy@mbyconsulting.ca are forwarded through ImprovMX to a Gmail inbox. These providers and their subprocessors may process information necessary to deliver their services.",
+      ],
+
+      [
+        "5. Retention and Deletion",
+
+        "Unpublished recommendations are subject to an initial retention deadline of 90 days following submission. Rejected or withdrawn recommendations are subject to a retention deadline of 30 days following rejection or withdrawal. Published recommendations undergo an annual review of the need for continued retention. A daily purge mechanism processes expired information eligible for deletion, including associated records. Professional correspondence is retained for no more than 24 months after the last exchange, subject to applicable legal obligations. Temporary verification codes and anti-abuse data expire according to their respective technical retention periods. MBY retention job execution history is subject to a 30-day retention period. Retention exceptions may apply where justified by legal obligations or disputes. Provider logs and backups may follow separate retention periods.",
+      ],
+
+      [
+        "6. Processing Outside Québec",
+
+        "Some providers or subprocessors may process or retain personal information outside Québec, including elsewhere in Canada and in the United States. Such information may be subject to the laws of the relevant jurisdictions. MBY Consulting must assess the risks associated with these activities and verify applicable safeguards and contractual commitments before disclosures covered by law.",
+      ],
+
+      [
+        "7. Individual Rights",
+
+        "Subject to applicable legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, as well as portability in a structured and commonly used technological format. You may withdraw your consent and request removal of a published recommendation. Send your request to privacy@mbyconsulting.ca. Reasonable identity verification may be required. Access and correction requests are handled within the applicable statutory period, generally no later than 30 days after receipt. Certain evidence may be retained where legally justified. You may also submit a complaint to the Commission d’accès à l’information du Québec.",
+      ],
+
+      [
+        "8. Security Measures",
+
+        "Security measures include server-side validation, anti-spam protection, rate limiting, temporary verification codes, restricted database access and human approval before publication. Test and production environments are separated. These measures reduce risks but cannot guarantee absolute security. The Contact form remains disabled pending incorporation and completion of the administrative formalities announced on the website.",
+      ],
+
+      [
+        "9. Policy Updates and Effective Date",
+
+        "This version 1.0 is intended to govern the collection of professional recommendations. Its effective date will be confirmed upon formal adoption. Material changes will be communicated according to applicable requirements.",
+      ],
     ],
-    foot: "Draft v0.3 — approval pending review of retention periods, transfers and deletion mechanisms.",
+
+    foot:
+      "Version 1.0 — Pending formal adoption.",
   },
 } as const;
 
-export function PrivacyPage({locale}:{locale:Locale}) {
-  const c=notice[locale];
-  return <main id="main-content" className="t3-privacy-page"><section className="t3-page-head"><div className="t3-container"><p className="t3-eyebrow">{c.eyebrow}</p><h1>{c.title}</h1><p className="t3-intro">{c.intro}</p></div></section><section className="t3-section"><div className="t3-container" style={{maxWidth:850}}>{c.sections.map(([heading,body])=><section key={heading} style={{marginBottom:30}}><h2 style={{fontSize:"1.45rem",marginBottom:12}}>{heading}</h2><p style={{lineHeight:1.8}}>{body}</p></section>)}<p style={{fontSize:12,marginTop:32,color:"#675d4a"}}>{c.foot}</p></div></section></main>;
+
+/**
+ * Shared bilingual privacy policy presentation.
+ * Existing T3 design system preserved.
+ */
+
+export function PrivacyPage({
+  locale,
+}: {
+  locale: Locale;
+}) {
+  const c = notice[locale];
+
+  return (
+    <main
+      id="main-content"
+      className="t3-privacy-page"
+    >
+      <section className="t3-page-head">
+        <div className="t3-container">
+          <p className="t3-eyebrow">
+            {c.eyebrow}
+          </p>
+
+          <h1>{c.title}</h1>
+
+          <p className="t3-intro">
+            {c.intro}
+          </p>
+        </div>
+      </section>
+
+      <section className="t3-section">
+        <div
+          className="t3-container"
+          style={{ maxWidth: 850 }}
+        >
+          {c.sections.map(([heading, body]) => (
+            <section
+              key={heading}
+              style={{ marginBottom: 30 }}
+            >
+              <h2
+                style={{
+                  fontSize: "1.45rem",
+                  marginBottom: 12,
+                }}
+              >
+                {heading}
+              </h2>
+
+              <p style={{ lineHeight: 1.8 }}>
+                {body}
+              </p>
+            </section>
+          ))}
+
+          <p
+            style={{
+              fontSize: 12,
+              marginTop: 32,
+              color: "#675d4a",
+            }}
+          >
+            {c.foot}
+          </p>
+        </div>
+      </section>
+    </main>
+  );
 }
