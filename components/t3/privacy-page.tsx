@@ -57,13 +57,13 @@ const notice = {
       [
         "7. Droits des personnes concernées",
 
-        "Sous réserve des conditions et exceptions prévues par la loi, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, ainsi que leur portabilité dans un format technologique structuré et couramment utilisé. Vous pouvez retirer votre consentement et demander le retrait d’une recommandation publiée. Adressez votre demande à privacy@mbyconsulting.ca. Une vérification raisonnable de votre identité peut être nécessaire. Les demandes d’accès et de rectification sont traitées dans le délai légal applicable, généralement au plus tard 30 jours suivant leur réception. Certaines preuves peuvent être conservées lorsque la loi le justifie. Vous pouvez également adresser une plainte à la Commission d’accès à l’information du Québec.",
+        "Sous réserve des conditions et exceptions prévues par la loi, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, ainsi que leur portabilité dans un format technologique structuré et couramment utilisé. Vous pouvez retirer votre consentement et demander le retrait d’une recommandation publiée. Adressez votre demande à privacy@mbyconsulting.ca. Une vérification raisonnable de votre identité peut être nécessaire. Les demandes d’accès et de rectification sont traitées dans le délai légal applicable, généralement au plus tard 30 jours suivant leur réception. Certaines preuves peuvent être conservées lorsque la loi le justifie. Vous pouvez également adresser une plainte à la Commission d’accès à l’information du Québec. Afin de protéger vos renseignements personnels, évitez de joindre des documents d’identité ou des renseignements sensibles à votre demande initiale par courriel. Si nécessaire, une méthode de vérification appropriée vous sera proposée.",
       ],
 
       [
         "8. Mesures de sécurité",
 
-        "Les mesures de sécurité comprennent notamment la validation côté serveur, la protection antispam, les limites de fréquence, les codes temporaires de vérification, la restriction des accès à la base de données et la validation humaine avant publication. Les environnements de test et de production sont séparés. Ces mesures réduisent les risques sans garantir une sécurité absolue. Le formulaire Contact demeure désactivé jusqu’à l’incorporation et à la finalisation des démarches administratives annoncées sur le site.",
+        "Les mesures de sécurité comprennent notamment la validation côté serveur, la protection antispam, les limites de fréquence, les codes temporaires de vérification, la restriction des accès à la base de données et la validation humaine avant publication. Les environnements de test et de production sont séparés. Les connexions à la base de données de production sont chiffrées et soumises à une vérification du certificat TLS et de l’identité du serveur. Ces mesures réduisent les risques sans garantir une sécurité absolue. Le formulaire Contact demeure désactivé jusqu’à l’incorporation et à la finalisation des démarches administratives annoncées sur le site.",
       ],
 
       [
@@ -124,13 +124,13 @@ const notice = {
       [
         "7. Individual Rights",
 
-        "Subject to applicable legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, as well as portability in a structured and commonly used technological format. You may withdraw your consent and request removal of a published recommendation. Send your request to privacy@mbyconsulting.ca. Reasonable identity verification may be required. Access and correction requests are handled within the applicable statutory period, generally no later than 30 days after receipt. Certain evidence may be retained where legally justified. You may also submit a complaint to the Commission d’accès à l’information du Québec.",
+        "Subject to applicable legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, as well as portability in a structured and commonly used technological format. You may withdraw your consent and request removal of a published recommendation. Send your request to privacy@mbyconsulting.ca. Reasonable identity verification may be required. Access and correction requests are handled within the applicable statutory period, generally no later than 30 days after receipt. Certain evidence may be retained where legally justified. You may also submit a complaint to the Commission d’accès à l’information du Québec. To protect your personal information, please avoid attaching identity documents or sensitive information to your initial email request. If necessary, an appropriate verification method will be offered.",
       ],
 
       [
         "8. Security Measures",
 
-        "Security measures include server-side validation, anti-spam protection, rate limiting, temporary verification codes, restricted database access and human approval before publication. Test and production environments are separated. These measures reduce risks but cannot guarantee absolute security. The Contact form remains disabled pending incorporation and completion of the administrative formalities announced on the website.",
+        "Security measures include server-side validation, anti-spam protection, rate limiting, temporary verification codes, restricted database access and human approval before publication. Test and production environments are separated. Production database connections are encrypted and subject to TLS certificate and server identity verification. These measures reduce risks but cannot guarantee absolute security. The Contact form remains disabled pending incorporation and completion of the administrative formalities announced on the website.",
       ],
 
       [
