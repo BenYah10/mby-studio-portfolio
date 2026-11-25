@@ -10,6 +10,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Script from "next/script";
+import Link from "next/link";
+import { routePaths } from "@/i18n/routes";
 import {
   RECOMMENDATION_CONSENTS,
   RECOMMENDATION_CONSENT_TYPES,
@@ -277,7 +279,12 @@ export function RecommendationForm({ locale }: Props) {
       setFeedbackKind("info"); setFeedback(locale === "fr" ? "Code envoyé. Vérifiez votre boîte courriel (validité : 10 minutes)." : "Code sent. Check your inbox (valid for 10 minutes).");
     } catch {
       setStage("editing");
-      setFeedbackKind("error"); setFeedback(locale === "fr" ? "Envoi du code impossible. Vérifiez la configuration de test ou réessayez plus tard." : "Could not send the code. Check the test configuration or try again later.");
+      setFeedbackKind("error");
+      setFeedback(
+      locale === "fr"
+       ? "Impossible d’envoyer le code de vérification. Veuillez réessayer plus tard."
+       : "Unable to send the verification code. Please try again later."
+   );
     } finally { resetTurnstile(); }
   }
 
@@ -336,6 +343,22 @@ export function RecommendationForm({ locale }: Props) {
       <header>
         <h1 className={styles.pageTitle}>{copy.title}</h1>
         <p className={styles.intro}>{copy.introduction}</p>
+        <p className={styles.help}>
+  {locale === "fr"
+    ? "Votre participation est volontaire. Avant de transmettre vos renseignements, veuillez consulter notre "
+    : "Your participation is voluntary. Before submitting your personal information, please review our "}
+  <Link
+    href={routePaths.privacy[locale]}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ textDecoration: "underline" }}
+  >
+    {locale === "fr"
+      ? "politique de confidentialité"
+      : "privacy policy"}
+  </Link>
+  {"."}
+</p>
       </header>
 
       <section className={styles.section} aria-labelledby="recommendation-identity">
@@ -398,7 +421,8 @@ export function RecommendationForm({ locale }: Props) {
             required={needsSector}
             onChange={event => {
               const next = event.target.value;
-              setSectorChoice(next);
+               invalidateApproval();
+               setSectorChoice(next);
               if (next !== "other") updateField("sectorOther", "");
             }}
           >
