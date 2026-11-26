@@ -2,12 +2,22 @@
 /**
  * MBY Consulting — Bilingual Privacy Policy V1.0
  *
- * Publication candidate.
- * Effective date and final approval must be confirmed
- * before public recommendation collection is enabled.
+ * Prepared effective date: November 26, 2026.
+ * Operational launch remains subject to final approval.
+ * P0.02-G.02:
+ * - Bilingual editorial corrections.
+ * - Mandatory professional role publication permission.
+ * - Clarification of collection and retention practices.
+ * - Temporary manual privacy request handling.
+ *
+ * Existing T3 presentation and bilingual routes preserved.
  */
 
 import type { Locale } from "@/i18n/config";
+
+// ============================================================
+// BILINGUAL PRIVACY POLICY
+// ============================================================
 
 const notice = {
   fr: {
@@ -27,13 +37,13 @@ const notice = {
       [
         "2. Renseignements personnels recueillis",
 
-        "Le formulaire de recommandations professionnelles recueille le nom complet, une adresse courriel personnelle, le lien LinkedIn, la fonction professionnelle, la relation professionnelle et le témoignage. Le nom de l’organisation ou un secteur d’activité est également demandé. Des choix d’affichage et des consentements distincts sont recueillis. Le courriel demeure privé et n’est jamais publié. Des renseignements techniques nécessaires à la sécurité, à la vérification du courriel et à la prévention des abus peuvent également être traités. La participation est volontaire. Ne transmettez aucun renseignement sensible, confidentiel ou concernant un tiers sans autorisation.",
+        "Le formulaire de recommandations professionnelles recueille le nom complet, une adresse courriel personnelle, le lien LinkedIn, la fonction professionnelle, la relation professionnelle et le témoignage. Le nom de l’organisation et le secteur d’activité sont facultatifs. Des choix d’affichage et des consentements distincts sont recueillis. Le courriel demeure privé et n’est jamais publié. Les renseignements sont recueillis directement auprès de vous au moyen du formulaire de recommandations et lors des échanges nécessaires à leur vérification ou au traitement de vos demandes. Des renseignements techniques nécessaires à la sécurité, à la vérification du courriel et à la prévention des abus peuvent également être recueillis automatiquement lors de l’utilisation du site. La participation est volontaire. Ne transmettez aucun renseignement sensible, confidentiel ou concernant un tiers sans autorisation.",
       ],
 
       [
         "3. Finalités, vérification et publication",
 
-        "Les renseignements recueillis servent à recevoir, examiner et vérifier les recommandations professionnelles, à documenter les consentements et à prévenir les abus. Un code temporaire permet de vérifier le contrôle de l’adresse courriel, sans constituer à lui seul une preuve d’identité. Une vérification professionnelle et une validation humaine sont effectuées avant toute publication. Aucune recommandation n’est publiée automatiquement. La publication nécessite notamment l’autorisation explicite du témoignage, de l’identité affichée et du lien LinkedIn. Les autres renseignements professionnels et les traductions sont publiés conformément aux autorisations applicables. L’affichage des initiales ne garantit pas l’anonymat, notamment lorsque le profil LinkedIn est accessible. Les renseignements personnels ne sont ni vendus ni utilisés à des fins de publicité ciblée.",
+        "Les renseignements recueillis servent à recevoir, examiner et vérifier les recommandations professionnelles, à documenter les consentements et à prévenir les abus. Un code temporaire permet de vérifier le contrôle de l’adresse courriel, sans constituer à lui seul une preuve d’identité. Une vérification professionnelle et une validation humaine sont effectuées avant toute publication. Aucune recommandation n’est publiée automatiquement. La publication nécessite l’autorisation explicite du témoignage, de l’identité affichée, de la fonction professionnelle et du lien LinkedIn. Une recommandation ne sera pas publiée si l’une de ces autorisations nécessaires à sa publication est refusée. Les autres renseignements professionnels et les éventuelles traductions sont publiés conformément aux autorisations applicables. L’affichage des initiales ne garantit pas l’anonymat, notamment lorsque le profil LinkedIn est accessible. Les renseignements personnels ne sont ni vendus ni utilisés à des fins de publicité ciblée.",
       ],
 
       [
@@ -45,7 +55,7 @@ const notice = {
       [
         "5. Conservation et suppression",
 
-        "Les recommandations non publiées sont soumises à une échéance de conservation initiale de 90 jours après leur soumission. Les recommandations rejetées ou retirées sont soumises à une échéance de 30 jours après le rejet ou le retrait. Les recommandations publiées font l’objet d’une révision annuelle de la nécessité de leur conservation. Un mécanisme quotidien de purge traite les renseignements arrivés à échéance et admissibles à la suppression, y compris les données associées. Les échanges professionnels sont conservés au maximum 24 mois après le dernier échange, sauf obligation légale applicable. Les codes temporaires et les données anti-abus expirent selon leurs durées techniques respectives. L’historique technique des tâches de conservation MBY est soumis à une durée de 30 jours. Des exceptions de conservation peuvent s’appliquer lorsqu’une obligation légale ou un litige le justifie. Les journaux et sauvegardes des prestataires peuvent suivre des délais distincts.",
+        "Les recommandations non publiées sont soumises à une échéance de conservation initiale de 90 jours après leur soumission. Les recommandations rejetées ou retirées sont soumises à une échéance de 30 jours après le rejet ou le retrait. Une échéance de révision annuelle est prévue pour les recommandations publiées afin d’évaluer manuellement la nécessité de maintenir leur publication et leur conservation. Un mécanisme quotidien de purge traite, par lots, les recommandations arrivées à échéance et admissibles à la suppression ainsi que les données associées couvertes par ce mécanisme. Les renseignements devenus inutiles doivent être supprimés plus tôt lorsque cela est possible. Les échanges professionnels sont conservés au maximum 24 mois après le dernier échange. Les dossiers relatifs aux demandes d’exercice des droits sont conservés au maximum 24 mois après leur clôture. Ces durées sont soumises aux obligations légales applicables. Les codes temporaires et les données anti-abus expirent selon leurs durées techniques respectives. L’historique d’exécution des tâches planifiées de conservation MBY est soumis à une durée de 30 jours. Des exceptions de conservation peuvent s’appliquer lorsqu’une obligation légale ou un litige le justifie. Les journaux et sauvegardes des prestataires peuvent suivre des délais distincts.",
       ],
 
       [
@@ -57,7 +67,7 @@ const notice = {
       [
         "7. Droits des personnes concernées",
 
-        "Sous réserve des conditions et exceptions prévues par la loi, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, ainsi que leur portabilité dans un format technologique structuré et couramment utilisé. Vous pouvez retirer votre consentement et demander le retrait d’une recommandation publiée. Adressez votre demande à privacy@mbyconsulting.ca. Une vérification raisonnable de votre identité peut être nécessaire. Les demandes d’accès et de rectification sont traitées dans le délai légal applicable, généralement au plus tard 30 jours suivant leur réception. Certaines preuves peuvent être conservées lorsque la loi le justifie. Vous pouvez également adresser une plainte à la Commission d’accès à l’information du Québec. Afin de protéger vos renseignements personnels, évitez de joindre des documents d’identité ou des renseignements sensibles à votre demande initiale par courriel. Si nécessaire, une méthode de vérification appropriée vous sera proposée.",
+        "Sous réserve des conditions et exceptions prévues par la loi, vous pouvez demander l’accès à vos renseignements personnels, leur rectification, leur suppression lorsque applicable, ainsi que leur portabilité dans un format technologique structuré et couramment utilisé. Vous pouvez retirer votre consentement et demander le retrait d’une recommandation publiée. Adressez votre demande à privacy@mbyconsulting.ca. Une vérification raisonnable de votre identité peut être nécessaire. Les demandes d’accès et de rectification font l’objet d’une réponse au plus tard 30 jours suivant leur réception, conformément aux exigences légales applicables. Certaines preuves peuvent être conservées lorsque la loi le justifie. Vous pouvez également adresser une plainte à la Commission d’accès à l’information du Québec. Les demandes sont actuellement traitées manuellement par le responsable de la protection des renseignements personnels. Le courriel est réservé à la prise de contact initiale et aux échanges ne contenant pas de renseignements sensibles. Ne joignez aucun document d’identité ni renseignement sensible à votre demande initiale par courriel. Lorsque nécessaire, une méthode sécurisée et proportionnée sera convenue pour vérifier votre identité et communiquer vos renseignements personnels.",
       ],
 
       [
@@ -69,13 +79,13 @@ const notice = {
       [
         "9. Mise à jour et entrée en vigueur",
 
-        "La présente version 1.0 est destinée à encadrer la collecte des recommandations professionnelles. Sa date d’entrée en vigueur sera confirmée lors de son adoption officielle. Toute modification importante sera communiquée conformément aux exigences applicables.",
+        "La présente politique de confidentialité, version 1.0, entre en vigueur le 26 novembre 2026. Elle encadre notamment la collecte, le traitement et la publication des recommandations professionnelles. Toute modification importante sera communiquée conformément aux exigences applicables.",
       ],
     ],
 
     foot:
-      "Version 1.0 — En attente d’adoption officielle.",
-  },
+     "Version 1.0 — Entrée en vigueur : 26 novembre 2026.",
+   },
 
   en: {
     eyebrow: "Privacy · Version 1.0",
@@ -94,13 +104,13 @@ const notice = {
       [
         "2. Personal Information Collected",
 
-        "The professional recommendation form collects your full name, personal email address, LinkedIn profile URL, professional role, professional relationship and testimonial. An organization name or industry sector is also requested. Separate display preferences and consents are collected. Your email address remains private and is never published. Technical information necessary for security, email verification and abuse prevention may also be processed. Participation is voluntary. Do not submit sensitive or confidential information or information concerning third parties without authorization.",
+        "The professional recommendation form collects your full name, personal email address, LinkedIn profile URL, professional role, professional relationship and testimonial. The organization name and industry sector are optional. Separate display preferences and consents are collected. Your email address remains private and is never published. Information is collected directly from you through the recommendation form and communications necessary to verify recommendations or process your requests. Technical information necessary for security, email verification and abuse prevention may also be collected automatically when you use the website. Participation is voluntary. Do not submit sensitive or confidential information or information concerning third parties without authorization.",
       ],
 
       [
         "3. Purposes, Verification and Publication",
 
-        "The information collected is used to receive, review and verify professional recommendations, document consent and prevent abuse. A temporary code verifies control of the email address but does not independently establish identity. Professional verification and human approval are performed before publication. Recommendations are never published automatically. Publication requires explicit authorization of the testimonial, displayed identity and LinkedIn profile link. Other professional information and translations are published according to the applicable permissions. Displaying initials does not guarantee anonymity, particularly when the LinkedIn profile is accessible. Personal information is neither sold nor used for targeted advertising.",
+        "The information collected is used to receive, review and verify professional recommendations, document consent and prevent abuse. A temporary code verifies control of the email address but does not independently establish identity. Professional verification and human approval are performed before publication. Recommendations are never published automatically. Publication requires explicit authorization of the testimonial, displayed identity, professional role and LinkedIn profile link. A recommendation will not be published if any of these required publication permissions is refused. Other professional information and any translations are published according to the applicable permissions. Displaying initials does not guarantee anonymity, particularly when the LinkedIn profile is accessible. Personal information is neither sold nor used for targeted advertising.",
       ],
 
       [
@@ -112,7 +122,7 @@ const notice = {
       [
         "5. Retention and Deletion",
 
-        "Unpublished recommendations are subject to an initial retention deadline of 90 days following submission. Rejected or withdrawn recommendations are subject to a retention deadline of 30 days following rejection or withdrawal. Published recommendations undergo an annual review of the need for continued retention. A daily purge mechanism processes expired information eligible for deletion, including associated records. Professional correspondence is retained for no more than 24 months after the last exchange, subject to applicable legal obligations. Temporary verification codes and anti-abuse data expire according to their respective technical retention periods. MBY retention job execution history is subject to a 30-day retention period. Retention exceptions may apply where justified by legal obligations or disputes. Provider logs and backups may follow separate retention periods.",
+        "Unpublished recommendations are subject to an initial retention deadline of 90 days following submission. Rejected or withdrawn recommendations are subject to a retention deadline of 30 days following rejection or withdrawal. Published recommendations are assigned an annual review deadline for a manual assessment of the need for continued publication and retention. A daily purge mechanism processes, in batches, expired recommendations eligible for deletion and associated records covered by that mechanism. Information that is no longer necessary must be deleted earlier where possible. Professional correspondence is retained for no more than 24 months after the last exchange. Records relating to individual rights requests are retained for no more than 24 months after closure. These periods are subject to applicable legal obligations. Temporary verification codes and anti-abuse data expire according to their respective technical retention periods. MBY scheduled retention job execution history is subject to a 30-day retention period. Retention exceptions may apply where justified by legal obligations or disputes. Provider logs and backups may follow separate retention periods.",
       ],
 
       [
@@ -124,7 +134,7 @@ const notice = {
       [
         "7. Individual Rights",
 
-        "Subject to applicable legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, as well as portability in a structured and commonly used technological format. You may withdraw your consent and request removal of a published recommendation. Send your request to privacy@mbyconsulting.ca. Reasonable identity verification may be required. Access and correction requests are handled within the applicable statutory period, generally no later than 30 days after receipt. Certain evidence may be retained where legally justified. You may also submit a complaint to the Commission d’accès à l’information du Québec. To protect your personal information, please avoid attaching identity documents or sensitive information to your initial email request. If necessary, an appropriate verification method will be offered.",
+        "Subject to applicable legal requirements and exceptions, you may request access to, correction of or deletion of your personal information where applicable, as well as portability in a structured and commonly used technological format. You may withdraw your consent and request removal of a published recommendation. Send your request to privacy@mbyconsulting.ca. Reasonable identity verification may be required. Access and correction requests receive a response no later than 30 days after receipt, in accordance with applicable statutory requirements. Certain evidence may be retained where legally justified. You may also submit a complaint to the Commission d’accès à l’information du Québec. Requests are currently handled manually by the person responsible for personal information. Email is limited to initial contact and communications that do not contain sensitive information. Do not attach identity documents or sensitive information to your initial email request. Where necessary, a secure and proportionate method will be agreed upon to verify your identity and communicate your personal information.",
       ],
 
       [
@@ -136,20 +146,19 @@ const notice = {
       [
         "9. Policy Updates and Effective Date",
 
-        "This version 1.0 is intended to govern the collection of professional recommendations. Its effective date will be confirmed upon formal adoption. Material changes will be communicated according to applicable requirements.",
+        "This privacy policy, version 1.0, takes effect on November 26, 2026. It governs, among other activities, the collection, processing and publication of professional recommendations. Material changes will be communicated according to applicable requirements.",
       ],
     ],
 
     foot:
-      "Version 1.0 — Pending formal adoption.",
-  },
+      "Version 1.0 — Effective date: November 26, 2026.",
+    },
 } as const;
 
-
-/**
- * Shared bilingual privacy policy presentation.
- * Existing T3 design system preserved.
- */
+// ============================================================
+// SHARED BILINGUAL PRESENTATION
+// Existing T3 design system preserved.
+// ============================================================
 
 export function PrivacyPage({
   locale,
