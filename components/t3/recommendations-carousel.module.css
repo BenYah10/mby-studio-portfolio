@@ -1,0 +1,400 @@
+/**
+ * MBY Consulting — Recommendation carousel
+ * M08.05-E/F
+ *
+ * Responsive previews, continuous scrolling,
+ * accessible dialog and LinkedIn profile links.
+ */
+
+.carousel {
+  --card-width: 320px;
+  --card-gap: 20px;
+
+  width: 100%;
+  min-width: 0;
+  color: #172c46;
+}
+
+/* ==========================================================
+   Horizontal carousel
+   ========================================================== */
+
+.viewport {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.track {
+  position: relative;
+  display: flex;
+  gap: var(--card-gap);
+  width: max-content;
+  padding: 12px 0 24px;
+}
+
+.track.centered {
+  min-width: 100%;
+  justify-content: center;
+}
+
+.group {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--card-gap);
+  align-items: stretch;
+}
+
+/* ==========================================================
+   Preview cards
+   ========================================================== */
+
+.card {
+  position: relative;
+  flex: 0 0 var(--card-width);
+  width: var(--card-width);
+  min-height: 310px;
+  display: flex;
+
+  background: linear-gradient(
+    145deg,
+    #ffffff,
+    #f5f8fc
+  );
+
+  border: 1px solid #cbd9eb;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 24px
+    rgba(17, 46, 84, 0.06);
+
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: #315f9c;
+
+  box-shadow: 0 12px 28px
+    rgba(49, 95, 156, 0.13);
+}
+
+.cardButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 24px;
+  padding-bottom: 55px;
+
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+
+.quoteMark {
+  display: block;
+
+  font-family: Georgia, serif;
+  font-size: 58px;
+  line-height: 0.85;
+
+  color: #a4b8d3;
+}
+
+.excerpt {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+
+  overflow: hidden;
+  overflow-wrap: anywhere;
+
+  max-height: 8.5em;
+  margin: 15px 0 24px;
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.author {
+  margin-top: auto;
+
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: 600;
+
+  color: #172c46;
+}
+
+.role {
+  margin-top: 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #60758b;
+  overflow-wrap: anywhere;
+}
+
+.readMore {
+  position: absolute;
+  bottom: 23px;
+  left: 24px;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #315f9c;
+}
+
+.linkedin {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 4px;
+  transition: transform 180ms ease;
+}
+
+.linkedin:hover {
+  transform: scale(1.1);
+}
+
+/* ==========================================================
+   Navigation controls
+   ========================================================== */
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  border: 1px solid #cbd9eb;
+  border-radius: 50%;
+
+  background: #ffffff;
+  color: #315f9c;
+
+  font-size: 17px;
+  cursor: pointer;
+
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.controls button:hover {
+  background: #315f9c;
+  color: #ffffff;
+}
+
+/* ==========================================================
+   Detailed recommendation dialog
+   ========================================================== */
+
+.dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+
+  width: min(680px, calc(100% - 32px));
+  max-height: 85vh;
+  max-height: 85dvh;
+
+  padding: 0;
+
+  border: 1px solid #cbd9eb;
+  border-radius: 20px;
+
+  background: #ffffff;
+  color: #172c46;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  box-shadow: 0 24px 80px
+    rgba(17, 46, 84, 0.25);
+}
+
+.dialog::backdrop {
+  background: rgba(15, 32, 53, 0.58);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.dialogContent {
+  position: relative;
+  padding: 38px;
+}
+
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 36px;
+  height: 36px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #edf3fa;
+  color: #315f9c;
+
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.dialogLabel {
+  padding-right: 36px;
+  margin-bottom: 25px;
+
+  color: #315f9c;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.dialogContent h2 {
+  margin: 12px 0;
+
+  font-family: Georgia, serif;
+  font-size: 28px;
+  color: #172c46;
+}
+
+.fullQuote {
+  margin: 24px 0;
+
+  font-size: 15px;
+  line-height: 1.9;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.original {
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #60758b;
+}
+
+.profileLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #315f9c;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profileLink:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================
+   Keyboard accessibility
+   ========================================================== */
+
+.cardButton:focus-visible,
+.linkedin:focus-visible,
+.controls button:focus-visible,
+.close:focus-visible,
+.profileLink:focus-visible {
+  outline: 2px solid #315f9c;
+  outline-offset: 4px;
+}
+
+/* ==========================================================
+   Mobile and tablet
+   ========================================================== */
+
+@media (max-width: 768px) {
+  .carousel {
+    --card-width: 280px;
+    --card-gap: 16px;
+  }
+
+  .dialogContent {
+    padding: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    --card-width: min(280px, 78vw);
+    --card-gap: 14px;
+  }
+
+  .cardButton {
+    padding: 20px;
+    padding-bottom: 55px;
+  }
+
+  .dialogContent {
+    padding: 24px;
+  }
+
+  .fullQuote {
+    font-size: 14px;
+  }
+}
+
+/* ==========================================================
+   Reduced motion
+   ========================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .linkedin,
+  .controls button {
+    transition: none;
+  }
+}
+
+/* Keep the close button visible while reading. */
+
+.close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 10;
+  margin-left: 12px;
+}

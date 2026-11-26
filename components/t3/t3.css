@@ -58,7 +58,7 @@
 
 /* T4.03 — authentic FR/EN recommendations, no fake content or avatars. */
 .mby-t3 .t3-recommendations-empty{display:grid;grid-template-columns:100px minmax(0,1fr);align-items:center;gap:34px;background:linear-gradient(115deg,#fff,#f2f7fe);border:1px solid #cbdcf0;border-radius:18px;padding:clamp(26px,5vw,64px);box-shadow:0 15px 40px rgba(17,46,84,.045)}
-.mby-t3 .t3-recommendations-symbol{font-family:Georgia,serif;font-size:clamp(88px,12vw,145px);line-height:.85;color:#315f9c;opacity:.35;text-align:center;user-select:none}
+.mby-t3 .t3-recommendations-symbol{font-family:Georgia,serif;font-size:clamp(88px,12vw,145px);line-height:.85;color:#315f9c;opacity:.35;text-align:center;-webkit-user-select: none; user-select: none;}
 .mby-t3 .t3-recommendations-empty h2{font-size:clamp(26px,3vw,39px);margin:0 0 16px;color:#07162b}
 .mby-t3 .t3-recommendations-empty p{font-size:16px;line-height:1.8;max-width:620px;color:#405a77;margin:0 0 15px}
 .mby-t3 .t3-recommendations-empty .t3-recommendations-footnote{font-size:13px;color:#315f9c;margin:0}
@@ -99,4 +99,15 @@
   margin: 0;
   font-size: clamp(15px, 1.8vw, 17px);
   line-height: 1.65;
+}
+/* M08.05 — Recommendations hero CTA */
+
+.mby-t3 .t3-recommendations-top-cta {
+  margin-top: 24px;
+}
+
+.mby-t3 .t3-recommendations-top-cta .t3-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
