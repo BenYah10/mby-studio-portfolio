@@ -524,7 +524,14 @@ export function RecommendationForm({ locale }: Props) {
                     {definition.required ? options.requiredBadge : options.optionalBadge}
                   </span>
                 </span>
-                <span className={styles.help}>{definition.notice}</span>
+
+                  <span className={styles.help}>{definition.notice}</span>
+                   {type === "publish_role" && (
+                    <small className={styles.help}>
+                     {copy.hints.rolePublication}
+                    </small>
+               )}
+
                 {isOtherLanguageRelationship &&
                   <small className={styles.help}>{options.consentOtherLanguage}</small>}
               </span>

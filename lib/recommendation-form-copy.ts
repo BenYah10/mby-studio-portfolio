@@ -45,8 +45,12 @@ const copy = {
         "Le lien vers votre profil LinkedIn est obligatoire et sa publication nécessite votre autorisation explicite.",
       quote:
         "Décrivez librement votre expérience professionnelle réelle.",
+
       permissions:
-        "Les autorisations obligatoires doivent être accordées pour soumettre la recommandation. Les autres restent facultatives.",
+         "Les autorisations obligatoires doivent être accordées pour soumettre la recommandation. Certaines autorisations facultatives à la soumission sont toutefois nécessaires à sa publication.",
+      rolePublication:
+         "L’autorisation de publication de votre fonction professionnelle est nécessaire pour que votre recommandation puisse être publiée. Vous pouvez toutefois soumettre votre témoignage sans accorder cette autorisation.",
+
     },
     required: "Obligatoire",
     optional: "Facultatif",
@@ -90,8 +94,11 @@ const copy = {
         "A LinkedIn profile URL is required, and its publication requires your explicit authorization.",
       quote:
         "Describe your genuine professional experience in your own words.",
-      permissions:
-        "Required permissions must be granted to submit a recommendation. All other permissions are optional.",
+       permissions:
+        "Required permissions must be granted to submit a recommendation. Some permissions that are optional at submission are nevertheless required for publication.",
+       rolePublication:
+        "Permission to publish your professional role is required for your recommendation to be published. However, you may submit your testimonial without granting this permission.",
+
     },
     required: "Required",
     optional: "Optional",
