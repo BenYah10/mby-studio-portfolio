@@ -124,22 +124,50 @@ export async function RecommendationsSection({
 
     await connection();
 
+    // M08.07-H.3.4 — Restricted runtime diagnostics.
+    let stage: "module_import" | "publication_query" = "module_import";
+
     try {
 
       const { getPublishedRecommendations } =
         await import("@/lib/recommendations-public-read");
 
+      stage = "publication_query";
       published = await getPublishedRecommendations();
 
-    } catch {
+    } catch (error: unknown) {
 
       unavailable = true;
 
-      // Generic operational message only.
-      // Never log credentials, database rows or personal data.
+      // Log only fixed stages and explicitly allowed error codes.
+      // Never log the error object, message, stack, URL or row data.
+      const allowedCodes = new Set([
+        "ENOENT", "EACCES", "ENOTFOUND", "EAI_AGAIN",
+        "ECONNREFUSED", "ECONNRESET", "ETIMEDOUT", "CONNECT_TIMEOUT",
+        "CONNECTION_CLOSED", "CONNECTION_ENDED", "ENETUNREACH",
+        "EHOSTUNREACH", "28P01", "28000", "42501", "42883",
+        "3F000", "3D000", "53300", "57P01", "08P01", "08006",
+        "SELF_SIGNED_CERT_IN_CHAIN", "DEPTH_ZERO_SELF_SIGNED_CERT",
+        "UNABLE_TO_VERIFY_LEAF_SIGNATURE", "UNABLE_TO_GET_ISSUER_CERT",
+        "UNABLE_TO_GET_ISSUER_CERT_LOCALLY", "CERT_HAS_EXPIRED",
+        "ERR_TLS_CERT_ALTNAME_INVALID", "ERR_INVALID_URL",
+      ]);
+      let code = "UNKNOWN";
+      let candidate: unknown = error;
+      // Some runtime errors wrap their underlying cause.
+      for (let depth = 0; depth < 3; depth++) {
+        if (typeof candidate !== "object" || candidate === null) break;
+        const detail = candidate as { code?: unknown; cause?: unknown };
+        if (typeof detail.code === "string" && allowedCodes.has(detail.code)) {
+          code = detail.code;
+          break;
+        }
+        candidate = detail.cause;
+      }
 
       console.error(
-        "[MBY] Public recommendation reading unavailable."
+        "[MBY] Public recommendation reading unavailable.",
+        { stage, code }
       );
     }
   }
