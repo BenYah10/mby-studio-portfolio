@@ -4,7 +4,7 @@
  * NOTIF V1.0
  * Server-side execution only.
  * Bearer secret authentication.
- * TEST and Preview only during integration.
+ * Environment-specific activation controls.
  */
 
 import { NextRequest, NextResponse } from "next/server";

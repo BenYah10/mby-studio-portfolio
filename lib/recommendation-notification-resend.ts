@@ -4,7 +4,7 @@
  * NOTIF V1.0
  * Resend HTTP API.
  * Stable idempotency key.
- * Restricted TEST recipient.
+ * Environment-bound recipient selection.
  * No raw provider responses or personal data logged.
  */
 
@@ -12,6 +12,7 @@ import "server-only";
 
 import {
   getNotificationConfig,
+  isNotificationRecipient,
   isNotificationWorkerEnabled,
   NOTIFICATION_LIMITS,
 } from "./recommendation-notification-config";
@@ -46,7 +47,8 @@ const UUID_PATTERN =
 
 export async function sendNotificationEmail(
   notificationId: string,
-  email: NotificationEmail
+  email: NotificationEmail,
+  authorEmail: unknown
 ): Promise<NotificationSendResult> {
 
   if (
@@ -60,6 +62,15 @@ export async function sendNotificationEmail(
   }
 
   const config = getNotificationConfig();
+  // Never use a supplied author address outside Production.
+  const recipient = config.environment === "test"
+    ? config.testRecipient
+    : authorEmail;
+
+  if (!isNotificationRecipient(recipient) ||
+      (config.environment === "test" && authorEmail !== undefined)) {
+    return { ok: false, errorCode: "configuration_error" };
+  }
 
   try {
 
@@ -78,8 +89,7 @@ export async function sendNotificationEmail(
         body: JSON.stringify({
           from: config.mailFrom,
 
-          // TEST safety: no author email is accepted.
-          to: [config.testRecipient],
+          to: [recipient],
 
           subject: email.subject,
           text: email.text,

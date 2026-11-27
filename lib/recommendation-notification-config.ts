@@ -4,7 +4,7 @@
  * NOTIF V1.0
  * Server-side only.
  * Independent rollout controls.
- * Production remains disabled during integration.
+ * Production requires independent explicit activation.
  */
 
 import "server-only";
@@ -23,58 +23,55 @@ export type NotificationEvent =
   | "recommendation_published"
   | "recommendation_withdrawn";
 
+export type NotificationEnvironment = "test" | "production";
+
+export function getNotificationEnvironment(): NotificationEnvironment | null {
+  if (process.env.VERCEL_ENV === "production") return "production";
+  if (process.env.VERCEL_ENV === "preview") return "test";
+  if (!process.env.VERCEL_ENV && process.env.NODE_ENV === "development") {
+    return "test";
+  }
+  return null;
+}
+
 export function isNotificationWorkerEnabled(): boolean {
-  if (
-    process.env.MBY_RECOMMENDATIONS_NOTIFICATIONS_ENABLED !== "true"
-  ) {
+  const environment = getNotificationEnvironment();
+  if (process.env.MBY_RECOMMENDATIONS_NOTIFICATIONS_ENABLED !== "true") {
     return false;
   }
-
-  // Production activation requires a separate validated rollout.
-  if (process.env.VERCEL_ENV === "production") {
-    return false;
+  if (environment === "production") {
+    return process.env.MBY_RECOMMENDATIONS_NOTIFICATIONS_PRODUCTION_ENABLED === "true";
   }
+  return environment === "test";
+}
 
-  return (
-    process.env.VERCEL_ENV === "preview" ||
-    process.env.NODE_ENV === "development"
-  );
+export function isNotificationRecipient(value: unknown): value is string {
+  return typeof value === "string" && value.length <= 254 &&
+    /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(value);
 }
 
 export function getNotificationConfig() {
-  const databaseUrl =
-    process.env.MBY_NOTIFICATIONS_DATABASE_URL;
+  const environment = getNotificationEnvironment();
+  const databaseUrl = process.env.MBY_NOTIFICATIONS_DATABASE_URL;
+  const cronSecret = process.env.CRON_SECRET;
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const mailFrom = process.env.MBY_MAIL_FROM;
+  const testRecipient = process.env.MBY_NOTIFICATIONS_TEST_RECIPIENT?.trim();
 
-  const cronSecret =
-    process.env.CRON_SECRET;
-
-  const resendApiKey =
-    process.env.RESEND_API_KEY;
-
-  const mailFrom =
-    process.env.MBY_MAIL_FROM;
-
-  const testRecipient =
-    process.env.MBY_NOTIFICATIONS_TEST_RECIPIENT?.trim();
-
-  if (
-    !databaseUrl ||
-    !cronSecret ||
-    cronSecret.length < 32 ||
-    !resendApiKey ||
-    !mailFrom ||
-    !testRecipient ||
-    testRecipient.length > 254 ||
-    !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(testRecipient)
-  ) {
+  if (!environment || !isNotificationWorkerEnabled() || !databaseUrl ||
+      !cronSecret || cronSecret.length < 32 || !resendApiKey || !mailFrom) {
     throw new Error("Invalid notification configuration.");
   }
-
-  return {
-    databaseUrl,
-    cronSecret,
-    resendApiKey,
-    mailFrom,
-    testRecipient,
-  };
+  if (environment === "test") {
+    if (!isNotificationRecipient(testRecipient)) {
+      throw new Error("Invalid test notification configuration.");
+    }
+    return { environment, databaseUrl, cronSecret, resendApiKey, mailFrom, testRecipient } as const;
+  }
+  // No test override or Resend sandbox sender in production.
+  if (process.env.MBY_NOTIFICATIONS_TEST_RECIPIENT !== undefined ||
+      /@resend\.dev\b/i.test(mailFrom)) {
+    throw new Error("Invalid production notification configuration.");
+  }
+  return { environment, databaseUrl, cronSecret, resendApiKey, mailFrom } as const;
 }

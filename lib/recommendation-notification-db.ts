@@ -4,7 +4,7 @@
  * NOTIF V1.0
  * Dedicated restricted PostgreSQL identity.
  * TLS certificate and hostname verification.
- * Lazy initialization and TEST environment isolation.
+ * Lazy initialization and strict environment isolation.
  */
 
 import "server-only";
@@ -19,12 +19,13 @@ import {
 } from "./recommendation-notification-config";
 
 // ============================================================
-// 1. TEST database identity
+// 1. Database identities
 // ============================================================
 
 const TEST_PROJECT_REF = "qnunowufhniuehjbgwsi";
+const PRODUCTION_PROJECT_REF = "qlhiygprhsezgcjlhvup";
 
-const TEST_POOLER_HOST =
+const POOLER_HOST =
   "aws-0-ca-central-1.pooler.supabase.com";
 
 const WORKER_ROLE =
@@ -44,13 +45,13 @@ function createNotificationDb() {
   const connectionUrl = new URL(config.databaseUrl);
 
   const expectedUsername =
-    `${WORKER_ROLE}.${TEST_PROJECT_REF}`;
+    `${WORKER_ROLE}.${config.environment === "production" ? PRODUCTION_PROJECT_REF : TEST_PROJECT_REF}`;
 
   // Fail closed if the connection targets another environment.
 
   if (
     connectionUrl.protocol !== "postgresql:" ||
-    connectionUrl.hostname !== TEST_POOLER_HOST ||
+    connectionUrl.hostname !== POOLER_HOST ||
     connectionUrl.port !== "5432" ||
     connectionUrl.pathname !== "/postgres" ||
     decodeURIComponent(connectionUrl.username) !==

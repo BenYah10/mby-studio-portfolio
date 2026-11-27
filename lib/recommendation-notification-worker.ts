@@ -15,6 +15,8 @@ import { getNotificationDb } from
 
 import {
   isNotificationWorkerEnabled,
+  getNotificationConfig,
+  isNotificationRecipient,
   NOTIFICATION_LIMITS,
 } from "./recommendation-notification-config";
 
@@ -46,6 +48,7 @@ type ValidatedNotification = {
   event_type: NotificationEvent;
   locale: NotificationLocale;
   is_test: boolean;
+  author_email?: unknown;
 };
 
 type RecoveryResult = {
@@ -79,6 +82,7 @@ export async function runNotificationWorker():
     throw new Error("Notification worker disabled.");
   }
 
+  const config = getNotificationConfig();
   const db = getNotificationDb();
 
   const startedAt = Date.now();
@@ -157,12 +161,23 @@ export async function runNotificationWorker():
 
       const notification = validated[0];
 
-      // Fail closed for invalid or non-test notifications.
+      // A mismatched database contract is an infrastructure error,
+      // not a business cancellation. Preserve the reservation for recovery.
+      if (notification && (
+        notification.is_test !== (config.environment === "test") ||
+        (config.environment === "test" && notification.author_email !== undefined) ||
+        (config.environment === "production" &&
+          !isNotificationRecipient(notification.author_email))
+      )) {
+        result.unresolved++;
+        break;
+      }
+
+      // Fail closed for invalid or obsolete reservations.
 
       if (
         validated.length !== 1 ||
         !notification ||
-        notification.is_test !== true ||
         notification.notification_id !==
           item.notification_id ||
         notification.event_type !== item.event_type ||
@@ -200,7 +215,8 @@ export async function runNotificationWorker():
 
       const delivery = await sendNotificationEmail(
         item.notification_id,
-        email
+        email,
+        notification.author_email
       );
 
       if (delivery.ok) {
