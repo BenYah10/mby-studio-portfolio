@@ -86,8 +86,10 @@ export async function GET(request: NextRequest) {
   }
 
   if (!isNotificationWorkerEnabled()) {
-    return reply(503, { ok: false });
-  }
+  console.warn("[MBY-NOTIF] WORKER_DISABLED");
+
+  return reply(503, { ok: false });
+}
 
   try {
 
@@ -101,11 +103,43 @@ export async function GET(request: NextRequest) {
       }
     );
 
-  } catch {
+  } catch (error: unknown) {
 
-    return reply(503, {
-      ok: false,
-    });
+  const errorCode =
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error
+      ? error.code
+      : undefined;
 
-  }
+  const allowedCodes = [
+    "ENOENT",
+    "28P01",
+    "42501",
+    "42883",
+    "ECONNREFUSED",
+    "ECONNRESET",
+    "ETIMEDOUT",
+    "CONNECT_TIMEOUT",
+    "ENOTFOUND",
+    "SELF_SIGNED_CERT_IN_CHAIN",
+    "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
+    "CERT_HAS_EXPIRED",
+    "ERR_TLS_CERT_ALTNAME_INVALID",
+    "ERR_INVALID_URL",
+  ];
+
+  const safeCode =
+    typeof errorCode === "string" &&
+    allowedCodes.includes(errorCode)
+      ? errorCode
+      : "INTERNAL_ERROR";
+
+  console.error("[MBY-NOTIF]", safeCode);
+
+  return reply(503, {
+    ok: false,
+  });
+
+}
 }
