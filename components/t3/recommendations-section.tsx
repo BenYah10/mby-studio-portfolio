@@ -26,9 +26,7 @@ import type {
   PublishedRecommendation,
 } from "@/lib/recommendations-public-read";
 
-import Link from "next/link";
 import { connection } from "next/server";
-import { routePaths } from "@/i18n/routes";
 
 import {
   RecommendationsCarousel,
@@ -55,8 +53,11 @@ const copy = {
     unavailableNote:
       "Veuillez réessayer ultérieurement.",
 
-    submit:
-      "Soumettre une recommandation",
+    publishedTitle:
+      "Recommandations professionnelles vérifiées",
+
+    publishedLead:
+      "Découvrez les témoignages de professionnels avec lesquels j’ai collaboré, accompagnés de leurs profils LinkedIn.",
 
     sectionLabel:
       "Recommandations professionnelles",
@@ -78,8 +79,11 @@ const copy = {
     unavailableNote:
       "Please try again later.",
 
-    submit:
-      "Submit a recommendation",
+    publishedTitle:
+      "Verified Professional Recommendations",
+
+    publishedLead:
+      "Discover testimonials from professionals I have worked with, along with their LinkedIn profiles.",
 
     sectionLabel:
       "Professional recommendations",
@@ -100,12 +104,6 @@ export async function RecommendationsSection({
   // Independent activation of publication reading.
   const readingEnabled =
     process.env.MBY_RECOMMENDATIONS_READ_ENABLED === "true";
-
-  // Existing submission feature flag remains unchanged.
-  const canSubmit =
-    process.env.NODE_ENV === "development" ||
-    process.env.NEXT_PUBLIC_MBY_RECOMMENDATIONS_ENABLED
-      === "true";
 
   let published: PublishedRecommendation[] = [];
   let unavailable = false;
@@ -173,21 +171,6 @@ export async function RecommendationsSection({
   }
 
   // ==========================================================
-  // 4. Recommendation submission link
-  // ==========================================================
-
-  const submissionLink = canSubmit ? (
-    <p style={{ marginTop: 24 }}>
-      <Link
-        className="t3-button"
-        href={routePaths.recommendationSubmit[locale]}
-      >
-        {c.submit}
-      </Link>
-    </p>
-  ) : null;
-
-  // ==========================================================
   // 5. Temporary service unavailability
   // ==========================================================
 
@@ -210,8 +193,6 @@ export async function RecommendationsSection({
           <p className="t3-recommendations-footnote">
             {c.unavailableNote}
           </p>
-
-          {submissionLink}
         </div>
       </section>
     );
@@ -245,8 +226,6 @@ export async function RecommendationsSection({
           <p className="t3-recommendations-footnote">
             {c.emptyNote}
           </p>
-
-          {submissionLink}
         </div>
       </section>
     );
@@ -273,7 +252,8 @@ export async function RecommendationsSection({
 
   return (
     <>
-      {submissionLink}
+      <h2>{c.publishedTitle}</h2>
+      <p>{c.publishedLead}</p>
 
       <RecommendationsCarousel
         items={published}

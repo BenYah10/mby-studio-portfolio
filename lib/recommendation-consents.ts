@@ -69,7 +69,7 @@ export const RECOMMENDATION_CONSENTS: Record<
       label: "Publication de ma fonction",
       notice:
         "J'autorise la publication de l'intitulé professionnel exact que j'ai approuvé.",
-      required: false,
+      required: true,
     },
     publish_organization: {
       label: "Publication de mon organisation",
@@ -130,7 +130,7 @@ export const RECOMMENDATION_CONSENTS: Record<
       label: "Publish my professional role",
       notice:
         "I authorize publication of the exact professional title that I have approved.",
-      required: false,
+      required: true,
     },
     publish_organization: {
       label: "Publish my organization",
