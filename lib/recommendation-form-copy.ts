@@ -47,9 +47,9 @@ const copy = {
         "Décrivez librement votre expérience professionnelle réelle.",
 
       permissions:
-         "Les autorisations obligatoires doivent être accordées pour soumettre la recommandation. Certaines autorisations facultatives à la soumission sont toutefois nécessaires à sa publication.",
+         "Les autorisations obligatoires doivent être accordées pour soumettre une recommandation destinée à être publiée.",
       rolePublication:
-         "L’autorisation de publication de votre fonction professionnelle est nécessaire pour que votre recommandation puisse être publiée. Vous pouvez toutefois soumettre votre témoignage sans accorder cette autorisation.",
+         "L’autorisation de publication de votre fonction professionnelle est obligatoire pour soumettre votre recommandation. Elle ne concerne pas le nom de votre employeur, de votre client ou de votre organisation.",
 
     },
     required: "Obligatoire",
@@ -95,9 +95,9 @@ const copy = {
       quote:
         "Describe your genuine professional experience in your own words.",
        permissions:
-        "Required permissions must be granted to submit a recommendation. Some permissions that are optional at submission are nevertheless required for publication.",
+        "Required permissions must be granted to submit a recommendation intended for publication.",
        rolePublication:
-        "Permission to publish your professional role is required for your recommendation to be published. However, you may submit your testimonial without granting this permission.",
+        "Permission to publish your professional role is required to submit your recommendation. It does not authorize publication of the name of your employer, client or organization.",
 
     },
     required: "Required",
